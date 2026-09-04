@@ -1,10 +1,11 @@
 import "dotenv/config";
 import express, { Application, Request, Response } from "express";
-import swaggerUI from "swagger-ui-express";
-import connectDB from "./config/mongoDB.config";
-import specs from "./config/swagger.config";
-import authRouter from "./routes/auth.route";
 import cookieParser from "cookie-parser";
+import swaggerUI from "swagger-ui-express";
+
+import specs from "./config/swagger.config";
+import connectDB from "./config/mongoDB.config";
+import authRouter from "./routes/auth.route";
 
 const app: Application = express();
 const PORT = (process.env.PORT as string) || 3000;
