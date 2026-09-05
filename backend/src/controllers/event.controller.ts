@@ -13,7 +13,10 @@ export const getAllEvents = async (req: Request, res: Response) => {
     }
     res.status(200).send(allEvents);
   } catch (err) {
-    console.error("There is an error in getAllEvents", err);
+    res.status(500).json({
+      message: "Server failed to get all events" , 
+      error: err
+    });
   }
 };
 
@@ -35,7 +38,7 @@ export const getEvent = async (req: Request, res: Response) => {
     });
   } catch (err) {
     res.status(500).json({
-      message: "Server failed to get all events" , 
+      message: "Server failed to get event" , 
       error: err
     });
   }
@@ -55,7 +58,7 @@ export const createEvent = async (req: Request, res: Response) => {
     res.status(201).json(newEvent);
   } catch (err) {
     res.status(500).json({
-      message: "Server failed to get event" , 
+      message: "Server failed to update event" , 
       error: err
     });
   }
@@ -75,7 +78,7 @@ export const deleteEvent = async (req: Request, res: Response) => {
      await Event.deleteOne({ _id: eventId });
 
     res.status(204).send("event deleted correctly");
-    
+
   } catch (err) {
     res.status(500).json({
       message: "Server failed to delete event" , 
