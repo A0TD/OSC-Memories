@@ -5,7 +5,13 @@ import User from "../models/user.model";
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, inviteCode } = req.body;
+    if (inviteCode !== process.env.INVITE_CODE) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid invite code",
+      });
+    }
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
