@@ -1,15 +1,30 @@
-import express from "express"
-import { Router } from "express"
-import { getAllEvents} from "../controllers/event.controller.js";
-
+import express from "express";
+import { Router } from "express";
+import {
+  createEvent,
+  getEvent,
+  getAllEvents,
+  deleteEvent,
+  updateEvent,
+} from "../controllers/event.controller";
+import mediaRouter from "./media.route";
 
 const eventRouter = Router();
 
-//get all events related to specific season
-eventRouter.get("/:seasonid" , getAllEvents);
+eventRouter.use("/:eventId/media", mediaRouter);
 
-//get images of a specific event
-// eventRouter.get("/:seasonid/:eventid/" , getEventPhotos);
+eventRouter.get("/", getAllEvents);
 
-// //get videos of a specific event
-// eventRouter.get("/:seasonid/:eventid/" , getEventVideos);
+eventRouter.get("/:eventId", getEvent);
+
+eventRouter.post("/", createEvent);
+
+eventRouter.put("/:eventId", updateEvent);
+
+eventRouter.delete("/:eventId", deleteEvent);
+
+export default eventRouter;
+
+// eventRouter.get("/:seasonId/:eventId/" , getEventPhotos);
+
+// eventRouter.get("/:seasonId/:eventId/" , getEventVideos);

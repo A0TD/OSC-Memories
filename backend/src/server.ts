@@ -6,6 +6,7 @@ import swaggerUI from "swagger-ui-express";
 import specs from "./config/swagger.config";
 import connectDB from "./config/mongoDB.config";
 import authRouter from "./routes/auth.route";
+import seasonRouter from "./routes/season.route";
 
 const app: Application = express();
 const PORT = (process.env.PORT as string) || 3000;
@@ -21,6 +22,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/auth", authRouter);
+app.use("/seasons/", seasonRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
