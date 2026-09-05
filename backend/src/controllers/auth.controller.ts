@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import express, { Request, Response } from "express";
+import { Request, Response } from "express";
 import User from "../models/user.model";
 
 export const register = async (req: Request, res: Response) => {
@@ -30,7 +30,12 @@ export const register = async (req: Request, res: Response) => {
       },
     );
 
-    res.cookie("token", token, { httpOnly: true });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+      maxAge: 1 * 60 * 60 * 1000,
+    });
 
     return res.status(201).json({
       success: true,
@@ -73,7 +78,13 @@ export const login = async (req: Request, res: Response) => {
         expiresIn: "1h",
       },
     );
-    res.cookie("token", token, { httpOnly: true });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+      maxAge: 1 * 60 * 60 * 1000,
+    });
+
     return res.status(200).json({
       success: true,
       message: "Login successful",
