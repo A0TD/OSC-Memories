@@ -9,7 +9,7 @@ import {
 } from "../controllers/event.controller";
 import mediaRouter from "./media.route";
 
-const eventRouter = Router();
+const eventRouter = Router({mergeParams: true});
 
 eventRouter.use("/:eventId/media", mediaRouter);
 /**
