@@ -1,5 +1,34 @@
 import mongoose from "mongoose";
+import { z } from "zod";
 
+export const createEventSchema = z.object({
+  body: z.object({
+    name: z.string().min(1),
+    seasonId: z
+      .string()
+      .regex(/^[0-9a-fA-F]{24}$/, "Invalid MongoDB ObjectId format"),
+    heroImage: z.string(),
+    description: z.string().default("No description included"),
+  }),
+});
+
+export const updateEventSchema = z.object({
+  params: z.object({
+    eventId: z
+      .string()
+      .regex(/^[0-9a-fA-F]{24}$/, "Invalid MongoDB ObjectId format"),
+  }),
+
+  body: z.object({
+    name: z.string().min(1).optional(),
+    seasonId: z
+      .string()
+      .regex(/^[0-9a-fA-F]{24}$/, "Invalid MongoDB ObjectId format")
+      .optional(),
+    heroImage: z.string().optional(),
+    description: z.string().optional(),
+  }),
+});
 /**
  * @swagger
  * components:
@@ -44,25 +73,28 @@ import mongoose from "mongoose";
  *           description: Auto-generated last update timestamp
  *           example: "2026-09-05T18:45:00.000Z"
  */
-const eventSchema = new mongoose.Schema({
+const eventSchema = new mongoose.Schema(
+  {
     name: {
-        type: String , 
-        required: [true , "Name of this event is required"]
+      type: String,
+      required: [true, "Name of this event is required"],
     },
     seasonId: {
-        type: mongoose.Types.ObjectId,
-        ref: "Season",
-        required: [true , "season reference is required"],
+      type: mongoose.Types.ObjectId,
+      ref: "Season",
+      required: [true, "season reference is required"],
     },
-    heroImage:{
-        type:String
-    }, 
-    description:{
-        type:String , 
-        default: "No description included"
+    heroImage: {
+      type: String,
     },
-}, {timestamps: true});
+    description: {
+      type: String,
+      default: "No description included",
+    },
+  },
+  { timestamps: true },
+);
 
-const Event = mongoose.model("Event" , eventSchema);
+const Event = mongoose.model("Event", eventSchema);
 
 export default Event;

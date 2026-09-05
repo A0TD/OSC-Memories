@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import z from "zod";
+import {z} from "zod";
 
 export const registerSchema = z.object({
   body: z.object({

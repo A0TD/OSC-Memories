@@ -8,6 +8,8 @@ import {
   updateEvent,
 } from "../controllers/event.controller";
 import mediaRouter from "./media.route";
+import validate from "../middlewares/zod.validation";
+import { createEventSchema, updateEventSchema } from "../models/event.model";
 
 const eventRouter = Router({mergeParams: true});
 
@@ -126,7 +128,7 @@ eventRouter.get("/:eventId", getEvent);
  *             schema:
  *               $ref: '#/components/schemas/Event'
  */
-eventRouter.post("/", createEvent);
+eventRouter.post("/",validate(createEventSchema), createEvent);
 /**
  * @swagger
  * /seasons/{seasonId}/events/{eventId}:
@@ -183,7 +185,7 @@ eventRouter.post("/", createEvent);
  *               type: string
  *               example: "the required event is not found"
  */
-eventRouter.put("/:eventId", updateEvent);
+eventRouter.put("/:eventId",validate(updateEventSchema), updateEvent);
 /**
  * @swagger
  * /seasons/{seasonId}/events/{eventId}:
