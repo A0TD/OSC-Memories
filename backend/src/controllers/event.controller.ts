@@ -58,7 +58,7 @@ export const createEvent = async (req: Request, res: Response) => {
     res.status(201).json(newEvent);
   } catch (err) {
     res.status(500).json({
-      message: "Server failed to update event" , 
+      message: "Server failed to create event" , 
       error: err
     });
   }
