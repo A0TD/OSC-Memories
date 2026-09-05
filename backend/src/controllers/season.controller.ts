@@ -87,6 +87,7 @@ export const deleteSeason = async (req: Request, res: Response) => {
 
 export const deleteAllSeasons = async (req: Request, res: Response) => {
   try {
+    // delete all related events first
     await Event.deleteMany()
     const result = await Season.deleteMany();
     return res.status(200).json({ result });
