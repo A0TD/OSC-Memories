@@ -1,9 +1,10 @@
 import {
   getAllSeasons,
   createSeason,
-  getSeason,
+  getSeasonById,
   updateSeason,
   deleteSeason,
+  deleteAllSeasons,
 } from "../controllers/season.controller";
 import { Router } from "express";
 import eventRouter from "./event.route";
@@ -14,11 +15,13 @@ seasonRouter.use("/:seasonId/events", eventRouter);
 
 seasonRouter.get("/", getAllSeasons);
 
-seasonRouter.get("/:seasonId", getSeason);
+seasonRouter.get("/:seasonId", getSeasonById);
 
 seasonRouter.post("/", createSeason);
 
 seasonRouter.put("/:seasonId", updateSeason);
+
+seasonRouter.delete("/", deleteAllSeasons);
 
 seasonRouter.delete("/:seasonId", deleteSeason);
 
