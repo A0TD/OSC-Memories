@@ -1,5 +1,81 @@
 import mongoose from "mongoose";
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - username
+ *         - email
+ *         - password
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Auto-generated MongoDB ObjectId
+ *           example: 60d5ecb8b5c9c22b1c8e4011
+ *         username:
+ *           type: string
+ *           description: The user's name.
+ *           example: johndoe
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: email address of the user
+ *           example: johndoe123@example.com
+ *         password:
+ *           type: string
+ *           format: password
+ *           writeOnly: true
+ *           description: Encrypted account password
+ *           example: P@ssword123
+ *         role:
+ *           type: string
+ *           enum: [Member, Admin]
+ *           default: Member
+ *           description: Access control role
+ *           example: Member
+ *         isVerified:
+ *           type: boolean
+ *           default: false
+ *           description: Indicates if the email address has been verified
+ *           example: false
+ *         verificationOtp:
+ *           type: string
+ *           nullable: true
+ *           description: One-time password sent for account verification
+ *           example: "482910"
+ *         verificationOtpExpiry:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           description: Expiration timestamp for the verification OTP
+ *           example: "2026-09-05T19:00:00.000Z"
+ *         resetPasswordOtp:
+ *           type: string
+ *           nullable: true
+ *           description: One-time password sent for resetting forgotten password
+ *           example: "193847"
+ *         resetPasswordOtpExpiry:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           description: Expiration timestamp for the reset OTP
+ *           example: "2026-09-05T19:15:00.000Z"
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           readOnly: true
+ *           description: Auto-generated creation timestamp
+ *           example: "2026-09-05T18:45:00.000Z"
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           readOnly: true
+ *           description: Auto-generated last update timestamp
+ *           example: "2026-09-05T18:45:00.000Z"
+ */
 const userSchema = new mongoose.Schema(
   {
     username: {

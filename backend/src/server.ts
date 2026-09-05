@@ -25,5 +25,5 @@ app.use("/auth", authRouter);
 app.use("/seasons/", seasonRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server is listening on  http://localhost:${PORT}`);
+  console.log(`Server is listening on  http://localhost:${PORT}/api-docs`);
 });
