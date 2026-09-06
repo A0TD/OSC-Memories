@@ -8,7 +8,7 @@ function Home() {
   return (
     <>
       <section className={homecss.home}>
-        <h1>Welcom To osc</h1>
+        <h1>Welcome to OSC</h1>
         <h2>MEMORIES</h2>
         <span></span>
         <p>
@@ -19,8 +19,8 @@ function Home() {
           <Link to="/seasons" className={homecss.seasonBtn}>
             Explore Seasons
           </Link>
-          <Link to="/seasons" className={homecss.eventBtn}>
-            Explore Events
+          <Link to="/events" className={homecss.eventBtn}>
+            About Events
           </Link>
         </div>
       </section>

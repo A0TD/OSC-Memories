@@ -1,5 +1,10 @@
-import { Router, Application, Request, Response } from "express";
-import { login, register } from "../controllers/auth.controller";
+import { Router } from "express";
+import {
+  login,
+  register,
+  resendOtp,
+  verifyEmail,
+} from "../controllers/auth.controller";
 import { loginSchema, registerSchema } from "../models/user.model";
 import validate from "../middlewares/zod.validation";
 
@@ -61,7 +66,11 @@ const authRouter = Router();
  *                   type: string
  *                   example: User with this email already exists
  */
-authRouter.post("/register",validate(registerSchema), register);
+authRouter.post("/register", validate(registerSchema), register);
+
+authRouter.post("/verify-email", verifyEmail);
+
+authRouter.post("/resend-otp", resendOtp);
 /**
  * @swagger
  * /auth/login:
@@ -111,6 +120,6 @@ authRouter.post("/register",validate(registerSchema), register);
  *                   type: string
  *                   example: Invalid credentials
  */
-authRouter.post("/login",validate(loginSchema), login);
+authRouter.post("/login", validate(loginSchema), login);
 
 export default authRouter;
