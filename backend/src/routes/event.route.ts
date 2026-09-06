@@ -9,9 +9,13 @@ import {
 } from "../controllers/event.controller";
 import mediaRouter from "./media.route";
 import validate from "../middlewares/zod.validation";
-import { createEventSchema, eventIdParamSchema, updateEventSchema } from "../models/event.model";
+import {
+  createEventSchema,
+  eventIdParamSchema,
+  updateEventSchema,
+} from "../models/event.model";
 
-const eventRouter = Router({mergeParams: true});
+const eventRouter = Router({ mergeParams: true });
 
 eventRouter.use("/:eventId/media", mediaRouter);
 /**
@@ -19,7 +23,7 @@ eventRouter.use("/:eventId/media", mediaRouter);
  * /seasons/{seasonId}/events:
  *   get:
  *     summary: Get all events for a season
- *     tags: 
+ *     tags:
  *       - Events
  *     parameters:
  *       - in: path
@@ -51,7 +55,7 @@ eventRouter.get("/", getAllEvents);
  * /seasons/{seasonId}/events/{eventId}:
  *   get:
  *     summary: Get a single event by ID
- *     tags: 
+ *     tags:
  *       - Events
  *     parameters:
  *       - in: path
@@ -88,13 +92,13 @@ eventRouter.get("/", getAllEvents);
  *               type: string
  *               example: "the required event is not found"
  */
-eventRouter.get("/:eventId",validate(eventIdParamSchema), getEvent);
+eventRouter.get("/:eventId", validate(eventIdParamSchema), getEvent);
 /**
  * @swagger
  * /seasons/{seasonId}/events:
  *   post:
  *     summary: Create a new event
- *     tags: 
+ *     tags:
  *       - Events
  *     parameters:
  *       - in: path
@@ -115,7 +119,7 @@ eventRouter.get("/:eventId",validate(eventIdParamSchema), getEvent);
  *               name:
  *                 type: string
  *                 example: Salakhana 2026
- *               heroImageURL:
+ *               heroImage:
  *                 type: string
  *                 example: https://example.com/images/hero.png
  *               description:
@@ -129,13 +133,13 @@ eventRouter.get("/:eventId",validate(eventIdParamSchema), getEvent);
  *             schema:
  *               $ref: '#/components/schemas/Event'
  */
-eventRouter.post("/",validate(createEventSchema), createEvent);
+eventRouter.post("/", validate(createEventSchema), createEvent);
 /**
  * @swagger
  * /seasons/{seasonId}/events/{eventId}:
  *   put:
  *     summary: Update an existing event
- *     tags: 
+ *     tags:
  *       - Events
  *     parameters:
  *       - in: path
@@ -160,7 +164,7 @@ eventRouter.post("/",validate(createEventSchema), createEvent);
  *               name:
  *                 type: string
  *                 example: Updated Event Name.
- *               heroImageURL:
+ *               heroImage:
  *                 type: string
  *                 example: https://example.com/images/new-hero.png
  *               description:
@@ -187,13 +191,13 @@ eventRouter.post("/",validate(createEventSchema), createEvent);
  *               type: string
  *               example: "the required event is not found"
  */
-eventRouter.put("/:eventId",validate(updateEventSchema), updateEvent);
+eventRouter.put("/:eventId", validate(updateEventSchema), updateEvent);
 /**
  * @swagger
  * /seasons/{seasonId}/events/{eventId}:
  *   delete:
  *     summary: Delete an event
- *     tags: 
+ *     tags:
  *       - Events
  *     parameters:
  *       - in: path
@@ -227,7 +231,7 @@ eventRouter.put("/:eventId",validate(updateEventSchema), updateEvent);
  *               type: string
  *               example: "the required event is not found"
  */
-eventRouter.delete("/:eventId",validate(eventIdParamSchema), deleteEvent);
+eventRouter.delete("/:eventId", validate(eventIdParamSchema), deleteEvent);
 
 export default eventRouter;
 

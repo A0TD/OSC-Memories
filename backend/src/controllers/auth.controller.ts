@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import User from "../models/user.model";
-import AppError from "../utils/appError";
+import AppError from "../utils/appError.util";
 
 export const register = async (
   req: Request,

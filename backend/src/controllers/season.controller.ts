@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Season from "../models/season.model";
 import Event from "../models/event.model";
-import AppError from "../utils/appError";
+import AppError from "../utils/appError.util";
 
 export const getAllSeasons = async (
   req: Request,

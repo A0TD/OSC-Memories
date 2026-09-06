@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import AppError from "../utils/appError";
+import AppError from "../utils/appError.util";
 export const authenticate = (
   req: Request,
   res: Response,

@@ -4,14 +4,11 @@ import { z } from "zod";
 export const createEventSchema = z.object({
   body: z.object({
     name: z.string().min(1),
-    seasonId: z
-      .string()
-      .regex(/^[0-9a-fA-F]{24}$/, "Invalid MongoDB ObjectId format"),
     heroImage: z.string(),
     description: z.string().default("No description included"),
   }),
 });
-
+//
 export const updateEventSchema = z.object({
   params: z.object({
     eventId: z

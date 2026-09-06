@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Event from "../models/event.model.js";
 // import Media   from "../models/media.model.js"
 import mongoose from "mongoose";
-import AppError from "../utils/appError.js";
+import AppError from "../utils/appError.util.js";
 
 export const getAllEvents = async (
   req: Request,
