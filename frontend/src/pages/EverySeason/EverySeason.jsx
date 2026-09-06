@@ -1,13 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import styles from "./Seasons.module.css";
-import { FaArrowRight } from "react-icons/fa6";
-import image from "../../assets/img/Seasons_Photo.jpg";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FaArrowRight } from 'react-icons/fa'; 
+import styles from './EverySeason.module.css';
+import image from '../../assets/img/Seasons_Photo.jpg'
 
-export default function Seasons() {
+export default function EverySeason() {
   return (
     <>
-      <div className="text-light min-vh-100">
+    <div className="text-light min-vh-100">
         <div className={`${styles.heroSection} d-flex align-items-center`}>
           <div className="container">
             <h1 className={`fw-bold display-4 ${styles.seasonsHeading}`}>Seasons</h1>
@@ -211,5 +211,5 @@ export default function Seasons() {
         </div>
       </div>
     </>
-  );
+  )
 }

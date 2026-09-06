@@ -8,7 +8,7 @@ function Home() {
   return (
     <>
       <section className={homecss.home}>
-        <h1>Welcom To osc</h1>
+        <h1>Welcom To OSC</h1>
         <h2>MEMORIES</h2>
         <span></span>
         <p>
