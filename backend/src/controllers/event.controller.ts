@@ -59,14 +59,14 @@ export const createEvent = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { name, heroImageURL, description } = req.body;
+  const { name, heroImage, description } = req.body;
   const { seasonId }: any = req.params;
   const objectId = new mongoose.Types.ObjectId(seasonId);
   try {
     const newEvent = await Event.create({
       name: name,
       seasonId: objectId,
-      heroImage: heroImageURL,
+      heroImage,
       description: description,
     });
     res.status(201).send({
@@ -113,13 +113,13 @@ export const updateEvent = async (
   next: NextFunction,
 ) => {
   const { eventId } = req.params;
-  const { name, heroImageURL, description } = req.body;
+  const { name, heroImage, description } = req.body;
   try {
     const updatedEvent = await Event.findByIdAndUpdate(
       eventId,
       {
         name: name,
-        heroImage: heroImageURL,
+        heroImage,
         description: description,
       },
       { new: true },
