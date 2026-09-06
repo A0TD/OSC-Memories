@@ -1,6 +1,36 @@
 import mongoose from "mongoose";
-import { Schema,model } from "mongoose";
-import Event from './event.model'
+import { Schema, model } from "mongoose";
+import Event from "./event.model";
+import { z } from "zod";
+
+export const createSeasonSchema = z.object({
+  body: z.object({
+    name: z.string().trim().min(1),
+    date: z.coerce.date(),
+    description: z.string().trim().min(1).default("No description included"),
+  }),
+});
+
+export const updateSeasonSchema = z.object({
+  params: z.object({
+    seasonId: z
+      .string()
+      .regex(/^[0-9a-fA-F]{24}$/, "Invalid MongoDB ObjectId format"),
+  }),
+  body: z.object({
+    name: z.string().trim().min(1).optional(),
+    date: z.coerce.date().optional(),
+    description: z.string().trim().min(1).optional(),
+  }),
+});
+
+export const seasonIdParamSchema = z.object({
+  params: z.object({
+    seasonId: z
+      .string()
+      .regex(/^[0-9a-fA-F]{24}$/, "Invalid MongoDB ObjectId format"),
+  }),
+});
 
 /**
  * @swagger
@@ -43,32 +73,31 @@ import Event from './event.model'
  *           description: Auto-generated last update timestamp
  *           example: "2026-09-05T18:45:00.000Z"
  */
-const seasonSchema = new Schema({
+const seasonSchema = new Schema(
+  {
     name: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
     date: {
-        type: Date,
-        required: true
+      type: Date,
+      required: true,
     },
     description: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      trim: true,
+      default: "No description included",
     },
-},
-{timestamps:true , strict: false}
-)
-
+  },
+  { timestamps: true, strict: false },
+);
 
 //when delete a season  delete all the events related to it
-seasonSchema.pre('findOneAndDelete',async function(){
-const seasonId = this.getQuery()._id
-await Event.deleteMany({seasonId})
-})
+seasonSchema.pre("findOneAndDelete", async function () {
+  const seasonId = this.getQuery()._id;
+  await Event.deleteMany({ seasonId });
+});
 
-
-const seasonModel = model("Season",seasonSchema)
-export default seasonModel 
+const seasonModel = model("Season", seasonSchema);
+export default seasonModel;

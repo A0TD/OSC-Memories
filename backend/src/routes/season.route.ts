@@ -8,6 +8,8 @@ import {
 } from "../controllers/season.controller";
 import { Router } from "express";
 import eventRouter from "./event.route";
+import validate from "../middlewares/zod.validation";
+import { createSeasonSchema, seasonIdParamSchema, updateSeasonSchema } from "../models/season.model";
 
 const seasonRouter = Router();
 
@@ -86,7 +88,7 @@ seasonRouter.get("/", getAllSeasons);
  *                 error:
  *                   type: object
  */
-seasonRouter.get("/:seasonId", getSeasonById);
+seasonRouter.get("/:seasonId",validate(seasonIdParamSchema), getSeasonById);
 /**
  * @swagger
  * /seasons:
@@ -145,7 +147,7 @@ seasonRouter.get("/:seasonId", getSeasonById);
  *                 error:
  *                   type: object
  */
-seasonRouter.post("/", createSeason);
+seasonRouter.post("/",validate(createSeasonSchema), createSeason);
 /**
  * @swagger
  * /seasons/{seasonId}:
@@ -207,7 +209,7 @@ seasonRouter.post("/", createSeason);
  *                 error:
  *                   type: object
  */
-seasonRouter.put("/:seasonId", updateSeason);
+seasonRouter.put("/:seasonId",validate(updateSeasonSchema), updateSeason);
 /**
  * @swagger
  * /seasons:
@@ -287,6 +289,6 @@ seasonRouter.delete("/", deleteAllSeasons);
  *                 error:
  *                   type: object
  */
-seasonRouter.delete("/:seasonId", deleteSeason);
+seasonRouter.delete("/:seasonId",validate(seasonIdParamSchema), deleteSeason);
 
 export default seasonRouter;

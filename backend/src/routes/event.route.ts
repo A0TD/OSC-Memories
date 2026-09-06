@@ -9,7 +9,7 @@ import {
 } from "../controllers/event.controller";
 import mediaRouter from "./media.route";
 import validate from "../middlewares/zod.validation";
-import { createEventSchema, updateEventSchema } from "../models/event.model";
+import { createEventSchema, eventIdParamSchema, updateEventSchema } from "../models/event.model";
 
 const eventRouter = Router({mergeParams: true});
 
@@ -88,13 +88,14 @@ eventRouter.get("/", getAllEvents);
  *               type: string
  *               example: "the required event is not found"
  */
-eventRouter.get("/:eventId", getEvent);
+eventRouter.get("/:eventId",validate(eventIdParamSchema), getEvent);
 /**
  * @swagger
  * /seasons/{seasonId}/events:
  *   post:
  *     summary: Create a new event
- *     tags: [Events]
+ *     tags: 
+ *       - Events
  *     parameters:
  *       - in: path
  *         name: seasonId
@@ -134,7 +135,8 @@ eventRouter.post("/",validate(createEventSchema), createEvent);
  * /seasons/{seasonId}/events/{eventId}:
  *   put:
  *     summary: Update an existing event
- *     tags: [Events]
+ *     tags: 
+ *       - Events
  *     parameters:
  *       - in: path
  *         name: seasonId
@@ -191,7 +193,8 @@ eventRouter.put("/:eventId",validate(updateEventSchema), updateEvent);
  * /seasons/{seasonId}/events/{eventId}:
  *   delete:
  *     summary: Delete an event
- *     tags: [Events]
+ *     tags: 
+ *       - Events
  *     parameters:
  *       - in: path
  *         name: seasonId
@@ -224,7 +227,7 @@ eventRouter.put("/:eventId",validate(updateEventSchema), updateEvent);
  *               type: string
  *               example: "the required event is not found"
  */
-eventRouter.delete("/:eventId", deleteEvent);
+eventRouter.delete("/:eventId",validate(eventIdParamSchema), deleteEvent);
 
 export default eventRouter;
 

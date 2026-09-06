@@ -29,6 +29,14 @@ export const updateEventSchema = z.object({
     description: z.string().optional(),
   }),
 });
+
+export const eventIdParamSchema = z.object({
+  params: z.object({
+    eventId: z
+      .string()
+      .regex(/^[0-9a-fA-F]{24}$/, "Invalid MongoDB ObjectId format"),
+  }),
+});
 /**
  * @swagger
  * components:
