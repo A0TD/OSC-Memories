@@ -1,6 +1,6 @@
 .footerContent {
   background-color: var(--bg-card);
-  padding: 50px 50px;
+  padding: 70px 50px;
   font-size: 14px;
 }
 .footerContent h3 {
@@ -18,6 +18,7 @@
   text-decoration: none;
   color: var(--text-main);
   opacity: 0.8;
+  padding:0 10px ;
 }
 .footerContent a:hover {
   color: var(--brand-orange);
@@ -41,8 +42,8 @@
 
 .footerBottom {
   text-align: center;
-  padding: 20px;
-  background-color: #fcd8b0;
+  padding: 30px;
+  background-color: var(--bg-footer);
   color: var(--text-main);
   font-size: 14px;
 }

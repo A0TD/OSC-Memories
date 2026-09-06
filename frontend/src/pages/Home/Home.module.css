@@ -1,6 +1,6 @@
 .home {
   background-image:
-    linear-gradient(rgba(30, 10, 0, 0.695), rgba(20, 5, 0, 0.695)),
+    linear-gradient(rgba(30, 10, 0, 0.600), rgba(20, 5, 0, 0.600)),
     url(../../assets/IMG_20260412_172948.jpg);
   background-size: cover;
   background-position: center center;
@@ -9,7 +9,7 @@
   flex-direction: column;
   gap: 10px;
   align-items: center;
-  padding: 80px 20% 155px;
+  padding: 150px 20% 155px;
   color: white;
   text-align: center;
 }
@@ -41,7 +41,8 @@
   color: white;
   background-color: var(--brand-orange);
   border-radius: 10px;
-  padding: 7px 10px;
+  text-align: center;
+  padding: 7px 10px 8px;
   font-weight: 600;
 }
 .home a:hover {

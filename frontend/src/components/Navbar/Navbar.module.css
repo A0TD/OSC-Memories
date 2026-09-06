@@ -1,10 +1,16 @@
 .navbar {
-  background-color: var(--bg-card);
+  background-color: var(--bg-nav);
   border-bottom: 1px solid var(--border-color);
   padding: 0px 20px;
   box-shadow: 0 px 12px rgba(0, 0, 0, 0.05);
   height: 70px;
   position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  
 }
 
 .logo img {
@@ -139,5 +145,52 @@
   background-color: var(--brand-orange);
   color: #fff;
   border-radius: 20px;
-  box-shadow: 0 5px 10px rgba(99, 99, 99, 0.771);
+  box-shadow: 0 7px 10px rgb(99, 99, 99);
+}
+
+.themeToggleSwitch {
+  position: relative;
+  width: 65px;
+  height: 34px;
+  background-color: var(--bg-card);
+  border-radius: 17px;
+  cursor: pointer;
+  border: 2px solid var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.toggleCircle {
+  position: absolute;
+  left: 4px;
+  width: 26px;
+  height: 26px;
+  background-color: var(--text-main);
+  border-radius: 50%;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+
+[data-theme="dark"] .toggleCircle {
+  transform: translateX(27px);
+}
+
+.icon {
+  font-size: 14px;
+  line-height: 1;
+  z-index: 1;
+}
+
+.sunIcon {
+  color: var(--bg-main);
+  margin-left: 5px;
+}
+
+.moonIcon {
+  color: var(--bg-main);
+  margin-right: 5px;
 }

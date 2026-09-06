@@ -26,9 +26,9 @@ function Footer() {
 
             <NavLink to="/register">Register</NavLink>
           </div>
-          <div className="d-flex flex-column col-4 col-md-3 col-lg-2  ">
+          <div className="d-flex flex-column  col-4 col-md-3 col-lg-2  ">
             <h3>Quick Links</h3>
-            <NavLink to="/home">Home</NavLink>
+            <NavLink to="/">Home</NavLink>
 
             <NavLink to="/home">Seasons</NavLink>
 
