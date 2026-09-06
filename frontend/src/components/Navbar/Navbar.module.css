@@ -1,0 +1,196 @@
+.navbar {
+  background-color: var(--bg-nav);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0px 20px;
+  box-shadow: 0 px 12px rgba(0, 0, 0, 0.05);
+  height: 70px;
+  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  
+}
+
+.logo img {
+  width: 40px;
+  animation: floatLogo 3s ease-in-out infinite;
+}
+@keyframes floatLogo {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+.logop {
+  margin-left: 15px;
+}
+
+.logop h1 {
+  font-size: 40px;
+  margin-bottom: -5px;
+  font-weight: bold;
+  color: var(--brand-orange);
+}
+
+.logop p {
+  font-size: 13px;
+  margin-top: -5px;
+  color: var(--text-main);
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.navlinks a {
+  text-decoration: none;
+  color: var(--text-main);
+  opacity: 0.9;
+  font-size: 16px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.navlinks a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--brand-orange);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navlinks a:hover::after,
+.navlinks a.active::after {
+  width: 100%;
+}
+
+.active {
+  color: var(--brand-orange) !important ;
+  font-weight: bold;
+  transform: scale(1.1);
+}
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.hamburger > span {
+  width: 25px;
+  height: 3px;
+  background-color: var(--text-main);
+  opacity: 0.8;
+}
+
+@media (max-width: 700px) {
+  .navlinks {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 55%;
+    width: 100px;
+    background-color: rgba(255, 250, 250, 0.662);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    gap: 15px;
+  }
+
+  .navlinks.showMenu {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 700px) {
+  .hamburger {
+    display: none;
+  }
+  .navlinks {
+    display: flex !important;
+    font-size: 14px;
+  }
+}
+
+.authLinks button {
+  border: none;
+  color: var(--brand-orange);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.authLinks button.regbtn {
+  background-image: linear-gradient(
+    to top right,
+    rgb(243, 195, 94) 40%,
+    rgb(233, 96, 5)
+  );
+  border: none;
+  color: white;
+}
+
+.authLinks button:hover {
+  background-color: var(--brand-orange);
+  color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 7px 10px rgb(99, 99, 99);
+}
+
+.themeToggleSwitch {
+  position: relative;
+  width: 65px;
+  height: 34px;
+  background-color: var(--bg-card);
+  border-radius: 17px;
+  cursor: pointer;
+  border: 2px solid var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.toggleCircle {
+  position: absolute;
+  left: 4px;
+  width: 26px;
+  height: 26px;
+  background-color: var(--text-main);
+  border-radius: 50%;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+
+[data-theme="dark"] .toggleCircle {
+  transform: translateX(27px);
+}
+
+.icon {
+  font-size: 14px;
+  line-height: 1;
+  z-index: 1;
+}
+
+.sunIcon {
+  color: var(--bg-main);
+  margin-left: 5px;
+}
+
+.moonIcon {
+  color: var(--bg-main);
+  margin-right: 5px;
+}
