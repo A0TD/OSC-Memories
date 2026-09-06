@@ -84,6 +84,9 @@ const seasonSchema = new Schema(
       type: Date,
       required: true,
     },
+    imageUrl: {
+      type: String,
+    },
     description: {
       type: String,
       trim: true,

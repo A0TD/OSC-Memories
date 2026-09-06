@@ -4,7 +4,7 @@ import { z } from "zod";
 export const createEventSchema = z.object({
   body: z.object({
     name: z.string().min(1),
-    heroImage: z.string(),
+    imageUrl: z.string(),
     description: z.string().default("No description included"),
   }),
 });
@@ -22,7 +22,7 @@ export const updateEventSchema = z.object({
       .string()
       .regex(/^[0-9a-fA-F]{24}$/, "Invalid MongoDB ObjectId format")
       .optional(),
-    heroImage: z.string().optional(),
+    imageUrl: z.string().optional(),
     description: z.string().optional(),
   }),
 });
@@ -56,10 +56,10 @@ export const eventIdParamSchema = z.object({
  *           type: string
  *           description: MongoDB ObjectId reference to the associated Season
  *           example: 60d5ecb8b5c9c22b1c8e4012
- *         heroImage:
+ *         imageUrl:
  *           type: string
- *           description: URL or path to the hero image
- *           example: https://example.com/images/hero.png
+ *           description: URL or path to the event image
+ *           example: https://example.com/images/event.png
  *         description:
  *           type: string
  *           default: "No description included"
@@ -89,7 +89,7 @@ const eventSchema = new mongoose.Schema(
       ref: "Season",
       required: [true, "season reference is required"],
     },
-    heroImage: {
+    imageUrl: {
       type: String,
     },
     description: {

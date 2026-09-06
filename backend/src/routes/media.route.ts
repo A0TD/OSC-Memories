@@ -7,7 +7,7 @@ import {
 } from "../controllers/media.controller";
 import { Router } from "express";
 
-const mediaRouter = Router();
+const mediaRouter = Router({ mergeParams: true });
 
 mediaRouter.get("/", getAllMedia);
 

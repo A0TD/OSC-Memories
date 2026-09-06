@@ -119,9 +119,9 @@ eventRouter.get("/:eventId", validate(eventIdParamSchema), getEvent);
  *               name:
  *                 type: string
  *                 example: Salakhana 2026
- *               heroImage:
+ *               imageUrl:
  *                 type: string
- *                 example: https://example.com/images/hero.png
+ *                 example: https://example.com/images/event.png
  *               description:
  *                 type: string
  *                 example: The amazing salakhana of 2026
@@ -164,15 +164,15 @@ eventRouter.post("/", validate(createEventSchema), createEvent);
  *               name:
  *                 type: string
  *                 example: Updated Event Name.
- *               heroImage:
+ *               imageUrl:
  *                 type: string
- *                 example: https://example.com/images/new-hero.png
+ *                 example: https://example.com/images/new-event.png
  *               description:
  *                 type: string
  *                 example: Updated event description.
  *     responses:
  *       201:
- *         description: Event updated successfully
+ *         description: Event updated successfully What do you My stuff, I don't know, if you need, yeah, I mean, for Hmm, Diva, what do you think of that? Can you get No, it's my favorite. It's a little bit over here, get all events, I don't Aye, from, I can get a Brazilian ID.
  *         content:
  *           application/json:
  *             schema:
