@@ -3,6 +3,8 @@ import {
   login,
   register,
   resendOtp,
+  forgotPassword,
+  resetPassword,
   verifyEmail,
 } from "../controllers/auth.controller";
 import { loginSchema, registerSchema } from "../models/user.model";
@@ -71,6 +73,8 @@ authRouter.post("/register", validate(registerSchema), register);
 authRouter.post("/verify-email", verifyEmail);
 
 authRouter.post("/resend-otp", resendOtp);
+authRouter.post("/forgot-password", forgotPassword);
+authRouter.post("/reset-password", resetPassword);
 /**
  * @swagger
  * /auth/login:

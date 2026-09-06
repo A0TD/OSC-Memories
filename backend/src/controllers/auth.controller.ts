@@ -3,7 +3,10 @@ import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import User from "../models/user.model";
 import AppError from "../utils/appError.util";
-import { sendVerificationOtp } from "../utils/sendOtp.util";
+import {
+  sendResetPasswordOtp,
+  sendVerificationOtp,
+} from "../utils/sendOtp.util";
 
 export const register = async (
   req: Request,
@@ -113,6 +116,62 @@ export const resendOtp = async (
     return res.status(200).send({
       success: true,
       message: "Verification OTP sent to email",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const forgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new AppError(400, "User not found");
+    }
+    await sendResetPasswordOtp(user._id, user.email);
+    return res.status(200).send({
+      success: true,
+      message: "Reset password OTP sent to email",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const resetPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new AppError(400, "User not found");
+    }
+    if (!user.resetPasswordOtp || !user.resetPasswordOtpExpiry) {
+      throw new AppError(400, "No OTP found, please request a new one");
+    }
+    if (user.resetPasswordOtpExpiry < new Date()) {
+      throw new AppError(400, "OTP has expired");
+    }
+    const isOtpValid = await bcrypt.compare(otp, user.resetPasswordOtp);
+    if (!isOtpValid) {
+      throw new AppError(400, "Invalid OTP");
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.resetPasswordOtp = undefined;
+    user.resetPasswordOtpExpiry = undefined;
+    await user.save();
+    return res.status(200).send({
+      success: true,
+      message: "Password reset successfully",
     });
   } catch (err) {
     next(err);
