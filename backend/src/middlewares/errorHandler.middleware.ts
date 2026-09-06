@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ZodError } from "zod/v3";
+import { ZodError } from "zod";
 
 export const globalErrorHandler = (
   err: Error,
@@ -12,7 +12,7 @@ export const globalErrorHandler = (
 
   if (err instanceof ZodError) {
     statusCode = 400;
-    message = err.errors.map((e) => e.message).join(", ");
+    message = err.issues[0].message;
   }
 
   res.status(statusCode).send({
