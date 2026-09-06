@@ -7,6 +7,7 @@ import specs from "./config/swagger.config";
 import connectDB from "./config/mongoDB.config";
 import authRouter from "./routes/auth.route";
 import seasonRouter from "./routes/season.route";
+import { globalErrorHandler } from "./middlewares/errorHandler.middleware";
 
 const app: Application = express();
 const PORT = (process.env.PORT as string) || 3000;
@@ -23,6 +24,8 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/auth", authRouter);
 app.use("/seasons/", seasonRouter);
+
+app.use(globalErrorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on  http://localhost:${PORT}/api-docs`);

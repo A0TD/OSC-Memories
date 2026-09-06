@@ -16,8 +16,8 @@ const validate =
       req.params = parsed.params as any;
 
       next();
-    } catch (error) {
-      return res.status(400).send(`Error caught: ${error}`);
+    } catch (err) {
+      next(err);
     }
   };
 

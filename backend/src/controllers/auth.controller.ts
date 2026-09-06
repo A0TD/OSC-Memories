@@ -1,23 +1,22 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import User from "../models/user.model";
+import AppError from "../utils/appError";
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { username, email, password, inviteCode } = req.body;
     if (inviteCode !== process.env.INVITE_CODE) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid invite code",
-      });
+      throw new AppError(400, "Invalid invite code");
     }
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: "User already exists",
-      });
+      throw new AppError(400, "User already exists");
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
@@ -43,36 +42,32 @@ export const register = async (req: Request, res: Response) => {
       maxAge: 1 * 60 * 60 * 1000,
     });
 
-    return res.status(201).json({
+    return res.status(201).send({
       success: true,
       message: "User created successfully",
-      user,
+      data: {
+        user,
+      },
     });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
+    next(error);
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid email or password",
-      });
+      throw new AppError(400, "Invalid email or password");
     }
     const isCorrectPassword = await bcrypt.compare(password, user.password);
     if (!isCorrectPassword) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid email or password",
-      });
+      throw new AppError(400, "Invalid email or password");
     }
     const token = jwt.sign(
       {
@@ -91,16 +86,14 @@ export const login = async (req: Request, res: Response) => {
       maxAge: 1 * 60 * 60 * 1000,
     });
 
-    return res.status(200).json({
+    return res.status(200).send({
       success: true,
       message: "Login successful",
-      user,
+      data: {
+        user,
+      },
     });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
+    next(error);
   }
 };

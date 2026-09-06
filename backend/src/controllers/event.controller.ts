@@ -1,52 +1,66 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import Event from "../models/event.model.js";
 // import Media   from "../models/media.model.js"
 import mongoose from "mongoose";
+import AppError from "../utils/appError.js";
 
-export const getAllEvents = async (req: Request, res: Response) => {
-  const {seasonId} = req.params;
+export const getAllEvents = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { seasonId } = req.params;
   try {
     const allEvents = await Event.find({ seasonId: seasonId });
 
-    if (allEvents.length === 0) {
-      return res.status(404).send("There are no events yet");
-    }
-    res.status(200).send(allEvents);
-  } catch (err) {
-    res.status(500).json({
-      message: "Server failed to get all events" , 
-      error: err
+    res.status(200).send({
+      success: true,
+      message: "Events retrieved successfully",
+      data: {
+        events: allEvents,
+      },
     });
+  } catch (err) {
+    next(err);
   }
 };
 
-export const getEvent = async (req: Request, res: Response) => {
+export const getEvent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { eventId } = req.params;
   try {
     const requiredEvent = await Event.findOne({ _id: eventId });
 
     if (!requiredEvent) {
-      return res.status(404).send("the required event is not found");
+      throw new AppError(404, "Event not found");
     }
 
-    //we need here to return all the media related to this event
-    const allMediaRelated: any[] = [];
+    //return all media related to event
+    const relatedMedia: any[] = [];
 
-    res.status(200).json({
-      requiredEvent,
-      allMediaRelated,
+    res.status(200).send({
+      success: true,
+      message: "Event retrieved successfully",
+      data: {
+        event: requiredEvent,
+        relatedMedia,
+      },
     });
   } catch (err) {
-    res.status(500).json({
-      message: "Server failed to get event" , 
-      error: err
-    });
+    next(err);
   }
 };
 
-export const createEvent = async (req: Request, res: Response) => {
+export const createEvent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { name, heroImageURL, description } = req.body;
-  const {seasonId}:any = req.params;
+  const { seasonId }: any = req.params;
   const objectId = new mongoose.Types.ObjectId(seasonId);
   try {
     const newEvent = await Event.create({
@@ -55,63 +69,79 @@ export const createEvent = async (req: Request, res: Response) => {
       heroImage: heroImageURL,
       description: description,
     });
-    res.status(201).json(newEvent);
-  } catch (err) {
-    res.status(500).json({
-      message: "Server failed to create event" , 
-      error: err
+    res.status(201).send({
+      success: true,
+      message: "Event created successfully",
+      data: {
+        event: newEvent,
+      },
     });
+  } catch (err) {
+    next(err);
   }
 };
 
-export const deleteEvent = async (req: Request, res: Response) => {
+export const deleteEvent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { eventId } = req.params;
   try {
     const requiredEvent = await Event.findOne({ _id: eventId });
 
     if (!requiredEvent) {
-      return res.status(404).send("the required event is not found");
+      throw new AppError(404, "Event not found");
     }
 
     //we need to delete all media related to this event
 
-     await Event.deleteOne({ _id: eventId });
+    await Event.deleteOne({ _id: eventId });
 
-    res.status(204).send("event deleted correctly");
-
-  } catch (err) {
-    res.status(500).json({
-      message: "Server failed to delete event" , 
-      error: err
+    res.status(200).send({
+      success: true,
+      message: "Event deleted successfully",
     });
+  } catch (err) {
+    next(err);
   }
 };
 
-export const updateEvent = async (req: Request, res: Response) => {
+export const updateEvent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { eventId } = req.params;
   const { name, heroImageURL, description } = req.body;
   try {
-    const updatedEvent = await Event.findByIdAndUpdate(eventId, {
-      name: name,
-      heroImage: heroImageURL,
-      description: description,
-    });
+    const updatedEvent = await Event.findByIdAndUpdate(
+      eventId,
+      {
+        name: name,
+        heroImage: heroImageURL,
+        description: description,
+      },
+      { new: true },
+    );
 
     if (!updatedEvent) {
-      return res.status(404).send("the required event is not found");
+      throw new AppError(404, "Event not found");
     }
 
-    res.status(201).json({
-      message: "Event is updated",
-      updatedEvent,
+    res.status(200).send({
+      success: true,
+      message: "Event updated successfully",
+      data: {
+        event: updatedEvent,
+      },
     });
   } catch (err) {
-    res.status(500).json({
-      message: "Server failed to update event" , 
-      error: err
-    });
+    next(err);
   }
 };
+
+// export const getEventPhotos = async (req:Request , res:Response) => {
 
 // export const getEventPhotos = async (req:Request , res:Response) => {
 //     const eventId = req.params.eventid;

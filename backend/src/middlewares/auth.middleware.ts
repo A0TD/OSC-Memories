@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import AppError from "../utils/appError";
 export const authenticate = (
   req: Request,
   res: Response,
@@ -8,18 +9,12 @@ export const authenticate = (
   try {
     const token = req.cookies.token;
     if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthenticated",
-      });
+      throw new AppError(401, "Unauthenticated");
     }
     (req as any).user = jwt.verify(token, process.env.JWT_SECRET as string);
     next();
   } catch (err) {
-    return res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-    });
+    next(err);
   }
 };
 
@@ -28,17 +23,11 @@ export const authorize = (role: string) => {
     try {
       const userRole = (req as any).user.role;
       if (userRole !== role) {
-        return res.status(403).json({
-          success: false,
-          message: "Unauthorized",
-        });
+        throw new AppError(403, "Unauthorized");
       }
       next();
     } catch (err) {
-      return res.status(500).json({
-        success: false,
-        message: "Internal Server Error",
-      });
+      next(err);
     }
   };
 };
