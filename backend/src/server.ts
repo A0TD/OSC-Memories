@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, { Application, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import swaggerUI from "swagger-ui-express";
+import cors from "cors";
 
 import specs from "./config/swagger.config";
 import connectDB from "./config/mongoDB.config";
@@ -14,6 +15,7 @@ const PORT = (process.env.PORT as string) || 3000;
 
 connectDB();
 
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
