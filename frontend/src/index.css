@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/*Color of Light Mode */
+:root {
+  --brand-orange: #fb7507;
+  --brand-yellow: #ffc107;
+  --bg-nav: #fffaf0e3;
+  --bg-main: #fef6e6;
+  --bg-card: #fce1c2;
+  --text-main: #212829;
+  --border-color: #e9ecef;
+  --bg-footer: #fcd8b0;
+}
+
+/*Color of Dark Mode */
+[data-theme='dark'] {
+  --bg-nav: #100d0b94;
+  --bg-main: #100d0b;
+  --bg-card:  #713504;
+  --text-main: #ffffff;
+  --border-color: #2d3748;
+  --bg-footer:  #391b00;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  
+}
