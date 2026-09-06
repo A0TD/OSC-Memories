@@ -12,8 +12,6 @@ const validate =
       });
 
       req.body = parsed.body;
-      req.query = parsed.query as any;
-      req.params = parsed.params as any;
 
       next();
     } catch (err) {
