@@ -1,0 +1,48 @@
+.footerContent {
+  background-color: var(--bg-card);
+  padding: 50px 50px;
+  font-size: 14px;
+}
+.footerContent h3 {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 0 0 5px;
+  color: var(--brand-orange);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.footerContent h3:hover {
+  transform: translateY(-6px);
+}
+.footerContent a {
+  text-decoration: none;
+  color: var(--text-main);
+  opacity: 0.8;
+}
+.footerContent a:hover {
+  color: var(--brand-orange);
+}
+.footerBrand p {
+  color: var(--text-main);
+  opacity: 0.8;
+}
+
+.footerContent img {
+  width: 30px;
+  background-color: rgb(167, 167, 167);
+  border-radius: 8px;
+  padding: 2px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.footerContent img:hover {
+  transform: scale(1.1);
+}
+
+.footerBottom {
+  text-align: center;
+  padding: 20px;
+  background-color: #fcd8b0;
+  color: var(--text-main);
+  font-size: 14px;
+}

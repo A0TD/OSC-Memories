@@ -1,0 +1,30 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/*Color of Light Mode */
+:root {
+  --brand-orange: #ff9800;
+  --brand-yellow: #ffc107;
+  --bg-main: #fcf9f2;
+  --bg-card: #fce1c2;
+  --text-main: #212829;
+  --border-color: #e9ecef;
+}
+
+/*Color of Dark Mode */
+[data-theme='dark'] {
+  --bg-main: #0b0c10;
+  --bg-card: #1f2833;
+  --text-main: #ffffff;
+  --border-color: #2d3748;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  
+  
+}
