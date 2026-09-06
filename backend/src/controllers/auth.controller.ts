@@ -49,8 +49,8 @@ export const register = async (
         user,
       },
     });
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -93,7 +93,7 @@ export const login = async (
         user,
       },
     });
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 };
