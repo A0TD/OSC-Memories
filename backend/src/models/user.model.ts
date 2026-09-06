@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {z} from "zod";
+import { z } from "zod";
 
 export const registerSchema = z.object({
   body: z.object({
@@ -9,6 +9,7 @@ export const registerSchema = z.object({
       .min(3, "Username must be at least 3 characters"),
     email: z.email("Invalid email address"),
     password: z.string().min(6, "Password must be at least 6 characters"),
+    inviteCode: z.string().min(1, "Invite code is required"),
   }),
 });
 
