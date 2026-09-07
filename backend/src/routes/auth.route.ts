@@ -7,7 +7,14 @@ import {
   resetPassword,
   verifyEmail,
 } from "../controllers/auth.controller";
-import { loginSchema, registerSchema } from "../models/user.model";
+import {
+  forgotPasswordSchema,
+  loginSchema,
+  registerSchema,
+  resendOtpSchema,
+  verifyEmailSchema,
+  resetPasswordSchema,
+} from "../models/user.model";
 import validate from "../middlewares/zod.validation";
 
 const authRouter = Router();
@@ -113,7 +120,7 @@ authRouter.post("/register", validate(registerSchema), register);
  *       500:
  *         description: Internal Server Error
  */
-authRouter.post("/verify-email", verifyEmail);
+authRouter.post("/verify-email", validate(verifyEmailSchema), verifyEmail);
 /**
  * @swagger
  * /auth/resend-otp:
@@ -153,7 +160,7 @@ authRouter.post("/verify-email", verifyEmail);
  *       500:
  *         description: Internal Server Error
  */
-authRouter.post("/resend-otp", resendOtp);
+authRouter.post("/resend-otp", validate(resendOtpSchema), resendOtp);
 /**
  * @swagger
  * /auth/forgot-password:
@@ -193,7 +200,11 @@ authRouter.post("/resend-otp", resendOtp);
  *       500:
  *         description: Internal Server Error
  */
-authRouter.post("/forgot-password", forgotPassword);
+authRouter.post(
+  "/forgot-password",
+  validate(forgotPasswordSchema),
+  forgotPassword,
+);
 /**
  * @swagger
  * /auth/reset-password:
@@ -242,7 +253,11 @@ authRouter.post("/forgot-password", forgotPassword);
  *       500:
  *         description: Internal Server Error
  */
-authRouter.post("/reset-password", resetPassword);
+authRouter.post(
+  "/reset-password",
+  validate(resetPasswordSchema),
+  resetPassword,
+);
 /**
  * @swagger
  * /auth/login:
