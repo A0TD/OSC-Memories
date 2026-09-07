@@ -7,7 +7,6 @@ export const globalErrorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  console.error(err);
   let statusCode = (err as any)?.statusCode || 500;
   let message = err.message || "Internal Server Error";
 
@@ -18,8 +17,12 @@ export const globalErrorHandler = (
     message = `${fieldPath}: ${firstIssue.message}`;
   }
 
+  if (statusCode === 500) {
+    console.error(err);
+  }
+
   res.status(statusCode).send({
-    success: "false",
+    success: false,
     message,
   });
 };

@@ -13,6 +13,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@types/morgan": "^1.9.10",
     "@types/multer": "^2.2.0",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.11.0",
@@ -24,7 +25,6 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.9.4",
-    "multer": "^2.3.0",
     "nodemailer": "^10.0.0",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1",
@@ -41,9 +41,5 @@
     "@types/swagger-ui-express": "^4.1.8",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2"
-  },
-  "allowScripts": {
-    "bcrypt@6.0.0": true,
-    "esbuild@0.28.2": true
   }
 }
