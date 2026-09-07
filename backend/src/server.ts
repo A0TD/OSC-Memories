@@ -3,6 +3,7 @@ import express, { Application, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import swaggerUI from "swagger-ui-express";
 import cors from "cors";
+import morgan from "morgan";
 
 import specs from "./config/swagger.config";
 import connectDB from "./config/mongoDB.config";
@@ -20,6 +21,8 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(morgan("dev"));
+
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 app.get("/", (req: Request, res: Response) => {
