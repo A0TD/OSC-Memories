@@ -125,22 +125,3 @@ export const deleteSeason = async (
     next(err);
   }
 };
-
-export const deleteAllSeasons = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    // delete all related events first
-    await Event.deleteMany();
-    const result = await Season.deleteMany();
-    return res.status(200).send({
-      success: true,
-      message: "All seasons and their events deleted successfully",
-      data: { result },
-    });
-  } catch (err) {
-    next(err);
-  }
-};

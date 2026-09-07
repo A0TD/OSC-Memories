@@ -4,7 +4,6 @@ import {
   getSeasonById,
   updateSeason,
   deleteSeason,
-  deleteAllSeasons,
 } from "../controllers/season.controller";
 import { Router } from "express";
 import eventRouter from "./event.route";
@@ -241,40 +240,7 @@ seasonRouter.put(
   validate(updateSeasonSchema),
   updateSeason,
 );
-/**
- * @swagger
- * /seasons:
- *   delete:
- *     summary: Delete all seasons and their associated events
- *     tags:
- *       - Seasons
- *     responses:
- *       200:
- *         description: All seasons and related events deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: All seasons and their events deleted successfully
- *                 data:
- *                   type: object
- *                   properties:
- *                     result:
- *                       type: object
- *       401:
- *         description: Unauthorized - Authentication required
- *       403:
- *         description: Forbidden - Insufficient permissions
- *       500:
- *         description: Internal Server error
- */
-seasonRouter.delete("/", authenticate, authorize("Admin"), deleteAllSeasons);
+
 /**
  * @swagger
  * /seasons/{seasonId}:
