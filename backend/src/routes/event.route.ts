@@ -53,6 +53,8 @@ eventRouter.use("/:eventId/media", mediaRouter);
  *                       type: array
  *                       items:
  *                         $ref: '#/components/schemas/Event'
+ *       400:
+ *         description: Bad Request - Validation error
  *       401:
  *         description: Unauthorized - Authentication required
  *       500:
@@ -102,6 +104,8 @@ eventRouter.get("/", getAllEvents);
  *                       type: array
  *                       items:
  *                         type: object
+ *       400:
+ *         description: Bad Request - Validation error
  *       403:
  *         description: Forbidden - Insufficient permissions
  *       404:
@@ -272,6 +276,8 @@ eventRouter.put("/:eventId", validate(updateEventSchema), updateEvent);
  *                 message:
  *                   type: string
  *                   example: Event deleted successfully
+ *       400:
+ *         description: Bad Request - Validation error
  *       401:
  *         description: Unauthorized - Authentication required
  *       403:

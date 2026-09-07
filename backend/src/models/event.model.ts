@@ -60,6 +60,7 @@ export const eventIdParamSchema = z.object({
  *         imageUrl:
  *           type: string
  *           description: URL or path to the event image
+ *           default: "https://placehold.co/600x400"
  *           example: https://example.com/images/event.png
  *         description:
  *           type: string
@@ -83,7 +84,7 @@ const eventSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     seasonId: {
       type: mongoose.Types.ObjectId,
@@ -92,6 +93,7 @@ const eventSchema = new mongoose.Schema(
     },
     imageUrl: {
       type: String,
+      default: "https://placehold.co/600x400",
     },
     description: {
       type: String,

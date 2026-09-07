@@ -27,21 +27,25 @@ seasonRouter.use("/:seasonId/events", eventRouter);
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Season'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
- *                   example: Failed to fetch seasons
- *                 error:
+ *                   example: Seasons retrieved successfully
+ *                 data:
  *                   type: object
+ *                   properties:
+ *                     seasons:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/Season'
+ *       401:
+ *         description: Unauthorized - Authentication required
+ *       500:
+ *         description: Internal Server error
  */
 seasonRouter.get("/", getAllSeasons);
 /**
@@ -64,29 +68,27 @@ seasonRouter.get("/", getAllSeasons);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Season'
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Season retrieved successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     season:
+ *                       $ref: '#/components/schemas/Season'
+ *       400:
+ *         description: Bad Request - Validation error
+ *       401:
+ *         description: Unauthorized - Authentication required
  *       404:
  *         description: Season not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Season not found
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Failed to fetch season
- *                 error:
- *                   type: object
+ *         description: Internal Server error
  */
 seasonRouter.get("/:seasonId",validate(seasonIdParamSchema), getSeasonById);
 /**
@@ -105,7 +107,6 @@ seasonRouter.get("/:seasonId",validate(seasonIdParamSchema), getSeasonById);
  *             required:
  *               - name
  *               - date
- *               - description
  *             properties:
  *               name:
  *                 type: string
@@ -114,6 +115,9 @@ seasonRouter.get("/:seasonId",validate(seasonIdParamSchema), getSeasonById);
  *                 type: string
  *                 format: date-time
  *                 example: "2026-03-01T00:00:00.000Z"
+ *               imageUrl:
+ *                 type: string
+ *                 example: "https://example.com/images/season.png"
  *               description:
  *                 type: string
  *                 example: 2026 Season
@@ -123,29 +127,27 @@ seasonRouter.get("/:seasonId",validate(seasonIdParamSchema), getSeasonById);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Season'
- *       400:
- *         description: Missing required fields
- *         content:
- *           application/json:
- *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
- *                   example: name, date, and description are required
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Failed to create season
- *                 error:
+ *                   example: Season created successfully
+ *                 data:
  *                   type: object
+ *                   properties:
+ *                     season:
+ *                       $ref: '#/components/schemas/Season'
+ *       400:
+ *         description: Bad Request - Missing required fields or validation error
+ *       401:
+ *         description: Unauthorized - Authentication required
+ *       403:
+ *         description: Forbidden - Insufficient permissions
+ *       500:
+ *         description: Internal Server error
  */
 seasonRouter.post("/",validate(createSeasonSchema), createSeason);
 /**
@@ -176,6 +178,9 @@ seasonRouter.post("/",validate(createSeasonSchema), createSeason);
  *                 type: string
  *                 format: date-time
  *                 example: "2026-03-15T00:00:00.000Z"
+ *               imageUrl:
+ *                 type: string
+ *                 example: "https://example.com/images/updated-season.png"
  *               description:
  *                 type: string
  *                 example: Updated season description.
@@ -185,29 +190,29 @@ seasonRouter.post("/",validate(createSeasonSchema), createSeason);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Season'
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Season updated successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     season:
+ *                       $ref: '#/components/schemas/Season'
+ *       400:
+ *         description: Bad Request - Validation error
+ *       401:
+ *         description: Unauthorized - Authentication required
+ *       403:
+ *         description: Forbidden - Insufficient permissions
  *       404:
  *         description: Season not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Season not found
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Failed to update season
- *                 error:
- *                   type: object
+ *         description: Internal Server error
  */
 seasonRouter.put("/:seasonId",validate(updateSeasonSchema), updateSeason);
 /**
@@ -225,20 +230,23 @@ seasonRouter.put("/:seasonId",validate(updateSeasonSchema), updateSeason);
  *             schema:
  *               type: object
  *               properties:
- *                 result:
- *                   type: object
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
- *                   example: Failed to delete all seasons
- *                 error:
+ *                   example: All seasons and their events deleted successfully
+ *                 data:
  *                   type: object
+ *                   properties:
+ *                     result:
+ *                       type: object
+ *       401:
+ *         description: Unauthorized - Authentication required
+ *       403:
+ *         description: Forbidden - Insufficient permissions
+ *       500:
+ *         description: Internal Server error
  */
 seasonRouter.delete("/", deleteAllSeasons);
 /**
@@ -263,31 +271,22 @@ seasonRouter.delete("/", deleteAllSeasons);
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
  *                   example: Season and its events deleted successfully
+ *       400:
+ *         description: Bad Request - Validation error
+ *       401:
+ *         description: Unauthorized - Authentication required
+ *       403:
+ *         description: Forbidden - Insufficient permissions
  *       404:
  *         description: Season not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Season not found
  *       500:
  *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Failed to delete season
- *                 error:
- *                   type: object
  */
 seasonRouter.delete("/:seasonId",validate(seasonIdParamSchema), deleteSeason);
 

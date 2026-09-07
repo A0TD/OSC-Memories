@@ -41,7 +41,6 @@ export const seasonIdParamSchema = z.object({
  *       required:
  *         - name
  *         - date
- *         - description
  *       properties:
  *         _id:
  *           type: string
@@ -56,9 +55,15 @@ export const seasonIdParamSchema = z.object({
  *           format: date-time
  *           description: start and end date of the season
  *           example: "2026-03-01T00:00:00.000Z"
+ *         imageUrl:
+ *           type: string
+ *           description: URL of the season's cover image
+ *           default: "https://placehold.co/600x400"
+ *           example: "https://example.com/images/season.png"
  *         description:
  *           type: string
  *           description: Description of the season
+ *           default: "No description included"
  *           example: The amazing 2026 season
  *         createdAt:
  *           type: string
@@ -86,6 +91,7 @@ const seasonSchema = new Schema(
     },
     imageUrl: {
       type: String,
+      default: "https://placehold.co/600x400",
     },
     description: {
       type: String,
