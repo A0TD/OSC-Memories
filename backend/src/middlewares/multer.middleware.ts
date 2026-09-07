@@ -4,8 +4,8 @@ import { Request } from "express";
 
 
 const storage = multer.diskStorage({
-    filename: (req:Request , file:any , cb:any)=>{
-         cb(null , Date.now() + path.extname(file.originalname));
+    filename: (req:Request , file , callback)=>{
+         callback(null , Date.now() + path.extname(file.originalname));
     }
 });
 

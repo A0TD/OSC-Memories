@@ -11,7 +11,7 @@ const validate =
         params: req.params,
       });
 
-      req.body = parsed.body;
+      if (parsed.body) req.body = parsed.body;
 
       next();
     } catch (err) {

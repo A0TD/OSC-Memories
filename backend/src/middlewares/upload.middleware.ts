@@ -21,8 +21,7 @@ const uploadMultiple = asyncHandler(
         next();
       }
     } catch (err) {
-      console.error(err);
-      res.status(500).send(`Internal server error -${err}`);
+      next(err);
     }
   },
 );
