@@ -20,6 +20,33 @@ export const loginSchema = z.object({
   }),
 });
 
+export const verifyEmailSchema = z.object({
+  body: z.object({
+    email: z.email("Invalid email address"),
+    otp: z.string().min(1, "OTP is required"),
+  }),
+});
+
+export const resendOtpSchema = z.object({
+  body: z.object({
+    email: z.email("Invalid email address"),
+  }),
+});
+
+export const forgotPasswordSchema = z.object({
+  body: z.object({
+    email: z.email("Invalid email address"),
+  }),
+});
+
+export const resetPasswordSchema = z.object({
+  body: z.object({
+    email: z.email("Invalid email address"),
+    otp: z.string().min(1, "OTP is required"),
+    newPassword: z.string().min(6, "New password must be at least 6 characters"),
+  }),
+});
+
 /**
  * @swagger
  * components:
@@ -37,12 +64,12 @@ export const loginSchema = z.object({
  *           example: 60d5ecb8b5c9c22b1c8e4011
  *         username:
  *           type: string
- *           description: The user's name.
+ *           description: The user's name
  *           example: johndoe
  *         email:
  *           type: string
  *           format: email
- *           description: email address of the user
+ *           description: Email address of the user
  *           example: johndoe123@example.com
  *         password:
  *           type: string
@@ -63,24 +90,20 @@ export const loginSchema = z.object({
  *           example: false
  *         verificationOtp:
  *           type: string
- *           nullable: true
  *           description: One-time password sent for account verification
  *           example: "482910"
  *         verificationOtpExpiry:
  *           type: string
  *           format: date-time
- *           nullable: true
  *           description: Expiration timestamp for the verification OTP
  *           example: "2026-09-05T19:00:00.000Z"
  *         resetPasswordOtp:
  *           type: string
- *           nullable: true
  *           description: One-time password sent for resetting forgotten password
  *           example: "193847"
  *         resetPasswordOtpExpiry:
  *           type: string
  *           format: date-time
- *           nullable: true
  *           description: Expiration timestamp for the reset OTP
  *           example: "2026-09-05T19:15:00.000Z"
  *         createdAt:

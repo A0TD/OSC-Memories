@@ -29,6 +29,7 @@ const authRouter = Router();
  *               - username
  *               - email
  *               - password
+ *               - inviteCode
  *             properties:
  *               username:
  *                 type: string
@@ -52,28 +53,195 @@ const authRouter = Router();
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
- *                   example: User created successfully.
- *                 user:
- *                   $ref: '#/components/schemas/User'
+ *                   example: User created successfully, verification OTP sent to email
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
  *       400:
- *         description: Bad Request - Missing required fields or email already exists
+ *         description: Bad Request - Missing required fields, invalid invite code, or email already exists
+ *       500:
+ *         description: Internal Server Error
+ */
+authRouter.post("/register", validate(registerSchema), register);
+/**
+ * @swagger
+ * /auth/verify-email:
+ *   post:
+ *     summary: Verify a user's email address using an OTP
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - otp
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *               otp:
+ *                 type: string
+ *                 example: "482910"
+ *     responses:
+ *       200:
+ *         description: Email verified successfully (sets HTTP-only cookie)
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
- *                   example: User with this email already exists
+ *                   example: Email verified successfully
+ *       400:
+ *         description: Bad Request - User not found, already verified, or invalid/expired OTP
+ *       500:
+ *         description: Internal Server Error
  */
-authRouter.post("/register", validate(registerSchema), register);
-
 authRouter.post("/verify-email", verifyEmail);
-
+/**
+ * @swagger
+ * /auth/resend-otp:
+ *   post:
+ *     summary: Resend verification OTP to the user's email
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *     responses:
+ *       200:
+ *         description: OTP resent successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Verification OTP sent to email
+ *       400:
+ *         description: Bad Request - User not found or already verified
+ *       500:
+ *         description: Internal Server Error
+ */
 authRouter.post("/resend-otp", resendOtp);
+/**
+ * @swagger
+ * /auth/forgot-password:
+ *   post:
+ *     summary: Request a password reset OTP
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *     responses:
+ *       200:
+ *         description: Reset password OTP sent successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Reset password OTP sent to email
+ *       400:
+ *         description: Bad Request - User not found
+ *       500:
+ *         description: Internal Server Error
+ */
 authRouter.post("/forgot-password", forgotPassword);
+/**
+ * @swagger
+ * /auth/reset-password:
+ *   post:
+ *     summary: Reset password using OTP
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - otp
+ *               - newPassword
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *               otp:
+ *                 type: string
+ *                 example: "193847"
+ *               newPassword:
+ *                 type: string
+ *                 format: password
+ *                 example: N3wP@ssw0rd!
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Password reset successfully
+ *       400:
+ *         description: Bad Request - Invalid/expired OTP or User not found
+ *       500:
+ *         description: Internal Server Error
+ */
 authRouter.post("/reset-password", resetPassword);
 /**
  * @swagger
@@ -102,27 +270,27 @@ authRouter.post("/reset-password", resetPassword);
  *                 example: P@ssword123
  *     responses:
  *       200:
- *         description: Login successful
+ *         description: Login successful (sets HTTP-only cookie)
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
  *                   example: Login successful
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *       401:
- *         description: Unauthorized - Invalid email or password
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Invalid credentials
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad Request - Invalid credentials or email not verified
+ *       500:
+ *         description: Internal Server Error
  */
 authRouter.post("/login", validate(loginSchema), login);
 
