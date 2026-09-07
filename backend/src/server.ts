@@ -9,6 +9,7 @@ import connectDB from "./config/mongoDB.config";
 import authRouter from "./routes/auth.route";
 import seasonRouter from "./routes/season.route";
 import adminRouter from "./routes/admin.route";
+import eventInfoRouter from "./routes/eventInfo.route";
 import { globalErrorHandler } from "./middlewares/errorHandler.middleware";
 
 const app: Application = express();
@@ -27,7 +28,8 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/auth", authRouter);
 app.use("/seasons/", seasonRouter);
-app.use("/admin",adminRouter)
+app.use("/event-infos", eventInfoRouter);
+app.use("/admin", adminRouter);
 
 app.use(globalErrorHandler);
 
