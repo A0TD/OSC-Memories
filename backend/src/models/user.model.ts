@@ -43,7 +43,9 @@ export const resetPasswordSchema = z.object({
   body: z.object({
     email: z.email("Invalid email address"),
     otp: z.string().min(1, "OTP is required"),
-    newPassword: z.string().min(6, "New password must be at least 6 characters"),
+    newPassword: z
+      .string()
+      .min(6, "New password must be at least 6 characters"),
   }),
 });
 
@@ -60,6 +62,7 @@ export const resetPasswordSchema = z.object({
  *       properties:
  *         _id:
  *           type: string
+ *           readOnly: true
  *           description: Auto-generated MongoDB ObjectId
  *           example: 60d5ecb8b5c9c22b1c8e4011
  *         username:

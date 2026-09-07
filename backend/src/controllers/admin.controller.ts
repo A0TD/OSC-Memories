@@ -30,6 +30,9 @@ const makeAdmin = async (req: Request, res: Response, next: NextFunction) => {
       { new: true },
     );
 
+        if(!updatedUser)
+      throw new AppError(404, "User not found");
+
     res.status(200).send({
       success: true,
       message: "User has been promoted!",
