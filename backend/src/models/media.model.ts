@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
 
 const mediaSchema = new mongoose.Schema({
-  // name:{
-  //     type: String ,
-  // } ,
+  ownerId: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   eventId: {
     type: mongoose.Types.ObjectId,
     ref: "Event",
@@ -13,9 +15,8 @@ const mediaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  type: {
+  mimeType: {
     type: String,
-    enum: ["Image", "Video"],
     required: true,
   },
 });
