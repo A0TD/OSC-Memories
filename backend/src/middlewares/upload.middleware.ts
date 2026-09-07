@@ -16,7 +16,7 @@ const uploadMultiple = asyncHandler(async(req:Request,res:Response,next:NextFunc
         imageUrls.push(result.secure_url);
        
         //we need here to make images interface to extend Request type
-        req.images = imageUrls;
+        (req as any).images = imageUrls;
 
         // console.log(req.images);
 
