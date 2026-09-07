@@ -83,7 +83,7 @@ export const verifyEmail = async (
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 1 * 60 * 60 * 1000,
     });
     res.status(200).send({
@@ -206,7 +206,7 @@ export const login = async (
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 1 * 60 * 60 * 1000,
     });
 
