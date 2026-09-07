@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import Season from "../models/season.model";
-import Event from "../models/event.model";
 import AppError from "../utils/appError.util";
 
 export const getAllSeasons = async (
@@ -54,10 +53,6 @@ export const createSeason = async (
 ) => {
   try {
     const { name, date, description } = req.body;
-
-    if (!name || !date || !description) {
-      throw new AppError(400, "name, date, and description are required");
-    }
 
     const season = await Season.create({ name, date, description });
     return res.status(201).send({

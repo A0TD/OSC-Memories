@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Event from "../models/event.model.js";
 // import Media   from "../models/media.model.js"
-import mongoose from "mongoose";
 import AppError from "../utils/appError.util.js";
 
 export const getAllEvents = async (
@@ -30,23 +29,19 @@ export const getEvent = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { eventId } = req.params;
+  const { seasonId, eventId } = req.params;
   try {
-    const requiredEvent = await Event.findOne({ _id: eventId });
+    const requiredEvent = await Event.findOne({ _id: eventId, seasonId });
 
     if (!requiredEvent) {
       throw new AppError(404, "Event not found");
     }
-
-    //return all media related to event
-    const relatedMedia: any[] = [];
 
     res.status(200).send({
       success: true,
       message: "Event retrieved successfully",
       data: {
         event: requiredEvent,
-        relatedMedia,
       },
     });
   } catch (err) {
@@ -61,11 +56,10 @@ export const createEvent = async (
 ) => {
   const { name, imageUrl, description } = req.body;
   const { seasonId }: any = req.params;
-  const objectId = new mongoose.Types.ObjectId(seasonId);
   try {
     const newEvent = await Event.create({
       name: name,
-      seasonId: objectId,
+      seasonId,
       imageUrl,
       description: description,
     });
@@ -86,17 +80,17 @@ export const deleteEvent = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { eventId } = req.params;
+  const { seasonId, eventId } = req.params;
   try {
-    const requiredEvent = await Event.findOne({ _id: eventId });
+    const deletedEvent = await Event.findOneAndDelete({
+      _id: eventId,
+      seasonId,
+    });
 
-    if (!requiredEvent) {
+    if (!deletedEvent) {
       throw new AppError(404, "Event not found");
     }
-
     //we need to delete all media related to this event
-
-    await Event.deleteOne({ _id: eventId });
 
     res.status(200).send({
       success: true,
@@ -112,11 +106,11 @@ export const updateEvent = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { eventId } = req.params;
+  const { seasonId, eventId } = req.params;
   const { name, imageUrl, description } = req.body;
   try {
-    const updatedEvent = await Event.findByIdAndUpdate(
-      eventId,
+    const updatedEvent = await Event.findOneAndUpdate(
+      { _id: eventId, seasonId },
       {
         name: name,
         imageUrl,
