@@ -11,14 +11,18 @@ import eventRouter from "./event.route";
 import validate from "../middlewares/zod.validation";
 import {
   createSeasonSchema,
-  seasonIdParamSchema,
   updateSeasonSchema,
-} from "../models/season.model";
+} from "../zodSchemas/season.zodSchema";
+import paramSchema from "../zodSchemas/param.zodSchema";
 import { authenticate, authorize } from "../middlewares/auth.middleware";
 
 const seasonRouter = Router();
 
-seasonRouter.use("/:seasonId/events", eventRouter);
+seasonRouter.use(
+  "/:seasonId/events",
+  validate(paramSchema("seasonId")),
+  eventRouter,
+);
 /**
  * @swagger
  * /seasons:
@@ -95,7 +99,11 @@ seasonRouter.get("/", getAllSeasons);
  *       500:
  *         description: Internal Server error
  */
-seasonRouter.get("/:seasonId", validate(seasonIdParamSchema), getSeasonById);
+seasonRouter.get(
+  "/:seasonId",
+  validate(paramSchema("seasonId")),
+  getSeasonById,
+);
 /**
  * @swagger
  * /seasons:
@@ -229,6 +237,7 @@ seasonRouter.put(
   "/:seasonId",
   authenticate,
   authorize("Admin"),
+  validate(paramSchema("seasonId")),
   validate(updateSeasonSchema),
   updateSeason,
 );
@@ -309,7 +318,7 @@ seasonRouter.delete(
   "/:seasonId",
   authenticate,
   authorize("Admin"),
-  validate(seasonIdParamSchema),
+  validate(paramSchema("seasonId")),
   deleteSeason,
 );
 

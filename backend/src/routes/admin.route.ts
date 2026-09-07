@@ -5,6 +5,8 @@ import {
   deleteUser,
 } from "../controllers/admin.controller";
 import { authenticate, authorize } from "../middlewares/auth.middleware";
+import validate from "../middlewares/zod.validation";
+import paramSchema from "../zodSchemas/param.zodSchema";
 
 const adminRouter = Router();
 
@@ -89,7 +91,11 @@ adminRouter.get("/users", getAllUsers);
  *       500:
  *         description: Internal server error
  */
-adminRouter.patch("/users/:userId/make-admin", makeAdmin);
+adminRouter.patch(
+  "/users/:userId/make-admin",
+  validate(paramSchema("userId")),
+  makeAdmin,
+);
 /**
  * @swagger
  * /api/admin/users/{userId}:
@@ -132,6 +138,10 @@ adminRouter.patch("/users/:userId/make-admin", makeAdmin);
  *       500:
  *         description: Internal server error
  */
-adminRouter.delete("/users/:userId", deleteUser);
+adminRouter.delete(
+  "/users/:userId",
+  validate(paramSchema("userId")),
+  deleteUser,
+);
 
 export default adminRouter;

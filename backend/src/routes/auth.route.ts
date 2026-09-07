@@ -14,7 +14,7 @@ import {
   resendOtpSchema,
   verifyEmailSchema,
   resetPasswordSchema,
-} from "../models/user.model";
+} from "../zodSchemas/user.zodSchema";
 import validate from "../middlewares/zod.validation";
 
 const authRouter = Router();

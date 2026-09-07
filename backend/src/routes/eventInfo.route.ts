@@ -2,9 +2,9 @@ import { Router } from "express";
 import validate from "../middlewares/zod.validation";
 import {
   createEventInfoSchema,
-  eventInfoIdParamSchema,
   updateEventInfoSchema,
-} from "../models/eventInfo.model";
+} from "../zodSchemas/eventInfo.zodSchema";
+import paramSchema from "../zodSchemas/param.zodSchema";
 import {
   getAllEventInfos,
   getEventInfoById,
@@ -91,7 +91,7 @@ eventInfoRouter.get("/", getAllEventInfos);
  */
 eventInfoRouter.get(
   "/:eventInfoId",
-  validate(eventInfoIdParamSchema),
+  validate(paramSchema("eventInfoId")),
   getEventInfoById,
 );
 
@@ -215,7 +215,7 @@ eventInfoRouter.put(
   "/:eventInfoId",
   authenticate,
   authorize("Admin"),
-  validate(eventInfoIdParamSchema),
+  validate(paramSchema("eventInfoId")),
   validate(updateEventInfoSchema),
   updateEventInfo,
 );
@@ -263,7 +263,7 @@ eventInfoRouter.delete(
   "/:eventInfoId",
   authenticate,
   authorize("Admin"),
-  validate(eventInfoIdParamSchema),
+  validate(paramSchema("eventInfoId")),
   deleteEventInfo,
 );
 

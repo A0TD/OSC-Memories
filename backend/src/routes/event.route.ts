@@ -11,14 +11,19 @@ import mediaRouter from "./media.route";
 import validate from "../middlewares/zod.validation";
 import {
   createEventSchema,
-  eventIdParamSchema,
   updateEventSchema,
-} from "../models/event.model";
+} from "../zodSchemas/event.zodSchema";
+
 import { authenticate, authorize } from "../middlewares/auth.middleware";
+import paramSchema from "../zodSchemas/param.zodSchema";
 
 const eventRouter = Router({ mergeParams: true });
 
-eventRouter.use("/:eventId/media", mediaRouter);
+eventRouter.use(
+  "/:eventId/media",
+  validate(paramSchema("eventId")),
+  mediaRouter,
+);
 /**
  * @swagger
  * /seasons/{seasonId}/events:
@@ -114,7 +119,7 @@ eventRouter.get("/", getAllEvents);
  *       500:
  *         description: Internal server error
  */
-eventRouter.get("/:eventId", validate(eventIdParamSchema), getEvent);
+eventRouter.get("/:eventId", validate(paramSchema("eventId")), getEvent);
 /**
  * @swagger
  * /seasons/{seasonId}/events:
@@ -252,6 +257,7 @@ eventRouter.put(
   "/:eventId",
   authenticate,
   authorize("Admin"),
+  validate(paramSchema("eventId")),
   validate(updateEventSchema),
   updateEvent,
 );
@@ -304,12 +310,8 @@ eventRouter.delete(
   "/:eventId",
   authenticate,
   authorize("Admin"),
-  validate(eventIdParamSchema),
+  validate(paramSchema("eventId")),
   deleteEvent,
 );
 
 export default eventRouter;
-
-// eventRouter.get("/:seasonId/:eventId/" , getEventPhotos);
-
-// eventRouter.get("/:seasonId/:eventId/" , getEventVideos);
