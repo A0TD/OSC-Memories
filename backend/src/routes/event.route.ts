@@ -38,16 +38,25 @@ eventRouter.use("/:eventId/media", mediaRouter);
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Event'
- *       404:
- *         description: No events found for the specified season
- *         content:
- *           text/plain:
- *             schema:
- *               type: string
- *               example: "There are no events yet"
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Events retrieved successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     events:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/Event'
+ *       401:
+ *         description: Unauthorized - Authentication required
+ *       500:
+ *         description: Internal server error
  */
 eventRouter.get("/", getAllEvents);
 /**
@@ -78,19 +87,27 @@ eventRouter.get("/", getAllEvents);
  *             schema:
  *               type: object
  *               properties:
- *                 requiredEvent:
- *                   $ref: '#/components/schemas/Event'
- *                 allMediaRelated:
- *                   type: array
- *                   items:
- *                     type: object
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Event retrieved successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     event:
+ *                       $ref: '#/components/schemas/Event'
+ *                     relatedMedia:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *       403:
+ *         description: Forbidden - Insufficient permissions
  *       404:
  *         description: Event not found
- *         content:
- *           text/plain:
- *             schema:
- *               type: string
- *               example: "the required event is not found"
+ *       500:
+ *         description: Internal server error
  */
 eventRouter.get("/:eventId", validate(eventIdParamSchema), getEvent);
 /**
@@ -131,7 +148,27 @@ eventRouter.get("/:eventId", validate(eventIdParamSchema), getEvent);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Event'
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Event created successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     event:
+ *                       $ref: '#/components/schemas/Event'
+ *       400:
+ *         description: Bad Request - Validation error
+ *       401:
+ *         description: Unauthorized - Authentication required
+ *       403:
+ *         description: Forbidden - Insufficient permissions
+ *       500:
+ *         description: Internal server error
  */
 eventRouter.post("/", validate(createEventSchema), createEvent);
 /**
@@ -163,33 +200,42 @@ eventRouter.post("/", validate(createEventSchema), createEvent);
  *             properties:
  *               name:
  *                 type: string
- *                 example: Updated Event Name.
+ *                 example: Updated Event Name
  *               imageUrl:
  *                 type: string
  *                 example: https://example.com/images/new-event.png
  *               description:
  *                 type: string
- *                 example: Updated event description.
+ *                 example: Updated event description
  *     responses:
- *       201:
- *         description: Event updated successfully What do you My stuff, I don't know, if you need, yeah, I mean, for Hmm, Diva, what do you think of that? Can you get No, it's my favorite. It's a little bit over here, get all events, I don't Aye, from, I can get a Brazilian ID.
+ *       200:
+ *         description: Event updated successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
- *                   example: Event is updated
- *                 updatedEvent:
- *                   $ref: '#/components/schemas/Event'
+ *                   example: Event updated successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     event:
+ *                       $ref: '#/components/schemas/Event'
+ *       400:
+ *         description: Bad Request - Validation error
+ *       401:
+ *         description: Unauthorized - Authentication required
+ *       403:
+ *         description: Forbidden - Insufficient permissions
  *       404:
  *         description: Event not found
- *         content:
- *           text/plain:
- *             schema:
- *               type: string
- *               example: "the required event is not found"
+ *       500:
+ *         description: Internal server error
  */
 eventRouter.put("/:eventId", validate(updateEventSchema), updateEvent);
 /**
@@ -213,23 +259,27 @@ eventRouter.put("/:eventId", validate(updateEventSchema), updateEvent);
  *           type: string
  *         description: ID of the event
  *     responses:
- *       204:
+ *       200:
  *         description: Event deleted successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
- *                   example: Event is deleted correctly
+ *                   example: Event deleted successfully
+ *       401:
+ *         description: Unauthorized - Authentication required
+ *       403:
+ *         description: Forbidden - Insufficient permissions
  *       404:
  *         description: Event not found
- *         content:
- *           text/plain:
- *             schema:
- *               type: string
- *               example: "the required event is not found"
+ *       500:
+ *         description: Internal server error
  */
 eventRouter.delete("/:eventId", validate(eventIdParamSchema), deleteEvent);
 

@@ -46,6 +46,7 @@ export const eventIdParamSchema = z.object({
  *       properties:
  *         _id:
  *           type: string
+ *           readOnly: true
  *           description: Auto-generated MongoDB ObjectId
  *           example: 60d5ecb8b5c9c22b1c8e4011
  *         name:

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../models/user.model";
+import AppError from "../utils/appError.util";
 
 const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -46,6 +47,9 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.params;
 
     const deletedUser = await User.findByIdAndDelete(userId);
+
+    if(!deletedUser)
+      throw new AppError(404, "User not found");
 
     res.status(200).send({
       success: true,
