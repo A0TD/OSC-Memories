@@ -7,6 +7,8 @@ import {
 } from "../controllers/media.controller";
 import { Router } from "express";
 import { authenticate } from "../middlewares/auth.middleware";
+import uploadMultiple from "../middlewares/upload.middleware";
+import upload from "../middlewares/multer.middleware";
 
 const mediaRouter = Router({ mergeParams: true });
 
@@ -14,7 +16,7 @@ mediaRouter.get("/", getAllMedia);
 
 mediaRouter.get("/:mediaId", getMedia);
 
-mediaRouter.post("/", authenticate, createMedia);
+mediaRouter.post("/", authenticate , upload.array("images") , uploadMultiple , createMedia);
 
 // to update or delete media, you must be the owner of the media or an admin
 
