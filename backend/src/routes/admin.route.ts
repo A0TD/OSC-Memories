@@ -1,14 +1,22 @@
-import {Router} from "express"
-import { getAllUsers,makeAdmin,deleteUser } from "../controllers/admin.controller"
+import { Router } from "express";
+import {
+  getAllUsers,
+  makeAdmin,
+  deleteUser,
+} from "../controllers/admin.controller";
+import { authenticate, authorize } from "../middlewares/auth.middleware";
 
-const adminRouter = Router()
+const adminRouter = Router();
+
+adminRouter.use(authenticate);
+adminRouter.use(authorize("Admin"));
 
 /**
  * @swagger
  * /api/admin/users:
  *   get:
  *     summary: Retrieve all users
- *     tags: 
+ *     tags:
  *       - Admin
  *     responses:
  *       200:
@@ -38,13 +46,13 @@ const adminRouter = Router()
  *       500:
  *         description: Internal server error
  */
-adminRouter.get("/users",getAllUsers)
+adminRouter.get("/users", getAllUsers);
 /**
  * @swagger
  * /api/admin/users/{userId}/make-admin:
  *   patch:
  *     summary: Promote a user to Admin
- *     tags: 
+ *     tags:
  *       - Admin
  *     parameters:
  *       - in: path
@@ -81,13 +89,13 @@ adminRouter.get("/users",getAllUsers)
  *       500:
  *         description: Internal server error
  */
-adminRouter.patch("/users/:userId/make-admin",makeAdmin)
+adminRouter.patch("/users/:userId/make-admin", makeAdmin);
 /**
  * @swagger
  * /api/admin/users/{userId}:
  *   delete:
  *     summary: Delete a user
- *     tags: 
+ *     tags:
  *       - Admin
  *     parameters:
  *       - in: path
@@ -124,6 +132,6 @@ adminRouter.patch("/users/:userId/make-admin",makeAdmin)
  *       500:
  *         description: Internal server error
  */
-adminRouter.delete("/users/:userId",deleteUser)
+adminRouter.delete("/users/:userId", deleteUser);
 
-export default adminRouter
+export default adminRouter;

@@ -9,7 +9,12 @@ import {
 import { Router } from "express";
 import eventRouter from "./event.route";
 import validate from "../middlewares/zod.validation";
-import { createSeasonSchema, seasonIdParamSchema, updateSeasonSchema } from "../models/season.model";
+import {
+  createSeasonSchema,
+  seasonIdParamSchema,
+  updateSeasonSchema,
+} from "../models/season.model";
+import { authenticate, authorize } from "../middlewares/auth.middleware";
 
 const seasonRouter = Router();
 
@@ -19,7 +24,7 @@ seasonRouter.use("/:seasonId/events", eventRouter);
  * /seasons:
  *   get:
  *     summary: Retrieve all seasons
- *     tags: 
+ *     tags:
  *       - Seasons
  *     responses:
  *       200:
@@ -53,7 +58,7 @@ seasonRouter.get("/", getAllSeasons);
  * /seasons/{seasonId}:
  *   get:
  *     summary: Get a season by ID
- *     tags: 
+ *     tags:
  *       - Seasons
  *     parameters:
  *       - in: path
@@ -90,13 +95,13 @@ seasonRouter.get("/", getAllSeasons);
  *       500:
  *         description: Internal Server error
  */
-seasonRouter.get("/:seasonId",validate(seasonIdParamSchema), getSeasonById);
+seasonRouter.get("/:seasonId", validate(seasonIdParamSchema), getSeasonById);
 /**
  * @swagger
  * /seasons:
  *   post:
  *     summary: Create a new season
- *     tags: 
+ *     tags:
  *       - Seasons
  *     requestBody:
  *       required: true
@@ -149,13 +154,19 @@ seasonRouter.get("/:seasonId",validate(seasonIdParamSchema), getSeasonById);
  *       500:
  *         description: Internal Server error
  */
-seasonRouter.post("/",validate(createSeasonSchema), createSeason);
+seasonRouter.post(
+  "/",
+  authenticate,
+  authorize("Admin"),
+  validate(createSeasonSchema),
+  createSeason,
+);
 /**
  * @swagger
  * /seasons/{seasonId}:
  *   put:
  *     summary: Update a season by ID
- *     tags: 
+ *     tags:
  *       - Seasons
  *     parameters:
  *       - in: path
@@ -214,13 +225,19 @@ seasonRouter.post("/",validate(createSeasonSchema), createSeason);
  *       500:
  *         description: Internal Server error
  */
-seasonRouter.put("/:seasonId",validate(updateSeasonSchema), updateSeason);
+seasonRouter.put(
+  "/:seasonId",
+  authenticate,
+  authorize("Admin"),
+  validate(updateSeasonSchema),
+  updateSeason,
+);
 /**
  * @swagger
  * /seasons:
  *   delete:
  *     summary: Delete all seasons and their associated events
- *     tags: 
+ *     tags:
  *       - Seasons
  *     responses:
  *       200:
@@ -248,13 +265,13 @@ seasonRouter.put("/:seasonId",validate(updateSeasonSchema), updateSeason);
  *       500:
  *         description: Internal Server error
  */
-seasonRouter.delete("/", deleteAllSeasons);
+seasonRouter.delete("/", authenticate, authorize("Admin"), deleteAllSeasons);
 /**
  * @swagger
  * /seasons/{seasonId}:
  *   delete:
  *     summary: Delete a season and its associated events
- *     tags: 
+ *     tags:
  *       - Seasons
  *     parameters:
  *       - in: path
@@ -288,6 +305,12 @@ seasonRouter.delete("/", deleteAllSeasons);
  *       500:
  *         description: Server error
  */
-seasonRouter.delete("/:seasonId",validate(seasonIdParamSchema), deleteSeason);
+seasonRouter.delete(
+  "/:seasonId",
+  authenticate,
+  authorize("Admin"),
+  validate(seasonIdParamSchema),
+  deleteSeason,
+);
 
 export default seasonRouter;

@@ -14,6 +14,7 @@ import {
   eventIdParamSchema,
   updateEventSchema,
 } from "../models/event.model";
+import { authenticate, authorize } from "../middlewares/auth.middleware";
 
 const eventRouter = Router({ mergeParams: true });
 
@@ -174,7 +175,13 @@ eventRouter.get("/:eventId", validate(eventIdParamSchema), getEvent);
  *       500:
  *         description: Internal server error
  */
-eventRouter.post("/", validate(createEventSchema), createEvent);
+eventRouter.post(
+  "/",
+  authenticate,
+  authorize("Admin"),
+  validate(createEventSchema),
+  createEvent,
+);
 /**
  * @swagger
  * /seasons/{seasonId}/events/{eventId}:
@@ -241,7 +248,13 @@ eventRouter.post("/", validate(createEventSchema), createEvent);
  *       500:
  *         description: Internal server error
  */
-eventRouter.put("/:eventId", validate(updateEventSchema), updateEvent);
+eventRouter.put(
+  "/:eventId",
+  authenticate,
+  authorize("Admin"),
+  validate(updateEventSchema),
+  updateEvent,
+);
 /**
  * @swagger
  * /seasons/{seasonId}/events/{eventId}:
@@ -287,7 +300,13 @@ eventRouter.put("/:eventId", validate(updateEventSchema), updateEvent);
  *       500:
  *         description: Internal server error
  */
-eventRouter.delete("/:eventId", validate(eventIdParamSchema), deleteEvent);
+eventRouter.delete(
+  "/:eventId",
+  authenticate,
+  authorize("Admin"),
+  validate(eventIdParamSchema),
+  deleteEvent,
+);
 
 export default eventRouter;
 

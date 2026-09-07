@@ -12,6 +12,7 @@ import {
   updateEventInfo,
   deleteEventInfo,
 } from "../controllers/eventInfo.controller";
+import { authenticate, authorize } from "../middlewares/auth.middleware";
 
 const eventInfoRouter = Router();
 
@@ -145,7 +146,13 @@ eventInfoRouter.get(
  *       500:
  *         description: Internal server error
  */
-eventInfoRouter.post("/", validate(createEventInfoSchema), createEventInfo);
+eventInfoRouter.post(
+  "/",
+  authenticate,
+  authorize("Admin"),
+  validate(createEventInfoSchema),
+  createEventInfo,
+);
 
 /**
  * @swagger
@@ -206,6 +213,9 @@ eventInfoRouter.post("/", validate(createEventInfoSchema), createEventInfo);
  */
 eventInfoRouter.put(
   "/:eventInfoId",
+  authenticate,
+  authorize("Admin"),
+  validate(eventInfoIdParamSchema),
   validate(updateEventInfoSchema),
   updateEventInfo,
 );
@@ -251,6 +261,8 @@ eventInfoRouter.put(
  */
 eventInfoRouter.delete(
   "/:eventInfoId",
+  authenticate,
+  authorize("Admin"),
   validate(eventInfoIdParamSchema),
   deleteEventInfo,
 );
