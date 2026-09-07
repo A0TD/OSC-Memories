@@ -9,6 +9,12 @@ export const createEventInfoSchema = z.object({
 });
 
 export const updateEventInfoSchema = z.object({
+  params: z.object({
+    eventInfoId: z
+      .string()
+      .regex(/^[0-9a-fA-F]{24}$/, "Invalid MongoDB ObjectId format"),
+  }),
+
   body: z.object({
     name: z.string().trim().min(1, "Name cannot be empty").optional(),
     description: z
