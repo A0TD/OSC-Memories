@@ -13,7 +13,9 @@ export const globalErrorHandler = (
 
   if (err instanceof ZodError) {
     statusCode = 400;
-    message = err.issues[0].message;
+    const firstIssue = err.issues[0];
+    const fieldPath = firstIssue.path.join(".");
+    message = `${fieldPath}: ${firstIssue.message}`;
   }
 
   res.status(statusCode).send({
