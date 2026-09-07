@@ -3,10 +3,7 @@ import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import User from "../models/user.model";
 import AppError from "../utils/appError.util";
-import {
-  sendResetPasswordOtp,
-  sendVerificationOtp,
-} from "../utils/sendOtp.util";
+import sendOtp from "../utils/sendOtp.util";
 
 export const register = async (
   req: Request,
@@ -29,7 +26,7 @@ export const register = async (
       password: hashedPassword,
     });
 
-    await sendVerificationOtp(user._id, user.email);
+    await sendOtp(user._id, user.email, "verification");
 
     return res.status(201).send({
       success: true,
@@ -112,7 +109,7 @@ export const resendOtp = async (
     if (user.isVerified) {
       throw new AppError(400, "Email already verified");
     }
-    await sendVerificationOtp(user._id, user.email);
+    await sendOtp(user._id, user.email, "verification");
     return res.status(200).send({
       success: true,
       message: "Verification OTP sent to email",
@@ -133,7 +130,7 @@ export const forgotPassword = async (
     if (!user) {
       throw new AppError(400, "User not found");
     }
-    await sendResetPasswordOtp(user._id, user.email);
+    await sendOtp(user._id, user.email, "resetPassword");
     return res.status(200).send({
       success: true,
       message: "Reset password OTP sent to email",
