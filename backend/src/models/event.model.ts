@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Media from "./media.model";
 
 /**
  * @swagger
@@ -68,6 +69,12 @@ const eventSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+//before deleting an event, delete all related media
+eventSchema.pre("findOneAndDelete", async function () {
+  const eventId = this.getQuery()._id;
+  await Media.deleteMany({ eventId });
+});
 
 const Event = mongoose.model("Event", eventSchema);
 

@@ -5,6 +5,14 @@ import swaggerUI from "swagger-ui-express";
 import cors from "cors";
 import morgan from "morgan";
 
+import specs from "./config/swagger.config";
+import connectDB from "./config/mongoDB.config";
+import authRouter from "./routes/auth.route";
+import seasonRouter from "./routes/season.route";
+import adminRouter from "./routes/admin.route";
+import eventInfoRouter from "./routes/eventInfo.route";
+import { globalErrorHandler } from "./middlewares/errorHandler.middleware";
+
 const app: Application = express();
 const PORT = (process.env.PORT as string) || 3000;
 
@@ -14,16 +22,6 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
-
-
-import specs                              from "./config/swagger.config";
-import connectDB                          from "./config/mongoDB.config";
-import authRouter                         from "./routes/auth.route";
-import seasonRouter                       from "./routes/season.route";
-import adminRouter                        from "./routes/admin.route";
-import eventInfoRouter                    from "./routes/eventInfo.route";
-import { globalErrorHandler }             from "./middlewares/errorHandler.middleware";
-
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");

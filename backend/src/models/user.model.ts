@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Media from "./media.model";
 
 /**
  * @swagger
@@ -114,6 +115,12 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+//before deleting a user, delete all related media
+userSchema.pre("findOneAndDelete", async function () {
+  const userId = this.getQuery()._id;
+  await Media.deleteMany({ ownerId: userId });
+});
 
 const User = mongoose.model("User", userSchema);
 

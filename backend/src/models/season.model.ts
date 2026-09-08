@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import Event from "./event.model";
+import Media from "./media.model";
 
 /**
  * @swagger
@@ -71,9 +72,12 @@ const seasonSchema = new Schema(
   { timestamps: true, strict: false },
 );
 
-//when delete a season  delete all the events related to it
+//before deleting a season, delete all related events and media
 seasonSchema.pre("findOneAndDelete", async function () {
   const seasonId = this.getQuery()._id;
+  const events = await Event.find({ seasonId });
+  const eventIds = events.map((event) => event._id);
+  await Media.deleteMany({ eventId: { $in: eventIds } });
   await Event.deleteMany({ seasonId });
 });
 
