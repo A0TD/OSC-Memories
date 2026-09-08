@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import cloudinary from "../config/cloudinary.config";
 
 const mediaSchema = new mongoose.Schema({
   ownerId: {
@@ -19,6 +20,10 @@ const mediaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  publicId: {
+    type: String,
+    required: true,
+  },
 });
 
 mediaSchema.set("toJSON", {
@@ -28,8 +33,14 @@ mediaSchema.set("toJSON", {
     delete ret.__v;
     delete ret.createdAt;
     delete ret.updatedAt;
+    delete ret.publicId;
     return ret;
   },
+});
+
+mediaSchema.pre("findOneAndDelete", async function () {
+  const publicId = this.getQuery().publicId;
+  await cloudinary.uploader.destroy(publicId);
 });
 
 const Media = mongoose.model("Media", mediaSchema);
