@@ -45,32 +45,52 @@ export const getMedia = async (
 };
 
 export const uploadMedia = async (
+  //takes uploaded files from the request and uploads them one by one to cloudinary
+  //deletes the temporary files from the server's local storage
+  //creates documents for all the uploaded media then inserts them all into the database
+  //if it fails even one file upload, it deletes the rest from cloudinary to enforce atomicity
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  let uploadedPublicId;
+  const uploadedPublicIds: string[] = [];
   try {
     const { eventId }: any = req.params;
-    if (!req.file) throw new AppError(400, "Missing file upload!");
+    const files = req.files as Express.Multer.File[]; // allows using .map() on the files variable
 
-    let result;
+    if (!files || files.length === 0)
+      throw new AppError(400, "Missing file upload!");
+
+    let uploadedMedia;
     try {
-      result = await cloudinary.uploader.upload(req.file.path);
-      uploadedPublicId = result.public_id;
+      uploadedMedia = await Promise.all(
+        files.map(async (file) => {
+          const result = await cloudinary.uploader.upload(file.path, {
+            resource_type: "auto",
+          });
+          uploadedPublicIds.push(result.public_id);
+          return { file, result };
+        }),
+      );
     } finally {
-      if (req.file.path) {
-        await fs.unlink(req.file.path).catch(() => {}); //Deletes the temporary files created by multer using File System (fs)
-      }
+      await Promise.all(
+        //Deletes the temporary files created by multer using File System (fs)
+        files.map((file) => fs.unlink(file.path).catch(() => {})),
+      );
     }
 
-    const createdMedia = await Media.create({
-      ownerId: (req as any).user.id,
-      eventId,
-      url: result.secure_url,
-      mimeType: req.file.mimetype,
-      publicId: result.public_id,
+    const mediaDocuments = uploadedMedia.map(({ file, result }) => {
+      //destructures a single uploaded media into file and result
+      {
+        ownerId: (req as any).user.id;
+        eventId;
+        url: result.secure_url;
+        mimeType: file.mimetype;
+        publicId: result.public_id;
+      }
     });
+
+    const createdMedia = await Media.insertMany(mediaDocuments);
 
     res.status(200).json({
       success: true,
@@ -78,8 +98,10 @@ export const uploadMedia = async (
       createdMedia,
     });
   } catch (err) {
-    if (uploadedPublicId) {
-      await cloudinary.uploader.destroy(uploadedPublicId).catch(() => {});
+    if (uploadedPublicIds.length > 0) {
+      uploadedPublicIds.map(async (uploadedPublicId) => {
+        await cloudinary.uploader.destroy(uploadedPublicId).catch(() => {});
+      });
     }
     next(err);
   }
