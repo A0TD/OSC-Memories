@@ -47,7 +47,9 @@ export const verifyEmail = async (
 ) => {
   try {
     const { email, otp } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select(
+      "+verificationOtp +verificationOtpExpiry",
+    );
     if (!user) {
       throw new AppError(400, "User not found");
     }
@@ -147,7 +149,9 @@ export const resetPassword = async (
 ) => {
   try {
     const { email, otp, newPassword } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select(
+      "+resetPasswordOtp +resetPasswordOtpExpiry",
+    );
     if (!user) {
       throw new AppError(400, "User not found");
     }

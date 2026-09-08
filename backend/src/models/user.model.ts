@@ -102,20 +102,39 @@ const userSchema = new mongoose.Schema(
     },
     verificationOtp: {
       type: String,
+      select: false,
     },
     verificationOtpExpiry: {
       type: Date,
+      select: false,
     },
     resetPasswordOtp: {
       type: String,
+      select: false,
     },
     resetPasswordOtpExpiry: {
       type: Date,
+      select: false,
     },
   },
   { timestamps: true },
 );
 
+userSchema.set("toJSON", {
+  transform: (doc, ret: any) => {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    delete ret.password;
+    delete ret.verificationOtp;
+    delete ret.verificationOtpExpiry;
+    delete ret.resetPasswordOtp;
+    delete ret.resetPasswordOtpExpiry;
+    delete ret.createdAt;
+    delete ret.updatedAt;
+    return ret;
+  },
+});
 //before deleting a user, delete all related media
 userSchema.pre("findOneAndDelete", async function () {
   const userId = this.getQuery()._id;

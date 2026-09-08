@@ -72,6 +72,17 @@ const seasonSchema = new Schema(
   { timestamps: true, strict: false },
 );
 
+seasonSchema.set("toJSON", {
+  transform: (doc, ret: any) => {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    delete ret.createdAt;
+    delete ret.updatedAt;
+    return ret;
+  },
+});
+
 //before deleting a season, delete all related events and media
 seasonSchema.pre("findOneAndDelete", async function () {
   const seasonId = this.getQuery()._id;

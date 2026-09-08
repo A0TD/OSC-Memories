@@ -21,6 +21,17 @@ const mediaSchema = new mongoose.Schema({
   },
 });
 
+mediaSchema.set("toJSON", {
+  transform: (doc, ret: any) => {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    delete ret.createdAt;
+    delete ret.updatedAt;
+    return ret;
+  },
+});
+
 const Media = mongoose.model("Media", mediaSchema);
 
 export default Media;

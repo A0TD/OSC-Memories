@@ -70,6 +70,17 @@ const eventSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+eventSchema.set("toJSON", {
+  transform: (doc, ret: any) => {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    delete ret.createdAt;
+    delete ret.updatedAt;
+    return ret;
+  },
+});
+
 //before deleting an event, delete all related media
 eventSchema.pre("findOneAndDelete", async function () {
   const eventId = this.getQuery()._id;

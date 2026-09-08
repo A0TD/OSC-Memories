@@ -52,6 +52,17 @@ const eventInfoSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+eventInfoSchema.set("toJSON", {
+  transform: (doc, ret: any) => {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    delete ret.createdAt;
+    delete ret.updatedAt;
+    return ret;
+  },
+});
+
 const EventInfo = mongoose.model("EventInfo", eventInfoSchema);
 
 export default EventInfo;
