@@ -107,18 +107,25 @@ export const uploadMedia = async (
   }
 };
 
-export const updateMedia = async (req: Request, res: Response) => {
-  res.status(500).send({
-    success: false,
-    message: "Not implemented",
-  });
-};
+export const deleteMedia = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { mediaId } = req.params;
 
-export const deleteMedia = async (req: Request, res: Response) => {
-  res.status(500).send({
-    success: false,
-    message: "Not implemented",
-  });
+    const deletedMedia = await Media.findOneAndDelete({ _id: mediaId });
+
+    if (!deletedMedia) throw new AppError(404, "Media not found!");
+
+    return res.status(200).send({
+      success: true,
+      message: "Media deleted successfully!",
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const getMediaByOwnerId = async (

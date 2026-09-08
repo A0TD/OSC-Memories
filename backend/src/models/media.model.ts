@@ -1,30 +1,33 @@
 import mongoose from "mongoose";
 import cloudinary from "../config/cloudinary.config";
 
-const mediaSchema = new mongoose.Schema({
-  ownerId: {
-    type: mongoose.Types.ObjectId,
-    ref: "User",
-    required: true,
+const mediaSchema = new mongoose.Schema(
+  {
+    ownerId: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    eventId: {
+      type: mongoose.Types.ObjectId,
+      ref: "Event",
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+    mimeType: {
+      type: String,
+      required: true,
+    },
+    publicId: {
+      type: String,
+      required: true,
+    },
   },
-  eventId: {
-    type: mongoose.Types.ObjectId,
-    ref: "Event",
-    required: true,
-  },
-  url: {
-    type: String,
-    required: true,
-  },
-  mimeType: {
-    type: String,
-    required: true,
-  },
-  publicId: {
-    type: String,
-    required: true,
-  },
-});
+  { timestamps: true },
+);
 
 mediaSchema.set("toJSON", {
   transform: (doc, ret: any) => {
