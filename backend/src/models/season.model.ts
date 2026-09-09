@@ -72,12 +72,20 @@ seasonSchema.set("toJSON", {
 });
 
 //before deleting a season, delete all related events and media
-seasonSchema.pre("findOneAndDelete", async function () {
-  const seasonId = this.getQuery()._id;
-  const events = await Event.find({ seasonId });
-  const eventIds = events.map((event) => event._id);
-  await Media.deleteMany({ eventId: { $in: eventIds } });
-  await Event.deleteMany({ seasonId });
+seasonSchema.pre(["findOneAndDelete", "deleteOne"], async function () {
+  const season = await this.model.findOne(this.getQuery(), "_id");
+  if (season) {
+    await Event.deleteMany({ seasonId: season._id });
+  }
+});
+
+seasonSchema.pre("deleteMany", async function () {
+  const seasons = await this.model.find(this.getQuery(), "_id");
+  const seasonIds = seasons.map((season) => season._id);
+
+  if (seasonIds.length > 0) {
+    await Event.deleteMany({ seasonId: { $in: seasonIds } });
+  }
 });
 
 const seasonModel = model("Season", seasonSchema);

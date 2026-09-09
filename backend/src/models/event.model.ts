@@ -70,9 +70,20 @@ eventSchema.set("toJSON", {
 });
 
 //before deleting an event, delete all related media
-eventSchema.pre("findOneAndDelete", async function () {
-  const eventId = this.getQuery()._id;
-  await Media.deleteMany({ eventId });
+eventSchema.pre(["findOneAndDelete", "deleteOne"], async function () {
+  const event = await this.model.findOne(this.getQuery(), "_id");
+  if (event) {
+    await Media.deleteMany({ eventId: event._id });
+  }
+});
+
+eventSchema.pre("deleteMany", async function () {
+  const events = await this.model.find(this.getQuery(), "_id");
+  const eventIds = events.map((event) => event._id);
+
+  if (eventIds.length > 0) {
+    await Media.deleteMany({ eventId: { $in: eventIds } });
+  }
 });
 
 const Event = mongoose.model("Event", eventSchema);

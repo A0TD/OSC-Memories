@@ -124,9 +124,11 @@ userSchema.set("toJSON", {
   },
 });
 //before deleting a user, delete all related media
-userSchema.pre("findOneAndDelete", async function () {
-  const userId = this.getQuery()._id;
-  await Media.deleteMany({ ownerId: userId });
+userSchema.pre(["findOneAndDelete", "deleteOne"], async function () {
+  const user = await this.model.findOne(this.getQuery(), "_id");
+  if (user) {
+    await Media.deleteMany({ ownerId: user._id });
+  }
 });
 
 const User = mongoose.model("User", userSchema);

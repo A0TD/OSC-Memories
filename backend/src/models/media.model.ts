@@ -76,10 +76,20 @@ mediaSchema.set("toJSON", {
   },
 });
 
-mediaSchema.pre("findOneAndDelete", async function () {
+mediaSchema.pre(["findOneAndDelete", "deleteOne"], async function () {
   const doc = await this.model.findOne(this.getQuery());
-  const { publicId } = doc;
-  await cloudinary.uploader.destroy(publicId);
+  if (doc?.publicId) {
+    await cloudinary.uploader.destroy(doc.publicId);
+  }
+});
+
+mediaSchema.pre("deleteMany", async function () {
+  const docs = await this.model.find(this.getQuery(), "publicId");
+  const publicIds = docs.map((doc) => doc.publicId).filter(Boolean);
+
+  if (publicIds.length > 0) {
+    await cloudinary.api.delete_resources(publicIds);
+  }
 });
 
 const Media = mongoose.model("Media", mediaSchema);
