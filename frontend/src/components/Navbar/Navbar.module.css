@@ -1,22 +1,22 @@
+
 .navbar {
   background-color: var(--bg-nav);
   border-bottom: 1px solid var(--border-color);
-  padding: 0px 20px;
-  box-shadow: 0 px 12px rgba(0, 0, 0, 0.05);
+  padding: 0px 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   height: 70px;
-  position: relative;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
-  
 }
 
 .logo img {
   width: 40px;
   animation: floatLogo 3s ease-in-out infinite;
 }
+
 @keyframes floatLogo {
   0% {
     transform: translateY(0px);
@@ -28,6 +28,7 @@
     transform: translateY(0px);
   }
 }
+
 .logop {
   margin-left: 15px;
 }
@@ -45,6 +46,20 @@
   color: var(--text-main);
   opacity: 0.9;
   font-weight: 500;
+}
+
+.menuWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  margin-left: 50px;
+}
+
+.navlinks {
+  display: flex;
+  gap: 35px;
+  margin: 0 auto;
 }
 
 .navlinks a {
@@ -75,18 +90,26 @@
 }
 
 .active {
-  color: var(--brand-orange) !important ;
+  color: var(--brand-orange) !important;
   font-weight: bold;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
-.hamburger {
+
+.menuRight {
   display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.hamburger {
+  display: none;
   flex-direction: column;
   gap: 5px;
   background: transparent;
   border: none;
   cursor: pointer;
 }
+
 .hamburger > span {
   width: 25px;
   height: 3px;
@@ -94,58 +117,38 @@
   opacity: 0.8;
 }
 
-@media (max-width: 700px) {
-  .navlinks {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    left: 55%;
-    width: 100px;
-    background-color: rgba(255, 250, 250, 0.662);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    gap: 15px;
-  }
-
-  .navlinks.showMenu {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-@media (min-width: 700px) {
-  .hamburger {
-    display: none;
-  }
-  .navlinks {
-    display: flex !important;
-    font-size: 14px;
-  }
+.authLinks {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .authLinks button {
-  border: none;
+  border: 1px solid var(--brand-orange);
+  background-color: transparent;
   color: var(--brand-orange);
-  padding: 5px 10px;
+  padding: 6px 18px;
   border-radius: 20px;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.3s ease;
-}
-.authLinks button.regbtn {
-  background-image: linear-gradient(
-    to top right,
-    rgb(243, 195, 94) 40%,
-    rgb(233, 96, 5)
-  );
-  border: none;
-  color: white;
+  cursor: pointer;
 }
 
 .authLinks button:hover {
   background-color: var(--brand-orange);
   color: #fff;
-  border-radius: 20px;
-  box-shadow: 0 7px 10px rgb(99, 99, 99);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.authLinks button.regbtn {
+  background-image: linear-gradient(135deg, rgb(243, 195, 94) 0%, rgb(233, 96, 5) 100%);
+  border: none;
+  color: white;
+  transition: transform 0.5 ease;
+}
+
+.authLinks button.regbtn:hover {
+  transform: scale(1.1);
 }
 
 .themeToggleSwitch {
@@ -170,9 +173,7 @@
   height: 26px;
   background-color: var(--text-main);
   border-radius: 50%;
-  transition:
-    transform 0.3s ease,
-    background-color 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 [data-theme="dark"] .toggleCircle {
@@ -193,4 +194,57 @@
 .moonIcon {
   color: var(--bg-main);
   margin-right: 5px;
+}
+
+@media (max-width: 900px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .menuWrapper {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 200px;
+    background-color: var(--bg-nav);
+    border-bottom: 1px solid var(--border-color);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    gap: 20px;
+    align-items: center;
+    margin:0 20px;
+  }
+
+  .menuWrapper.showMenu {
+    display: flex;
+  }
+
+  .navlinks {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin: 0;
+  }
+
+  .menuRight {
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    align-items: center;
+  }
+
+  .authLinks {
+    flex-direction: column !important;
+    width: 70%;
+    gap: 12px !important;
+  }
+
+  .authLinks button {
+    width: 100%;
+    text-align: center;
+  }
 }

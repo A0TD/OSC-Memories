@@ -1,9 +1,9 @@
 import { NavLink } from "react-router-dom";
 import footcss from "./Footer.module.css";
-import oscLogo from "../../assets/imgi_1_Lock.png";
-import linkedin from "../../assets/linkedin.png";
-import facebook from "../../assets/icons8-facebook-48.png";
-import instagram from "../../assets/icons8-instagram-48.png";
+import oscLogo from "../../assets/images/imgi_1_Lock.png";
+import linkedin from "../../assets/images/linkedin.png";
+import facebook from "../../assets/images/icons8-facebook-48.png";
+import instagram from "../../assets/images/icons8-instagram-48.png";
 function Footer() {
   return (
     <footer>

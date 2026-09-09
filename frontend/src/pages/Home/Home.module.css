@@ -1,7 +1,7 @@
 .home {
   background-image:
     linear-gradient(rgba(30, 10, 0, 0.600), rgba(20, 5, 0, 0.600)),
-    url(../../assets/IMG_20260412_172948.jpg);
+    url(../../assets/images/IMG_20260412_172948.jpg);
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -125,8 +125,8 @@
 .icon img {
   height: 32px;
   object-fit: contain;
-  filter: invert(58%) sepia(96%) saturate(695%) hue-rotate(345deg)
-    brightness(95%) contrast(91%);
+  filter: invert(58%) sepia(100%) saturate(1000%) hue-rotate(335deg)
+    brightness(100%) contrast(100%);
   width: 40px;
 }
 
