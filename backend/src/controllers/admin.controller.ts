@@ -4,7 +4,7 @@ import AppError from "../utils/appError.util";
 
 const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const allUsers = await User.find().sort({ date: -1 });
+    const allUsers = await User.find().sort({ createdAt: -1 });
 
     res.status(200).send({
       success: true,
@@ -30,8 +30,7 @@ const makeAdmin = async (req: Request, res: Response, next: NextFunction) => {
       { new: true },
     );
 
-        if(!updatedUser)
-      throw new AppError(404, "User not found");
+    if (!updatedUser) throw new AppError(404, "User not found");
 
     res.status(200).send({
       success: true,
@@ -51,8 +50,7 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
 
     const deletedUser = await User.findByIdAndDelete(userId);
 
-    if(!deletedUser)
-      throw new AppError(404, "User not found");
+    if (!deletedUser) throw new AppError(404, "User not found");
 
     res.status(200).send({
       success: true,
@@ -66,4 +64,4 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export {getAllUsers,makeAdmin,deleteUser}
+export { getAllUsers, makeAdmin, deleteUser };

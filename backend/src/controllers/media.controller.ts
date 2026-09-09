@@ -81,13 +81,13 @@ export const uploadMedia = async (
 
     const mediaDocuments = uploadedMedia.map(({ file, result }) => {
       //destructures a single uploaded media into file and result
-      {
-        ownerId: (req as any).user.id;
-        eventId;
-        url: result.secure_url;
-        mimeType: file.mimetype;
-        publicId: result.public_id;
-      }
+      return {
+        ownerId: (req as any).user.id,
+        eventId,
+        url: result.secure_url,
+        mimeType: file.mimetype,
+        publicId: result.public_id,
+      };
     });
 
     const createdMedia = await Media.insertMany(mediaDocuments);

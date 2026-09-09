@@ -8,7 +8,7 @@ export const getAllSeasons = async (
   next: NextFunction,
 ) => {
   try {
-    const seasons = await Season.find().sort({ date: -1 });
+    const seasons = await Season.find().sort({ createdAt: -1 });
     return res.status(200).send({
       success: true,
       message: "Seasons retrieved successfully",

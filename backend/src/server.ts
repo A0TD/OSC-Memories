@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import swaggerUI from "swagger-ui-express";
 import cors from "cors";
 import morgan from "morgan";
+import helmet from "helmet";
 
 import specs from "./config/swagger.config";
 import connectDB from "./config/mongoDB.config";
@@ -18,7 +19,14 @@ const PORT = (process.env.PORT as string) || 3000;
 
 connectDB();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5175",
+
+    credentials: true,
+  }),
+);
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
