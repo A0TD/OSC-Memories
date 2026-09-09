@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import forgetcss from "./ForgotPassword.module.css";
+import forgetcss from "../../assets/styles/auth.module.css";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -11,45 +11,34 @@ export default function ForgotPassword() {
   
   const { forgotPassword } = useContext(AuthContext);
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setApiError("");
     setSuccessMessage("");
     setLoading(true);
-
-    setTimeout(() => {
-      setLoading(false); // لازم ترجع false عشان الزرار يفك
-      navigate("/reset-password", { state: { email } });
-    }, 500); // نص ثانية كفاية جداً كأنها محاكاة سريعة
-  };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setApiError("");
-  //   setSuccessMessage("");
-  //   setLoading(true);
     
 
-  //   try {
+    try {
 
-  //     await forgotPassword({ email });
+      await forgotPassword({ email });
       
-  //     setSuccessMessage("Reset password OTP sent successfully to your email!");
+      setSuccessMessage("Reset password OTP sent successfully to your email!");
       
-  //     setTimeout(() => {
-  //       navigate("/reset-password", { state: { email } });
-  //     }, 2000);
-  //   } catch (err) {
-  //     setApiError(
-  //       err.response?.data?.message || "An error occurred. Please try again."
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      setTimeout(() => {
+        navigate("/reset-password", { state: { email } });
+      }, 2000);
+    } catch (err) {
+      setApiError(
+        err.response?.data?.message || "An error occurred. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className={`container-fluid ${forgetcss.forgetContainer || ''}`}>
+    <div className={`container-fluid ${forgetcss.authContainer || ''}`}>
       <div className="row justify-content-center align-items-center min-vh-100">
         <div className={`col-10 col-sm-8 col-md-6 col-lg-4 ${forgetcss.authCard || ''}`}>
           <h2 className="text-center mb-3 fw-bold">Forgot Password</h2>

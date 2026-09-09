@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { validateRegisterForm } from "../../utils/validation";
-import regcss from "./Register.module.css";
+import regcss from "../../assets/styles/auth.module.css";
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -48,7 +48,7 @@ export default function Register() {
   };
 
   return (
-    <div className={`container-fluid ${regcss.registerContainer} `}>
+    <div className={`container-fluid ${regcss.authContainer} `}>
       <div className="row justify-content-center">
         <div
           className={`col-10 col-sm-8 col-md-6 col-lg-4  ${regcss.authCard} `}

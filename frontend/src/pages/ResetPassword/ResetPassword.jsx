@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import resetcss from "./ResetPassword.module.css";
+import resetcss from "../../assets/styles/auth.module.css";
 
 export default function ResetPassword() {
   const location = useLocation();
@@ -58,7 +58,7 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className={`container-fluid ${resetcss.resetContainer || ''}`}>
+    <div className={`container-fluid ${resetcss.authContainer || ''}`}>
       <div className="row justify-content-center align-items-center min-vh-100">
         <div className={`col-10 col-sm-8 col-md-6 col-lg-4 ${resetcss.authCard || ''}`}>
           <h2 className="text-center mb-3 fw-bold">Reset Password</h2>
