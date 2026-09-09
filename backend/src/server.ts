@@ -18,8 +18,6 @@ const app: Application = express();
 const PORT = (process.env.PORT as string) || 3000;
 const CLIENT_URL = process.env.CLIENT_URL;
 
-connectDB();
-
 app.use(
   cors({
     origin: CLIENT_URL,
@@ -39,6 +37,15 @@ app.use("/api/admin", adminRouter);
 
 app.use(globalErrorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on  http://localhost:${PORT}/api-docs`);
-});
+async function startServer() {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server is listening on  http://localhost:${PORT}/api-docs`);
+    });
+  } catch (error) {
+    console.error("Error starting server:", error);
+  }
+}
+
+startServer();
