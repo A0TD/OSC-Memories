@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import homecss from "./Home.module.css";
-import calender from "../../assets/icons8-calender-85.png";
-import photo from "../../assets/icons8-photo-48.png";
-import people from "../../assets/icons8-people-48.png";
-import star from "../../assets/icons8-star-50.png";
+import calender from "../../assets/images/icons8-calender-85.png";
+import photo from "../../assets/images/icons8-photo-48.png";
+import people from "../../assets/images/icons8-people-48.png";
+import star from "../../assets/images/icons8-star-50.png";
 function Home() {
   return (
     <>

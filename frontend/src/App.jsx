@@ -7,6 +7,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import Seasons from "./pages/Seasons/Seasons.jsx";
 import Home from "./pages/Home/Home";
 import EverySeason from './pages/EverySeason/EverySeason.jsx'
+import Register from './pages/Registers/Register.jsx';
 export default function App() {
   return (
     <>
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/seasons" element={<Seasons />} />
         <Route path="/seasons/everyseason" element={<EverySeason/>} />
+        <Route path="/register" element={<Register/>}/>
       </Routes>
       <Footer />
     </>
