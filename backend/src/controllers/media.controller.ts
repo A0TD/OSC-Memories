@@ -114,7 +114,6 @@ export const deleteMedia = async (
 ) => {
   try {
     const { mediaId } = req.params;
-
     const deletedMedia = await Media.findOneAndDelete({ _id: mediaId });
 
     if (!deletedMedia) throw new AppError(404, "Media not found!");

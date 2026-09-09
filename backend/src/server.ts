@@ -16,13 +16,13 @@ import { globalErrorHandler } from "./middlewares/errorHandler.middleware";
 
 const app: Application = express();
 const PORT = (process.env.PORT as string) || 3000;
+const CLIENT_URL = process.env.CLIENT_URL;
 
 connectDB();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
-
+    origin: CLIENT_URL,
     credentials: true,
   }),
 );
@@ -31,12 +31,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
-
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
-
 app.use("/api/auth", authRouter);
 app.use("/api/seasons", seasonRouter);
 app.use("/api/event-infos", eventInfoRouter);

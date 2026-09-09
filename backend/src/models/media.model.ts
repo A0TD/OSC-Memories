@@ -42,7 +42,8 @@ mediaSchema.set("toJSON", {
 });
 
 mediaSchema.pre("findOneAndDelete", async function () {
-  const publicId = this.getQuery().publicId;
+  const doc = await this.model.findOne(this.getQuery());
+  const { publicId } = doc;
   await cloudinary.uploader.destroy(publicId);
 });
 
