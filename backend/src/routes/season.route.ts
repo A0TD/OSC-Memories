@@ -24,7 +24,7 @@ seasonRouter.use(
 );
 /**
  * @swagger
- * /seasons:
+ * /api/seasons:
  *   get:
  *     summary: Retrieve all seasons
  *     tags:
@@ -58,7 +58,7 @@ seasonRouter.use(
 seasonRouter.get("/", getAllSeasons);
 /**
  * @swagger
- * /seasons/{seasonId}:
+ * /api/seasons/{seasonId}:
  *   get:
  *     summary: Get a season by ID
  *     tags:
@@ -105,7 +105,7 @@ seasonRouter.get(
 );
 /**
  * @swagger
- * /seasons:
+ * /api/seasons:
  *   post:
  *     summary: Create a new season
  *     tags:
@@ -170,7 +170,7 @@ seasonRouter.post(
 );
 /**
  * @swagger
- * /seasons/{seasonId}:
+ * /api/seasons/{seasonId}:
  *   put:
  *     summary: Update a season by ID
  *     tags:
@@ -243,7 +243,7 @@ seasonRouter.put(
 
 /**
  * @swagger
- * /seasons/{seasonId}:
+ * /api/seasons/{seasonId}:
  *   delete:
  *     summary: Delete a season and its associated events
  *     tags:
