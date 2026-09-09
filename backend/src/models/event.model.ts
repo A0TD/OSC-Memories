@@ -11,7 +11,7 @@ import Media from "./media.model";
  *         - name
  *         - seasonId
  *       properties:
- *         _id:
+ *         id:
  *           type: string
  *           readOnly: true
  *           description: Auto-generated MongoDB ObjectId
@@ -34,18 +34,6 @@ import Media from "./media.model";
  *           default: "No description included"
  *           description: Description of the event
  *           example: The amazing salakhana of 2026
- *         createdAt:
- *           type: string
- *           format: date-time
- *           readOnly: true
- *           description: Auto-generated creation timestamp
- *           example: "2026-09-05T18:45:00.000Z"
- *         updatedAt:
- *           type: string
- *           format: date-time
- *           readOnly: true
- *           description: Auto-generated last update timestamp
- *           example: "2026-09-05T18:45:00.000Z"
  */
 const eventSchema = new mongoose.Schema(
   {

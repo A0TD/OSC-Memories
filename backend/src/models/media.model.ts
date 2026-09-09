@@ -1,6 +1,41 @@
 import mongoose from "mongoose";
 import cloudinary from "../config/cloudinary.config";
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Media:
+ *       type: object
+ *       required:
+ *         - ownerId
+ *         - eventId
+ *         - url
+ *         - mimeType
+ *         - publicId
+ *       properties:
+ *         id:
+ *           type: string
+ *           readOnly: true
+ *           description: Auto-generated MongoDB ObjectId (transformed from _id)
+ *           example: 60d5ecb8b5c9c22b1c8e4011
+ *         ownerId:
+ *           type: string
+ *           description: MongoDB ObjectId reference to the User who uploaded the media
+ *           example: 60d5ecb8b5c9c22b1c8e4012
+ *         eventId:
+ *           type: string
+ *           description: MongoDB ObjectId reference to the associated Event
+ *           example: 60d5ecb8b5c9c22b1c8e4013
+ *         url:
+ *           type: string
+ *           description: Secure Cloudinary CDN URL of the uploaded file
+ *           example: https://res.cloudinary.com/demo/image/upload/v1234567890/sample.jpg
+ *         mimeType:
+ *           type: string
+ *           description: MIME type of the uploaded file
+ *           example: image/jpeg
+ */
 const mediaSchema = new mongoose.Schema(
   {
     ownerId: {

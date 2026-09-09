@@ -12,7 +12,7 @@ import Media from "./media.model";
  *         - name
  *         - date
  *       properties:
- *         _id:
+ *         id:
  *           type: string
  *           description: Auto-generated MongoDB ObjectId
  *           example: 60d5ecb8b5c9c22b1c8e4010
@@ -35,18 +35,6 @@ import Media from "./media.model";
  *           description: Description of the season
  *           default: "No description included"
  *           example: The amazing 2026 season
- *         createdAt:
- *           type: string
- *           format: date-time
- *           readOnly: true
- *           description: Auto-generated creation timestamp
- *           example: "2026-09-05T18:45:00.000Z"
- *         updatedAt:
- *           type: string
- *           format: date-time
- *           readOnly: true
- *           description: Auto-generated last update timestamp
- *           example: "2026-09-05T18:45:00.000Z"
  */
 const seasonSchema = new Schema(
   {

@@ -12,7 +12,7 @@ import Media from "./media.model";
  *         - email
  *         - password
  *       properties:
- *         _id:
+ *         id:
  *           type: string
  *           readOnly: true
  *           description: Auto-generated MongoDB ObjectId
@@ -61,18 +61,6 @@ import Media from "./media.model";
  *           format: date-time
  *           description: Expiration timestamp for the reset OTP
  *           example: "2026-09-05T19:15:00.000Z"
- *         createdAt:
- *           type: string
- *           format: date-time
- *           readOnly: true
- *           description: Auto-generated creation timestamp
- *           example: "2026-09-05T18:45:00.000Z"
- *         updatedAt:
- *           type: string
- *           format: date-time
- *           readOnly: true
- *           description: Auto-generated last update timestamp
- *           example: "2026-09-05T18:45:00.000Z"
  */
 const userSchema = new mongoose.Schema(
   {

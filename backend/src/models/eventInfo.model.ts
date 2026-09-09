@@ -10,7 +10,7 @@ import mongoose from "mongoose";
  *         - name
  *         - description
  *       properties:
- *         _id:
+ *         id:
  *           type: string
  *           readOnly: true
  *           description: Auto-generated MongoDB ObjectId
@@ -23,18 +23,6 @@ import mongoose from "mongoose";
  *           type: string
  *           description: Detailed description of the event
  *           example: "An event where games are showcased!"
- *         createdAt:
- *           type: string
- *           format: date-time
- *           readOnly: true
- *           description: Auto-generated creation timestamp
- *           example: "2026-09-07T01:30:19.000Z"
- *         updatedAt:
- *           type: string
- *           format: date-time
- *           readOnly: true
- *           description: Auto-generated last update timestamp
- *           example: "2026-09-07T01:30:19.000Z"
  */
 const eventInfoSchema = new mongoose.Schema(
   {

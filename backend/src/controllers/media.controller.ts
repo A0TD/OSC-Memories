@@ -10,12 +10,20 @@ export const getAllMedia = async (
   next: NextFunction,
 ) => {
   try {
-    const allMedia = await Media.find();
+    const { seasonId, eventId } = req.params;
+    const allMedia = await Media.find({ eventId }).populate(
+      "eventId",
+      "seasonId",
+    );
+    // filters by correct seasonId
+    const correctMedia = allMedia.filter((media) => {
+      return (media.eventId as any).seasonId.toString() === seasonId;
+    });
 
     return res.status(200).send({
       success: true,
       message: "Successfully retrieved all media!",
-      allMedia,
+      correctMedia,
     });
   } catch (err) {
     next(err);
@@ -28,11 +36,18 @@ export const getMedia = async (
   next: NextFunction,
 ) => {
   try {
-    const { eventId, mediaId } = req.params;
+    const { seasonId, eventId, mediaId } = req.params;
 
-    const foundMedia = await Media.findOne({ _id: mediaId, eventId });
+    const foundMedia = await Media.findOne({ _id: mediaId, eventId }).populate(
+      "eventId",
+      "seasonid",
+    );
 
-    if (!foundMedia) throw new AppError(404, "Media not found!");
+    if (
+      !foundMedia ||
+      (foundMedia.eventId as any).seasonId.toString() !== seasonId
+    )
+      throw new AppError(404, "Media not found!");
 
     return res.status(200).send({
       success: true,
