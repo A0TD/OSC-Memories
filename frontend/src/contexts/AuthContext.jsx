@@ -55,6 +55,30 @@ export const AuthProvider = ({ children }) => {
     });
     return data;
   };
+  const forgotPassword = async (emailData) => {
+    const data = await request({
+      url: ENDPOINTS.AUTH.FORGOT_PASSWORD,
+      method: 'POST',
+      data: emailData,
+    });
+    return data;
+  };
+  const resetPassword = async (resetData) => {
+    const data = await request({
+      url: ENDPOINTS.AUTH.RESET_PASSWORD,
+      method: 'POST',
+      data: resetData,
+    });
+    return data;
+  };
+  const resendOtp = async (emailData) => {
+  const data = await request({
+    url: ENDPOINTS.AUTH.RESEND_OTP, 
+    method: 'POST',
+    data: emailData,
+  });
+  return data;
+};
 
   const logout = () => {
     localStorage.removeItem(STORAGE_KEYS.USER);
@@ -63,7 +87,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, role, login, register, verifyEmail, logout, loading }}>
+    <AuthContext.Provider value={{ user, role, login, register, verifyEmail,forgotPassword,resetPassword, resendOtp, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

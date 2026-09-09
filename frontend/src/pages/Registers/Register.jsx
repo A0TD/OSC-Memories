@@ -37,7 +37,7 @@ export default function Register() {
 
     try {
       await register(formData);
-      navigate("/verify-otp", { state: { email: formData.email } });
+      navigate("/verify-email", { state: { email: formData.email } });
     } catch (err) {
       setApiError(
         err.response?.data?.message || "An error occurred during registration",
@@ -51,7 +51,7 @@ export default function Register() {
     <div className={`container-fluid ${regcss.registerContainer} `}>
       <div className="row justify-content-center">
         <div
-          className={`col-10 col-sm-8 col-md-6 col-lg-5  ${regcss.authCard} `}
+          className={`col-10 col-sm-8 col-md-6 col-lg-4  ${regcss.authCard} `}
         >
           <h2 className={regcss.title}>Create Account</h2>
 
