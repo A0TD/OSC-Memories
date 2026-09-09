@@ -4,6 +4,8 @@ import AppError from "../utils/appError.util";
 import cloudinary from "../config/cloudinary.config";
 import fs from "fs/promises";
 
+// "fl_attachment" --> place after /upload/ in the image url to download.
+
 export const getAllMedia = async (
   req: Request,
   res: Response,
@@ -82,6 +84,15 @@ export const uploadMedia = async (
         files.map(async (file) => {
           const result = await cloudinary.uploader.upload(file.path, {
             resource_type: "auto",
+            transformation: [
+              {
+                width: 1920,
+                height: 1080,
+                crop: "limit", // Downscale only if larger than 1080p, preserves aspect ratio
+                quality: "auto:good", // Smart compression (use "auto:eco" for maximum credit savings)
+                fetch_format: "auto", // Converts to WebP/AVIF automatically
+              },
+            ],
           });
           uploadedPublicIds.push(result.public_id);
           return { file, result };
@@ -114,9 +125,11 @@ export const uploadMedia = async (
     });
   } catch (err) {
     if (uploadedPublicIds.length > 0) {
-      uploadedPublicIds.map(async (uploadedPublicId) => {
-        await cloudinary.uploader.destroy(uploadedPublicId).catch(() => {});
-      });
+      await Promise.all(
+        uploadedPublicIds.map(async (uploadedPublicId) => {
+          await cloudinary.uploader.destroy(uploadedPublicId).catch(() => {});
+        }),
+      );
     }
     next(err);
   }
@@ -128,10 +141,19 @@ export const deleteMedia = async (
   next: NextFunction,
 ) => {
   try {
-    const { mediaId } = req.params;
-    const deletedMedia = await Media.findOneAndDelete({ _id: mediaId });
+    const { seasonId, eventId, mediaId } = req.params;
+    const deletedMedia = await Media.findOne({
+      _id: mediaId,
+      eventId,
+    }).populate("eventId", "seasonId");
 
-    if (!deletedMedia) throw new AppError(404, "Media not found!");
+    if (
+      !deletedMedia ||
+      (deletedMedia.eventId as any).seasonId.toString() !== seasonId
+    )
+      throw new AppError(404, "Media not found!");
+
+    await Media.findOneAndDelete({ _id: mediaId });
 
     return res.status(200).send({
       success: true,
