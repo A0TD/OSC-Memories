@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import logcss from "./Login.module.css";
+import logcss from "../../assets/styles/auth.module.css";
 import {validateLoginForm} from "../../utils/validation";
 
 export default function Login() {
@@ -47,7 +47,7 @@ export default function Login() {
   };
 
   return (
-    <div className={`container-fluid ${logcss.loginContainer}`}>
+    <div className={`container-fluid ${logcss.authContainer}`}>
       <div className="row justify-content-center">
         <div className={`col-10 col-sm-8 col-md-6 col-lg-4 ${logcss.authCard}`}>
           <h2 className={logcss.title}>Log In</h2>

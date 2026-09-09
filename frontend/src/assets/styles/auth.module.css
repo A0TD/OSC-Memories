@@ -1,9 +1,7 @@
-
-.registerContainer {
+.authContainer {
   min-height: 100vh;
   background: var(--bg-main);
 }
-
 .authCard {
   background: var(--bg-card);
   border: 1px solid rgba(237, 164, 101, 0.1);
@@ -31,14 +29,12 @@
   box-shadow: 0 12px 40px rgb(210, 139, 76), 0 8px 20px rgba(0, 0, 0, 0.4);
   transform: translateY(-3px);
 }
-
 .title {
   text-align: center;
   margin-bottom: 20px;
-  color: --brand-orange;
+  color: var( --brand-orange);
   font-weight: 700;
 }
-
 .formLabel {
   margin-bottom: 5px;
   font-size: 15px;
