@@ -8,6 +8,10 @@ import Seasons from "./pages/Seasons/Seasons.jsx";
 import Home from "./pages/Home/Home";
 import EverySeason from './pages/EverySeason/EverySeason.jsx'
 import Register from './pages/Registers/Register.jsx';
+import VerifyEmail from './pages/VerifyEmail/VerifyEmail'; 
+import Login from "./pages/Login/Login.jsx";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword/ResetPassword"; 
 export default function App() {
   return (
     <>
@@ -17,6 +21,11 @@ export default function App() {
         <Route path="/seasons" element={<Seasons />} />
         <Route path="/seasons/everyseason" element={<EverySeason/>} />
         <Route path="/register" element={<Register/>}/>
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/forgot-password" element={<ForgotPassword/>}/>
+        <Route path="/reset-password" element={<ResetPassword />} />
+      
       </Routes>
       <Footer />
     </>
