@@ -77,7 +77,7 @@ mediaSchema.set("toJSON", {
 });
 
 mediaSchema.pre(["findOneAndDelete", "deleteOne"], async function () {
-  const doc = await this.model.findOne(this.getQuery());
+  const doc = await this.model.findOne(this.getQuery(), "publicId");
   if (doc?.publicId) {
     await cloudinary.uploader.destroy(doc.publicId);
   }
@@ -85,7 +85,7 @@ mediaSchema.pre(["findOneAndDelete", "deleteOne"], async function () {
 
 mediaSchema.pre("deleteMany", async function () {
   const docs = await this.model.find(this.getQuery(), "publicId");
-  const publicIds = docs.map((doc) => doc.publicId).filter(Boolean);
+  const publicIds = docs.map((doc) => doc.publicId);
 
   if (publicIds.length > 0) {
     await cloudinary.api.delete_resources(publicIds);
