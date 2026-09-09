@@ -21,7 +21,7 @@ connectDB();
 
 app.use(
   cors({
-    origin: "http://localhost:5175",
+    origin: "http://localhost:5173",
 
     credentials: true,
   }),
@@ -37,10 +37,10 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
-app.use("/auth", authRouter);
-app.use("/seasons/", seasonRouter);
-app.use("/event-infos", eventInfoRouter);
-app.use("/admin", adminRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/seasons", seasonRouter);
+app.use("/api/event-infos", eventInfoRouter);
+app.use("/api/admin", adminRouter);
 
 app.use(globalErrorHandler);
 
