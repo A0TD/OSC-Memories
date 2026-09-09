@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import swaggerUI from "swagger-ui-express";
 import cors from "cors";
 import morgan from "morgan";
+import helmet from "helmet";
 
 import specs from "./config/swagger.config";
 import connectDB from "./config/mongoDB.config";
@@ -15,27 +16,36 @@ import { globalErrorHandler } from "./middlewares/errorHandler.middleware";
 
 const app: Application = express();
 const PORT = (process.env.PORT as string) || 3000;
+const CLIENT_URL = process.env.CLIENT_URL;
 
-connectDB();
-
-app.use(cors());
+app.use(
+  cors({
+    origin: CLIENT_URL,
+    credentials: true,
+  }),
+);
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
-
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
-
-app.use("/auth", authRouter);
-app.use("/seasons/", seasonRouter);
-app.use("/event-infos", eventInfoRouter);
-app.use("/admin", adminRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/seasons", seasonRouter);
+app.use("/api/event-infos", eventInfoRouter);
+app.use("/api/admin", adminRouter);
 
 app.use(globalErrorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on  http://localhost:${PORT}/api-docs`);
-});
+async function startServer() {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server is listening on  http://localhost:${PORT}/api-docs`);
+    });
+  } catch (error) {
+    console.error("Error starting server:", error);
+  }
+}
+
+startServer();

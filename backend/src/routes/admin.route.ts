@@ -15,7 +15,7 @@ adminRouter.use(authorize("Admin"));
 
 /**
  * @swagger
- * /admin/users:
+ * /api/admin/users:
  *   get:
  *     summary: Retrieve all users
  *     tags:
@@ -51,7 +51,7 @@ adminRouter.use(authorize("Admin"));
 adminRouter.get("/users", getAllUsers);
 /**
  * @swagger
- * /admin/users/{userId}/make-admin:
+ * /api/admin/users/{userId}/make-admin:
  *   patch:
  *     summary: Promote a user to Admin
  *     tags:
@@ -98,7 +98,7 @@ adminRouter.patch(
 );
 /**
  * @swagger
- * /admin/users/{userId}:
+ * /api/admin/users/{userId}:
  *   delete:
  *     summary: Delete a user
  *     tags:

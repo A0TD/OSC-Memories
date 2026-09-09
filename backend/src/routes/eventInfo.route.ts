@@ -18,7 +18,7 @@ const eventInfoRouter = Router();
 
 /**
  * @swagger
- * /event-infos:
+ * /api/event-infos:
  *   get:
  *     summary: Retrieve a list of all event infos
  *     tags:
@@ -51,7 +51,7 @@ eventInfoRouter.get("/", getAllEventInfos);
 
 /**
  * @swagger
- * /event-infos/{eventInfoId}:
+ * /api/event-infos/{eventInfoId}:
  *   get:
  *     summary: Retrieve a single event info by ID
  *     tags:
@@ -97,7 +97,7 @@ eventInfoRouter.get(
 
 /**
  * @swagger
- * /event-infos:
+ * /api/event-infos:
  *   post:
  *     summary: Create a new event info
  *     tags:
@@ -156,7 +156,7 @@ eventInfoRouter.post(
 
 /**
  * @swagger
- * /event-infos/{eventInfoId}:
+ * /api/event-infos/{eventInfoId}:
  *   put:
  *     summary: Update an existing event info by ID
  *     tags:
@@ -222,7 +222,7 @@ eventInfoRouter.put(
 
 /**
  * @swagger
- * /event-infos/{eventInfoId}:
+ * /api/event-infos/{eventInfoId}:
  *   delete:
  *     summary: Delete an event info by ID
  *     tags:

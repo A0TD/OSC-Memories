@@ -28,7 +28,7 @@ export const getEventInfoById = async (
     const { eventInfoId } = req.params;
 
     const eventInfo = await EventInfo.findById(eventInfoId);
-    
+
     if (!eventInfo) {
       throw new AppError(404, "Event info not found");
     }

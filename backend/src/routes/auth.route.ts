@@ -21,7 +21,7 @@ const authRouter = Router();
 
 /**
  * @swagger
- * /auth/register:
+ * /api/auth/register:
  *   post:
  *     summary: Register a new user account
  *     tags:
@@ -79,7 +79,7 @@ const authRouter = Router();
 authRouter.post("/register", validate(registerSchema), register);
 /**
  * @swagger
- * /auth/verify-email:
+ * /api/auth/verify-email:
  *   post:
  *     summary: Verify a user's email address using an OTP
  *     tags:
@@ -123,7 +123,7 @@ authRouter.post("/register", validate(registerSchema), register);
 authRouter.post("/verify-email", validate(verifyEmailSchema), verifyEmail);
 /**
  * @swagger
- * /auth/resend-otp:
+ * /api/auth/resend-otp:
  *   post:
  *     summary: Resend verification OTP to the user's email
  *     tags:
@@ -163,7 +163,7 @@ authRouter.post("/verify-email", validate(verifyEmailSchema), verifyEmail);
 authRouter.post("/resend-otp", validate(resendOtpSchema), resendOtp);
 /**
  * @swagger
- * /auth/forgot-password:
+ * /api/auth/forgot-password:
  *   post:
  *     summary: Request a password reset OTP
  *     tags:
@@ -207,7 +207,7 @@ authRouter.post(
 );
 /**
  * @swagger
- * /auth/reset-password:
+ * /api/auth/reset-password:
  *   post:
  *     summary: Reset password using OTP
  *     tags:
@@ -260,7 +260,7 @@ authRouter.post(
 );
 /**
  * @swagger
- * /auth/login:
+ * /api/auth/login:
  *   post:
  *     summary: Log in to an existing account
  *     tags:

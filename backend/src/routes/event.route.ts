@@ -25,7 +25,7 @@ eventRouter.use(
 );
 /**
  * @swagger
- * /seasons/{seasonId}/events:
+ * /api/seasons/{seasonId}/events:
  *   get:
  *     summary: Get all events for a season
  *     tags:
@@ -68,7 +68,7 @@ eventRouter.use(
 eventRouter.get("/", getAllEvents);
 /**
  * @swagger
- * /seasons/{seasonId}/events/{eventId}:
+ * /api/seasons/{seasonId}/events/{eventId}:
  *   get:
  *     summary: Get a single event by ID
  *     tags:
@@ -121,7 +121,7 @@ eventRouter.get("/", getAllEvents);
 eventRouter.get("/:eventId", validate(paramSchema("eventId")), getEvent);
 /**
  * @swagger
- * /seasons/{seasonId}/events:
+ * /api/seasons/{seasonId}/events:
  *   post:
  *     summary: Create a new event
  *     tags:
@@ -188,7 +188,7 @@ eventRouter.post(
 );
 /**
  * @swagger
- * /seasons/{seasonId}/events/{eventId}:
+ * /api/seasons/{seasonId}/events/{eventId}:
  *   put:
  *     summary: Update an existing event
  *     tags:
@@ -262,7 +262,7 @@ eventRouter.put(
 );
 /**
  * @swagger
- * /seasons/{seasonId}/events/{eventId}:
+ * /api/seasons/{seasonId}/events/{eventId}:
  *   delete:
  *     summary: Delete an event
  *     tags:

@@ -134,32 +134,3 @@ export const updateEvent = async (
     next(err);
   }
 };
-
-// export const getEventPhotos = async (req:Request , res:Response) => {
-
-// export const getEventPhotos = async (req:Request , res:Response) => {
-//     const eventId = req.params.eventid;
-//     const type = req.query.type;
-//     // const objectId = new mongoose.Types.ObjectId(eventId);
-
-//     const allImagesRelated = await Media.find({eventId: eventId , type: type});
-
-//     if(!allImagesRelated){
-//       res.status(404).send("No images included");
-//     }
-
-//     res.status(200).send(allImagesRelated);
-// }
-
-// export const getEventVideos = async (req:Request , res:Response) => {
-//     const eventId:any = req.params.eventid;
-//     const objectId = new mongoose.Types.ObjectId(eventId);
-
-//     const allVideosRelated = await Video.find({eventId: objectId});
-
-//     if(!allVideosRelated){
-//       res.status(404).send("No videos included");
-//     }
-
-//     res.status(200).send(allVideosRelated);
-// }

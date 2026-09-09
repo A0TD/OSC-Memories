@@ -26,7 +26,9 @@ export const register = async (
       password: hashedPassword,
     });
 
-    await sendOtp(user._id, user.email, "verification");
+    sendOtp(user._id, user.email, "verification").catch((err) => {
+      console.error("Error sending OTP:", err);
+    });
 
     return res.status(201).send({
       success: true,
@@ -111,7 +113,9 @@ export const resendOtp = async (
     if (user.isVerified) {
       throw new AppError(400, "Email already verified");
     }
-    await sendOtp(user._id, user.email, "verification");
+    sendOtp(user._id, user.email, "verification").catch((err) => {
+      console.error("Error sending OTP:", err);
+    });
     return res.status(200).send({
       success: true,
       message: "Verification OTP sent to email",
@@ -132,7 +136,9 @@ export const forgotPassword = async (
     if (!user) {
       throw new AppError(400, "User not found");
     }
-    await sendOtp(user._id, user.email, "resetPassword");
+    sendOtp(user._id, user.email, "resetPassword").catch((err) => {
+      console.error("Error sending OTP:", err);
+    });
     return res.status(200).send({
       success: true,
       message: "Reset password OTP sent to email",
