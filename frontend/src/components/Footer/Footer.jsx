@@ -1,3 +1,4 @@
+import React from "react";
 import { NavLink } from "react-router-dom";
 import footcss from "./Footer.module.css";
 import oscLogo from "../../assets/images/imgi_1_Lock.png";
