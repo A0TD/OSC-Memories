@@ -12,20 +12,13 @@ export const getAllMedia = async (
   next: NextFunction,
 ) => {
   try {
-    const { seasonId, eventId } = req.params;
-    const allMedia = await Media.find({ eventId }).populate(
-      "eventId",
-      "seasonId",
-    );
-    // filters by correct seasonId
-    const correctMedia = allMedia.filter((media) => {
-      return (media.eventId as any).seasonId.toString() === seasonId;
-    });
+    const { eventId } = req.params;
+    const allMedia = await Media.find({ eventId });
 
     return res.status(200).send({
       success: true,
       message: "Successfully retrieved all media!",
-      correctMedia,
+      data: { media: allMedia },
     });
   } catch (err) {
     next(err);
@@ -38,23 +31,17 @@ export const getMedia = async (
   next: NextFunction,
 ) => {
   try {
-    const { seasonId, eventId, mediaId } = req.params;
+    const { eventId, mediaId } = req.params;
 
-    const foundMedia = await Media.findOne({ _id: mediaId, eventId }).populate(
-      "eventId",
-      "seasonid",
-    );
-
-    if (
-      !foundMedia ||
-      (foundMedia.eventId as any).seasonId.toString() !== seasonId
-    )
+    const foundMedia = await Media.findOne({ _id: mediaId, eventId });
+    if (!foundMedia) {
       throw new AppError(404, "Media not found!");
+    }
 
     return res.status(200).send({
       success: true,
       message: "Successfully retrieved media!",
-      foundMedia,
+      data: { media: foundMedia },
     });
   } catch (err) {
     next(err);
@@ -121,7 +108,7 @@ export const uploadMedia = async (
     res.status(200).json({
       success: true,
       message: "Upload successful",
-      createdMedia,
+      data: { media: createdMedia },
     });
   } catch (err) {
     if (uploadedPublicIds.length > 0) {
@@ -141,17 +128,15 @@ export const deleteMedia = async (
   next: NextFunction,
 ) => {
   try {
-    const { seasonId, eventId, mediaId } = req.params;
+    const { eventId, mediaId } = req.params;
     const deletedMedia = await Media.findOne({
       _id: mediaId,
       eventId,
-    }).populate("eventId", "seasonId");
+    });
 
-    if (
-      !deletedMedia ||
-      (deletedMedia.eventId as any).seasonId.toString() !== seasonId
-    )
+    if (!deletedMedia) {
       throw new AppError(404, "Media not found!");
+    }
 
     await Media.findOneAndDelete({ _id: mediaId });
 
@@ -178,7 +163,7 @@ export const getMediaByOwnerId = async (
     return res.status(200).send({
       success: true,
       message: "Successfully retrieved media!",
-      foundMedia,
+      data: { media: foundMedia },
     });
   } catch (err) {
     next(err);
