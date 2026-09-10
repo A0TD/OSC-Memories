@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Seasons from "./pages/Seasons/Seasons.jsx";
 import Home from "./pages/Home/Home.jsx";
-import EverySeason from './pages/EverySeason/EverySeason.jsx'
+import Events from './pages/Events/Events.jsx'
 import EventInfo from './pages/EventInfo/EventInfo';
 import Register from './pages/Registers/Register.jsx';
 import VerifyEmail from './pages/VerifyEmail/VerifyEmail.jsx'; 
@@ -21,7 +21,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/seasons" element={<Seasons />} />
-        <Route path="/seasons/everyseason" element={<EverySeason/>} />
+        <Route path="/seasons/:id/events" element={<Events/>} />
         <Route path="/eventinfo" element={<EventInfo />} />
         <Route path="/register" element={<Register/>}/>
         <Route path="/verify-email" element={<VerifyEmail />} />

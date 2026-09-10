@@ -7,9 +7,9 @@ import {
   FaTrash,
   FaCalendarAlt,
 } from "react-icons/fa";
-import styles from "./EverySeason.module.css";
+import styles from "./Events.module.css";
 
-export default function EverySeason() {
+export default function Events() {
   const params = useParams();
   const seasonId = params.seasonId || params.id;
 
