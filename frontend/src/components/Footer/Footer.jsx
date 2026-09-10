@@ -32,7 +32,7 @@ function Footer() {
 
             <NavLink to="/seasons">Seasons</NavLink>
 
-            <NavLink to="/home">Events</NavLink>
+            <NavLink to="/eventinfo">Events</NavLink>
           </div>
           <div className=" col-4 col-md-12 col-lg-3 ">
             <h3>Follow Us</h3>

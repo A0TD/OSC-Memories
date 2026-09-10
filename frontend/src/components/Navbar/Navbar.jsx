@@ -68,7 +68,7 @@ function Navbar() {
             Seasons
           </NavLink>
           <NavLink
-            to="/events"
+            to="/eventinfo"
             className={({ isActive }) => (isActive ? navcss.active : "")}
             onClick={() => setIsOpen(false)}
           >
