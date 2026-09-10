@@ -1,5 +1,5 @@
 .eventCard {
-  height: 220px; /* تثبيت ارتفاع الكارد */
+min-height: 280px;
   display: flex;
   flex-direction: column;
   justify-content: between;
