@@ -1,4 +1,5 @@
 import { Router } from "express";
+import rateLimit from "express-rate-limit";
 import {
   login,
   register,
@@ -18,6 +19,15 @@ import {
 import validate from "../middlewares/zod.validation";
 
 const authRouter = Router();
+
+const rateLimitOptions = {
+  windowMs: 1 * 60 * 1000,
+  limit: 4,
+  message: {
+    success: false,
+    message: "Too many requests from this IP, please try again later.",
+  },
+};
 
 /**
  * @swagger
@@ -76,7 +86,12 @@ const authRouter = Router();
  *       500:
  *         description: Internal Server Error
  */
-authRouter.post("/register", validate(registerSchema), register);
+authRouter.post(
+  "/register",
+  rateLimit(rateLimitOptions),
+  validate(registerSchema),
+  register,
+);
 /**
  * @swagger
  * /api/auth/verify-email:
@@ -160,7 +175,12 @@ authRouter.post("/verify-email", validate(verifyEmailSchema), verifyEmail);
  *       500:
  *         description: Internal Server Error
  */
-authRouter.post("/resend-otp", validate(resendOtpSchema), resendOtp);
+authRouter.post(
+  "/resend-otp",
+  rateLimit(rateLimitOptions),
+  validate(resendOtpSchema),
+  resendOtp,
+);
 /**
  * @swagger
  * /api/auth/forgot-password:
@@ -202,6 +222,7 @@ authRouter.post("/resend-otp", validate(resendOtpSchema), resendOtp);
  */
 authRouter.post(
   "/forgot-password",
+  rateLimit(rateLimitOptions),
   validate(forgotPasswordSchema),
   forgotPassword,
 );

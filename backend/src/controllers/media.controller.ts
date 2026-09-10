@@ -42,7 +42,7 @@ export const getMedia = async (
 
     const foundMedia = await Media.findOne({ _id: mediaId, eventId }).populate(
       "eventId",
-      "seasonid",
+      "seasonId",
     );
 
     if (

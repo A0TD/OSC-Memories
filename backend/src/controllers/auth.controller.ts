@@ -107,18 +107,20 @@ export const resendOtp = async (
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
-    if (!user) {
-      throw new AppError(400, "User not found");
-    }
-    if (user.isVerified) {
-      throw new AppError(400, "Email already verified");
+    if (!user || user.isVerified) {
+      return res.send({
+        success: true,
+        message:
+          "Verification OTP sent to email if it exists and is not already verified",
+      });
     }
     sendOtp(user._id, user.email, "verification").catch((err) => {
       console.error("Error sending OTP:", err);
     });
     return res.status(200).send({
       success: true,
-      message: "Verification OTP sent to email",
+      message:
+        "Verification OTP sent to email if it exists and is not already verified",
     });
   } catch (err) {
     next(err);
