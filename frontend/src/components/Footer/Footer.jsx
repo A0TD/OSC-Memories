@@ -20,13 +20,13 @@ function Footer() {
             </div>
             <p>Relive the moments, celebrate the journey together.</p>
           </div>
-          <div className="d-flex flex-column col-4 col-md-3 col-lg-2  ">
+          <div className="d-flex flex-column col-6 col-md-3 col-lg-2  ">
             <h3>Account</h3>
             <NavLink to="/">Login</NavLink>
 
             <NavLink to="/register">Register</NavLink>
           </div>
-          <div className="d-flex flex-column  col-4 col-md-3 col-lg-2  ">
+          <div className="d-flex flex-column  col-6 col-md-3 col-lg-2  ">
             <h3>Quick Links</h3>
             <NavLink to="/">Home</NavLink>
 
@@ -34,7 +34,7 @@ function Footer() {
 
             <NavLink to="/home">Events</NavLink>
           </div>
-          <div className=" col-4 col-md-12 col-lg-3 ">
+          <div className=" col-12 col-md-12 col-lg-3 ">
             <h3>Follow Us</h3>
             <div className="d-flex gap-3 ">
               <a

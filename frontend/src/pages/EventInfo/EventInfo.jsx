@@ -16,6 +16,8 @@ export default function EventInfo() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editEventId, setEditEventId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+const [eventToDeleteId, setEventToDeleteId] = useState(null);
   
 
   const { request, loading, error } = useApi();
@@ -35,21 +37,23 @@ export default function EventInfo() {
     fetchEvents();
   }, [request]);
 
-const handleDelete = async (id) => {
-   
-    const confirmed = window.confirm("Are you sure you want to delete this event?");
-    
-    if (!confirmed) return; 
+const handleDelete = (id) => {
+  setEventToDeleteId(id);
+  setShowDeleteModal(true);
+};
 
-    try {
-      await request({ method: "DELETE", url: `/event-infos/${id}` });
-      setEvents(events.filter((event) => event.id !== id));
-    } catch (err) {
-      console.error("Failed to delete event", err);
-    }
-  };
 
-  // تعديل دالة الـ handleEdit عشان تفتح المودال وتعبي البيانات القديمة
+const handleDeleteConfirmed = async () => {
+  try {
+    await request({ method: "DELETE", url: `/event-infos/${eventToDeleteId}` });
+    setEvents(events.filter((event) => event.id !== eventToDeleteId));
+    setShowDeleteModal(false);
+    setEventToDeleteId(null);
+  } catch (err) {
+    console.error("Failed to delete event", err);
+  }
+};
+
   const handleEdit = (id) => {
     const eventToEdit = events.find((event) => event.id === id);
     if (eventToEdit) {
@@ -60,12 +64,12 @@ const handleDelete = async (id) => {
     }
   };
 
-  // التعامل مع إدخال الفورم
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // إرسال البيانات للباك إند (POST للإضافة أو PUT للتعديل)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError("");
@@ -77,7 +81,7 @@ const handleDelete = async (id) => {
 
     try {
       if (isEditing) {
-        // طلب التعديل (PUT)
+   
         const response = await request({
           method: "PUT",
           url: `/event-infos/${editEventId}`,
@@ -87,7 +91,7 @@ const handleDelete = async (id) => {
         const updatedEvent = response.data?.eventInfo || response.data;
         setEvents(events.map((ev) => (ev.id === editEventId ? updatedEvent : ev)));
       } else {
-        // طلب الإضافة (POST)
+
         const response = await request({
           method: "POST",
           url: "/event-infos",
@@ -98,7 +102,7 @@ const handleDelete = async (id) => {
         setEvents([newEvent, ...events]);
       }
 
-      // قفل الـ Modal وتفريغ الفورم وإعادة الحالات لوضعها الأصلي
+
       closeModal();
     } catch (err) {
       console.error("Failed to save event", err);
@@ -106,7 +110,7 @@ const handleDelete = async (id) => {
     }
   };
 
-  // دالة لإغلاق المودال وتصفير البيانات
+
   const closeModal = () => {
     setShowModal(false);
     setIsEditing(false);
@@ -121,7 +125,7 @@ const handleDelete = async (id) => {
 
   return (
     <div>
-      {/* Hero Section */}
+
       <div className={eventinfocss.heroSection}>
         <h1 className={eventinfocss.heroTitle}>Events, Workshops & Growth</h1>
         <p className={eventinfocss.heroSubtitle}>
@@ -130,9 +134,9 @@ const handleDelete = async (id) => {
         </p>
       </div>
 
-      {/* المحتوى جوه الـ Container */}
+
       <div className={eventinfocss.cardcontainer}>
-        {/* Header & Add Button */}
+
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h3 className="fw-bold">All Events</h3>
           {isAdmin && (
@@ -150,7 +154,7 @@ const handleDelete = async (id) => {
         </div>
         {error && <div className="alert alert-danger mb-4">{error}</div>}
 
-        {/* Events Grid */}
+
         <div className="row">
           {events.length > 0 ? (
             events.map((event) => (
@@ -170,7 +174,7 @@ const handleDelete = async (id) => {
         </div>
       </div>
 
-      {/* Modal نافذة إضافة أو تعديل إيفنت */}
+
       {showModal && (
         <div className={eventinfocss.modalOverlay}>
           <div className={eventinfocss.modalBox}>
@@ -233,6 +237,30 @@ const handleDelete = async (id) => {
           </div>
         </div>
       )}
+      {showDeleteModal && (
+  <div className={eventinfocss.modalOverlay}>
+    <div className={eventinfocss.modalBox} style={{ maxWidth: "400px", textAlign: "center" }}>
+      <h5 className="fw-bold mb-3">Are you sure?</h5>
+      <p className="mb-4">Do you really want to delete this event?</p>
+      <div className="d-flex justify-content-center gap-2">
+        <button
+          type="button"
+          className="btn btn-secondary px-4"
+          onClick={() => setShowDeleteModal(false)}
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          className="btn btn-danger px-4"
+          onClick={handleDeleteConfirmed}
+        >
+          Yes, Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }
