@@ -1,29 +1,23 @@
-.heroSection {
-  background-image: linear-gradient(rgba(30, 10, 0, 0.600), rgba(20, 5, 0, 0.600)), url('../../assets/img/Seasons_Photo.jpg');
-  background-size: cover;
-  background-position: center;
-  height: 600px;
+.textHeading {
+  color: var(--brand-orange) !important;
 }
-
-.seasonCard {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  background-color: var(--bg-card);
+.cardText {
   color: var(--text-main);
-  border-color: var(--border-color) !important;
 }
-.text {color: var(--text-main);}
-.seasonCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 15px var(--bg-card); 
-}
-.icon {
-  color: var(--text-main);
-  background-color: var(--brand-orange);
-}
-.allCards {
+.card {
   background-color: var(--bg-main);
+  border-color: var(--border-color) !important;
+  transition: 0.2s;
 }
-.seasonsHeading {
+.card:hover {
+  box-shadow: 0 0 20px var(--bg-main);
+}
+.btnEvents {
   color: var(--brand-orange);
+  border: 1px solid var(--brand-orange);
+}
+.btnEvents:hover {
+  color: white;
+  border-color: var(--brand-orange);
+  background-color: var(--brand-orange);
 }

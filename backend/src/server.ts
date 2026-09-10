@@ -5,6 +5,7 @@ import swaggerUI from "swagger-ui-express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
 import specs from "./config/swagger.config";
 import connectDB from "./config/mongoDB.config";
@@ -22,6 +23,16 @@ app.use(
   cors({
     origin: CLIENT_URL,
     credentials: true,
+  }),
+);
+app.use(
+  rateLimit({
+    windowMs: 1 * 60 * 1000,
+    limit: 40,
+    message: {
+      success: false,
+      message: "Too many requests from this IP, please try again later.",
+    },
   }),
 );
 app.use(helmet());

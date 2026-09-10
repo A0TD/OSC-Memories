@@ -12,7 +12,8 @@ import Register from './pages/Registers/Register.jsx';
 import VerifyEmail from './pages/VerifyEmail/VerifyEmail.jsx'; 
 import Login from "./pages/Login/Login.jsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
-import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx"; 
+import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
+import EveryEvent from "./pages/EveryEvent/EveryEvent.jsx";
 export default function App() {
   return (
     <>
@@ -24,10 +25,9 @@ export default function App() {
         <Route path="/eventinfo" element={<EventInfo />} />
         <Route path="/register" element={<Register/>}/>
         <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/forgot-password" element={<ForgotPassword/>}/>
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-      
       </Routes>
       <Footer />
     </>

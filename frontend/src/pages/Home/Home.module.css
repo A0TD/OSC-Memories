@@ -156,3 +156,7 @@
     width: 100%;
   }
 }
+
+.seasonBtn , .eventBtn {
+  border: 2px solid var(--bg-main);
+}

@@ -52,9 +52,9 @@ export const createSeason = async (
   next: NextFunction,
 ) => {
   try {
-    const { name, date, description } = req.body;
+    const { name, date, description, imageUrl } = req.body;
 
-    const season = await Season.create({ name, date, description });
+    const season = await Season.create({ name, date, description, imageUrl });
     return res.status(201).send({
       success: true,
       message: "Season created successfully",
