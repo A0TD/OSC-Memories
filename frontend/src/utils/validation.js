@@ -7,16 +7,16 @@ export const validateRegisterForm = ({ username, email, password, inviteCode }) 
   const errors = {};
   
   if (!username || username.trim().length < 3) {
-    errors.username = 'اسم المستخدم يجب أن يكون 3 أحرف على الأقل';
+    errors.username = 'UserName must be at least 3 characters';
   }
   if (!validateEmail(email)) {
-    errors.email = 'يرجى إدخال بريد إلكتروني صحيح';
+    errors.email = 'Please enter valid email';
   }
   if (!password || password.length < 6) {
-    errors.password = 'كلمة السر يجب أن تكون 6 أحرف على الأقل';
+    errors.password = 'Password must be at least 6 characters ';
   }
   if (!inviteCode || !inviteCode.trim()) {
-    errors.inviteCode = 'كود الدعوة (Invite Code) مطلوب';
+    errors.inviteCode = 'Invite code is required';
   }
 
   return {
@@ -29,10 +29,10 @@ export const validateLoginForm = ({ email, password }) => {
   const errors = {};
 
   if (!validateEmail(email)) {
-    errors.email = 'يرجى إدخال بريد إلكتروني صحيح';
+    errors.email = 'Please enter valid email';
   }
   if (!password) {
-    errors.password = 'كلمة السر مطلوبة';
+    errors.password = 'Password is required';
   }
 
   return {
