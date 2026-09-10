@@ -59,7 +59,7 @@ function Navbar() {
           <NavLink to="/seasons" className={({ isActive }) => (isActive ? navcss.active : "")} onClick={() => setIsOpen(false)}>
             Seasons
           </NavLink>
-          <NavLink to="/events" className={({ isActive }) => (isActive ? navcss.active : "")} onClick={() => setIsOpen(false)}>
+          <NavLink to="/eventinfo" className={({ isActive }) => (isActive ? navcss.active : "")} onClick={() => setIsOpen(false)}>
             Events
           </NavLink>
 

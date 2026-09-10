@@ -1,9 +1,8 @@
 import { useState, useCallback } from 'react';
 import axios from 'axios';
 
-// إعداد Axios Instance هنا مباشرة
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api', // بورت الباك إند
+  baseURL: 'http://localhost:3000/api', 
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
