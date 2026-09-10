@@ -22,7 +22,7 @@ function Footer() {
           </div>
           <div className="d-flex flex-column col-4 col-md-3 col-lg-2  ">
             <h3>Account</h3>
-            <NavLink to="/">Login</NavLink>
+            <NavLink to="/login">Login</NavLink>
 
             <NavLink to="/register">Register</NavLink>
           </div>
@@ -30,7 +30,7 @@ function Footer() {
             <h3>Quick Links</h3>
             <NavLink to="/">Home</NavLink>
 
-            <NavLink to="/home">Seasons</NavLink>
+            <NavLink to="/seasons">Seasons</NavLink>
 
             <NavLink to="/home">Events</NavLink>
           </div>

@@ -30,16 +30,19 @@ function Navbar() {
   };
 
   return (
-    <nav className={`${navcss.navbar} d-flex align-items-center justify-content-between px-4`}>
-
+    <nav
+      className={`${navcss.navbar} d-flex align-items-center justify-content-between px-4`}
+    >
       <div className="d-flex align-items-center">
-        <div className={navcss.logo}>
-          <img src={oscLogo} alt="OSC-Logo" />
-        </div>
-        <div className={navcss.logop}>
-          <h1>osc</h1>
-          <p>MEMORIES</p>
-        </div>
+        <NavLink to={"/"} className={navcss.logos}>
+          <div className={navcss.logo}>
+            <img src={oscLogo} alt="OSC-Logo" />
+          </div>
+          <div className={navcss.logop}>
+            <h1>OSC</h1>
+            <p>MEMORIES</p>
+          </div>
+        </NavLink>
       </div>
 
       <button className={navcss.hamburger} onClick={() => setIsOpen(!isOpen)}>
@@ -48,33 +51,49 @@ function Navbar() {
         <span></span>
       </button>
 
-  
       <div className={`${navcss.menuWrapper} ${isOpen ? navcss.showMenu : ""}`}>
-        
-
         <div className={navcss.navlinks}>
-          <NavLink to="/" className={({ isActive }) => (isActive ? navcss.active : "")} onClick={() => setIsOpen(false)}>
+          <NavLink
+            to="/"
+            className={({ isActive }) => (isActive ? navcss.active : "")}
+            onClick={() => setIsOpen(false)}
+          >
             Home
           </NavLink>
-          <NavLink to="/seasons" className={({ isActive }) => (isActive ? navcss.active : "")} onClick={() => setIsOpen(false)}>
+          <NavLink
+            to="/seasons"
+            className={({ isActive }) => (isActive ? navcss.active : "")}
+            onClick={() => setIsOpen(false)}
+          >
             Seasons
           </NavLink>
-          <NavLink to="/events" className={({ isActive }) => (isActive ? navcss.active : "")} onClick={() => setIsOpen(false)}>
+          <NavLink
+            to="/events"
+            className={({ isActive }) => (isActive ? navcss.active : "")}
+            onClick={() => setIsOpen(false)}
+          >
             Events
           </NavLink>
 
           {user && (
-            <NavLink to="/profile" className={({ isActive }) => (isActive ? navcss.active : "")} onClick={() => setIsOpen(false)}>
+            <NavLink
+              to="/profile"
+              className={({ isActive }) => (isActive ? navcss.active : "")}
+              onClick={() => setIsOpen(false)}
+            >
               Profile
             </NavLink>
           )}
           {user?.role === "admin" && (
-            <NavLink to="/members" className={({ isActive }) => (isActive ? navcss.active : "")} onClick={() => setIsOpen(false)}>
+            <NavLink
+              to="/members"
+              className={({ isActive }) => (isActive ? navcss.active : "")}
+              onClick={() => setIsOpen(false)}
+            >
               Members
             </NavLink>
           )}
         </div>
-
 
         <div className={navcss.menuRight}>
           <button
@@ -87,20 +106,41 @@ function Navbar() {
             <div className={navcss.toggleCircle}></div>
           </button>
 
-          <div className={`${navcss.authLinks} d-flex gap-2 align-items-center`}>
+          <div
+            className={`${navcss.authLinks} d-flex gap-2 align-items-center`}
+          >
             {!user ? (
               <>
-                <button onClick={() => { navigate("/login"); setIsOpen(false); }}>Log In</button>
-                <button onClick={() => { navigate("/register"); setIsOpen(false); }} className={navcss.regbtn}>
+                <button
+                  onClick={() => {
+                    navigate("/login");
+                    setIsOpen(false);
+                  }}
+                >
+                  Log In
+                </button>
+                <button
+                  onClick={() => {
+                    navigate("/register");
+                    setIsOpen(false);
+                  }}
+                  className={navcss.regbtn}
+                >
                   Register
                 </button>
               </>
             ) : (
-              <button onClick={() => { handleLogout(); setIsOpen(false); }}>Log Out</button>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsOpen(false);
+                }}
+              >
+                Log Out
+              </button>
             )}
           </div>
         </div>
-
       </div>
     </nav>
   );
