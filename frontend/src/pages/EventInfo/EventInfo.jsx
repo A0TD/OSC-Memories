@@ -13,7 +13,7 @@ export default function EventInfo() {
   const [formData, setFormData] = useState({ name: "", description: "" });
   const [formError, setFormError] = useState("");
   
-  // States جديدة عشان نعرف إحنا في وضع تعديل ولا إضافة، ونحفظ الـ ID بتاع الإيفنت اللي بنعدله
+
   const [isEditing, setIsEditing] = useState(false);
   const [editEventId, setEditEventId] = useState(null);
   
