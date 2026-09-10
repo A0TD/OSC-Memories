@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import eventcardvss from "./EventCard.module.css";
 
 export default function EventCard({ id, name, description, isAdmin, onDelete, onEdit }) {
