@@ -7,6 +7,7 @@ import {
 import { authenticate, authorize } from "../middlewares/auth.middleware";
 import validate from "../middlewares/zod.validation";
 import paramSchema from "../zodSchemas/param.zodSchema";
+import { getMediaByOwnerId } from "../controllers/media.controller";
 
 const adminRouter = Router();
 
@@ -96,6 +97,9 @@ adminRouter.patch(
   validate(paramSchema("userId")),
   makeAdmin,
 );
+
+adminRouter.get("/users/:userId/media", authenticate, getMediaByOwnerId);
+
 /**
  * @swagger
  * /api/admin/users/{userId}:
