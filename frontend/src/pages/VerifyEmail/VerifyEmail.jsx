@@ -92,7 +92,7 @@ export default function VerifyEmail() {
 
           <button 
             type="submit" 
-            className={`btn w-100 ${verifycss.submitBtn}`}
+            className={`btn w-100 ${verifycss.submitBtn} mx-0`}
             disabled={loading}
           >
             {loading ? 'Verifying...' : 'Verify Account'}
