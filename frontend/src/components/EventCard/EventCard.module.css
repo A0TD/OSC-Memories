@@ -1,10 +1,15 @@
 .eventCard {
-  flex: 1;
+  height: 220px; /* تثبيت ارتفاع الكارد */
+  display: flex;
+  flex-direction: column;
+  justify-content: between;
+  cursor: pointer;
   text-align: center;
   background-color: var(--bg-card);
   border-radius: 12px;
   border: 1px solid var(--border-color);
   transition: transform 0.3s ease;
+  padding: 20px 10px;
 }
 
 .eventCard:hover {
@@ -20,11 +25,11 @@
 }
 
 .eventDescription {
-  font-size: 0.9rem;
-  color: var(--text-card);
-  margin-bottom: 15px;
- 
-  
+display: -webkit-box;
+  -webkit-line-clamp: 3; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .editBtn {

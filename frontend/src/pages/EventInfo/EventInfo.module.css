@@ -53,6 +53,8 @@
   width: 100%;
   max-width: 500px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  word-break: break-word; /* بتخلي الكلام الطويييل ينزل سطر جديد غصب عنه وما يطلعش بره */
+  overflow-wrap: break-word;
 }
 .addbtn {
   padding: 10px 15px;

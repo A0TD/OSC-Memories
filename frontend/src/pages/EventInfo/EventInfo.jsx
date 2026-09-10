@@ -12,8 +12,8 @@ export default function EventInfo() {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ name: "", description: "" });
   const [formError, setFormError] = useState("");
-  
 
+const [selectedEvent, setSelectedEvent] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editEventId, setEditEventId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -166,6 +166,7 @@ const handleDeleteConfirmed = async () => {
                 isAdmin={isAdmin}
                 onDelete={handleDelete}
                 onEdit={handleEdit}
+                onReadMore={() => setSelectedEvent(event)}
               />
             ))
           ) : (
@@ -261,6 +262,24 @@ const handleDeleteConfirmed = async () => {
     </div>
   </div>
 )}
+{selectedEvent && (
+  <div className={eventinfocss.modalOverlay}>
+    <div className={eventinfocss.modalBox}>
+      <h3 className="fw-bold mb-3">{selectedEvent.name}</h3>
+      <p className="mb-4" style={{ whiteSpace: "pre-wrap" }}>{selectedEvent.description}</p>
+      <div className="d-flex justify-content-end">
+        <button
+          type="button"
+          className="btn btn-secondary px-4"
+          onClick={() => setSelectedEvent(null)}
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }
