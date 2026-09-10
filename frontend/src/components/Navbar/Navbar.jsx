@@ -1,3 +1,4 @@
+import React from'react';
 import navcss from "./Navbar.module.css";
 import oscLogo from "../../assets/images/imgi_1_Lock.png";
 import { useState, useEffect, useContext } from "react";
