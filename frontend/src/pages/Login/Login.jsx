@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import logcss from "../../assets/styles/auth.module.css";
-import {validateLoginForm} from "../../utils/validation";
+import { validateLoginForm } from "../../utils/validation";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -20,24 +20,28 @@ export default function Login() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setApiError("");
     const validation = validateLoginForm(formData);
-        if (!validation.isValid) {
-          setErrors(validation.errors);
-          return;
-        }
-        setErrors({});
-        setLoading(true);
+    if (!validation.isValid) {
+      setErrors(validation.errors);
+      return;
+    }
+    setErrors({});
+    setLoading(true);
     setLoading(true);
 
     try {
       await login(formData);
       navigate("/");
     } catch (err) {
+      const errorMessage = err.response?.data?.message;
+      if (errorMessage === "Email not verified") {
+        navigate("/verify-email", { state: { email: formData.email } });
+        return;
+      }
       setApiError(
         err.response?.data?.message || "An error occurred during login",
       );
