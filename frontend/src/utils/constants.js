@@ -1,7 +1,7 @@
 export const ROLES = {
   GUEST: 'guest',
   MEMBER: 'member',
-  ADMIN: 'admin',
+  ADMIN: 'Admin',
 };
 
 export const STORAGE_KEYS = {

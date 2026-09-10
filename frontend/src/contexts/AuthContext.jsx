@@ -23,14 +23,16 @@ export const AuthProvider = ({ children }) => {
     }
     setLoading(false);
   }, []);
-
-  const login = async (credentials) => {
+const login = async (credentials) => {
     const data = await request({
       url: ENDPOINTS.AUTH.LOGIN,
       method: 'POST',
       data: credentials,
     });
     const userData = data.data.user;
+
+    // أضيفي السطر ده هنا عشان يطبع القيمة الحقيقية في الكونسول
+    console.log("User role from backend:", userData.role);
 
     localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(userData));
     setUser(userData);
