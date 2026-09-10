@@ -19,8 +19,8 @@ function Home() {
           <Link to="/seasons" className={homecss.seasonBtn}>
             Explore Seasons
           </Link>
-          <Link to="/events" className={homecss.eventBtn}>
-            About Events
+          <Link to="/eventinfo" className={homecss.eventBtn}>
+            Explore Events
           </Link>
         </div>
       </section>

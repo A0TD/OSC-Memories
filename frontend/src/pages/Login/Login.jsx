@@ -36,7 +36,7 @@ export default function Login() {
 
     try {
       await login(formData);
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       setApiError(
         err.response?.data?.message || "An error occurred during login",

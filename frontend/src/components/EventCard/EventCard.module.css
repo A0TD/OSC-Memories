@@ -1,0 +1,62 @@
+.eventCard {
+  flex: 1;
+  text-align: center;
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  transition: transform 0.3s ease;
+}
+
+.eventCard:hover {
+  transform: translateY(-5px);
+}
+
+.eventTitle {
+  font-weight: 700;
+  color: var( --hero-title-color);
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid ;
+}
+
+.eventDescription {
+  font-size: 0.9rem;
+  color: var(--text-card);
+  margin-bottom: 15px;
+ 
+  
+}
+
+.editBtn {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #d97706;
+  background-color: transparent;
+  border: 1px solid #d97706;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editBtn:hover {
+  background-color: #d97706;
+  color: #ffffff;
+}
+
+.deleteBtn {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #dc2626;
+  background-color: transparent;
+  border: 1px solid #dc2626;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.deleteBtn:hover {
+  background-color: #dc2626;
+  color: #ffffff;
+}
