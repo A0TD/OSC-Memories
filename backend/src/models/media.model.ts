@@ -52,6 +52,10 @@ const mediaSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    downloadUrl: {
+      type: String,
+      required: true,
+    },
     mimeType: {
       type: String,
       required: true,

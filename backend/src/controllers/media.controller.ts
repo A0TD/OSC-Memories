@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import Media from "../models/media.model";
 import AppError from "../utils/appError.util";
 import cloudinary from "../config/cloudinary.config";
-import fs from "fs/promises";
+import { uploadMany } from "../utils/uploadMedia.util";
 
 // "fl_attachment" --> place after /upload/ in the image url to download.
 
@@ -57,7 +57,7 @@ export const uploadMedia = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const uploadedPublicIds: string[] = [];
+  let uploadedMedia: Awaited<ReturnType<typeof uploadMany>> = [];
   try {
     const { eventId }: any = req.params;
     const files = req.files as Express.Multer.File[]; // allows using .map() on the files variable
@@ -65,39 +65,20 @@ export const uploadMedia = async (
     if (!files || files.length === 0)
       throw new AppError(400, "Missing file upload!");
 
-    let uploadedMedia;
-    try {
-      uploadedMedia = await Promise.all(
-        files.map(async (file) => {
-          const result = await cloudinary.uploader.upload(file.path, {
-            resource_type: "auto",
-            transformation: [
-              {
-                width: 1920,
-                height: 1080,
-                crop: "limit", // Downscale only if larger than 1080p, preserves aspect ratio
-                quality: "auto:good", // Smart compression (use "auto:eco" for maximum credit savings)
-                fetch_format: "auto", // Converts to WebP/AVIF automatically
-              },
-            ],
-          });
-          uploadedPublicIds.push(result.public_id);
-          return { file, result };
-        }),
-      );
-    } finally {
-      await Promise.all(
-        //Deletes the temporary files created by multer using File System (fs)
-        files.map((file) => fs.unlink(file.path).catch(() => {})),
-      );
-    }
+    uploadedMedia = await uploadMany(files);
 
     const mediaDocuments = uploadedMedia.map(({ file, result }) => {
+      const autoDownloadUrl = cloudinary.url(result.public_id, {
+        secure: true,
+        format: result.format, // Keeps the original uploaded format
+        flags: "attachment", // Triggers the download prompt in the browser
+      });
       //destructures a single uploaded media into file and result
       return {
         ownerId: (req as any).user.id,
         eventId,
         url: result.secure_url,
+        downloadUrl: autoDownloadUrl,
         mimeType: file.mimetype,
         publicId: result.public_id,
       };
@@ -111,10 +92,10 @@ export const uploadMedia = async (
       data: { media: createdMedia },
     });
   } catch (err) {
-    if (uploadedPublicIds.length > 0) {
+    if (uploadedMedia.length > 0) {
       await Promise.all(
-        uploadedPublicIds.map(async (uploadedPublicId) => {
-          await cloudinary.uploader.destroy(uploadedPublicId).catch(() => {});
+        uploadedMedia.map(({ result }) => {
+          cloudinary.uploader.destroy(result.public_id).catch(() => {});
         }),
       );
     }
