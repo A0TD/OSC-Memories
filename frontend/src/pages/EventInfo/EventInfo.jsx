@@ -20,7 +20,7 @@ export default function EventInfo() {
 
   const { request, loading, error } = useApi();
   const { user } = useContext(AuthContext);
-  const isAdmin = user?.role === "admin";
+  const isAdmin = user?.role === "Admin";
 
   const fetchEvents = async () => {
     try {

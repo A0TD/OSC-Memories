@@ -68,7 +68,7 @@ function Navbar() {
               Profile
             </NavLink>
           )}
-          {user?.role === "admin" && (
+          {user?.role === "Admin" && (
             <NavLink to="/members" className={({ isActive }) => (isActive ? navcss.active : "")} onClick={() => setIsOpen(false)}>
               Members
             </NavLink>
