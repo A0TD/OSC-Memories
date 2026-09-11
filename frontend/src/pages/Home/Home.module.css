@@ -40,14 +40,14 @@
   text-decoration: none;
   color: white;
   background-color: var(--brand-orange);
-  border-radius: 10px;
+  border-radius: 6px;
   text-align: center;
   padding: 7px 10px 8px;
   font-weight: 600;
 }
 .home a:hover {
   background-color: transparent;
-  border: 2px var(--brand-orange) solid;
+  border: 1.px var(--brand-orange) solid;
 }
 /* ********************* About Section ******************** */
 
