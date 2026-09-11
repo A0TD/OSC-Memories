@@ -2,7 +2,7 @@
   background-image: linear-gradient(rgba(30, 10, 0, 0.600), rgba(20, 5, 0, 0.600)), url('../../assets/img/Seasons_Photo.jpg');
   background-size: cover;
   background-position: center;
-  height: 630px;
+  min-height: 700px;
 }
 
 .seasonCard {
@@ -27,7 +27,6 @@
 .seasonsHeading {
   color: var(--brand-orange);
 }
-
 .btn {
   background-color: var(--brand-orange);
   color: var(--text-main);
@@ -35,5 +34,6 @@
 }
 .btn:hover {
   border-color: var(--brand-orange);
+  background-color: white;
   color: var(--brand-orange);
 }

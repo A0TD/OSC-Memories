@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import styles from "./Seasons.module.css";
 import authStyles from "../../assets/styles/auth.module.css";
 import {
-  FaArrowRight,
   FaEdit,
   FaTrash,
   FaPlus,

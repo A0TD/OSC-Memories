@@ -5,19 +5,29 @@
   color: var(--text-main);
 }
 .card {
-  background-color: var(--bg-main);
+  background-color: var(--bg-card);
   border-color: var(--border-color) !important;
   transition: 0.2s;
 }
 .card:hover {
   box-shadow: 0 0 20px var(--bg-main);
 }
-.btnEvents {
-  color: var(--brand-orange);
-  border: 1px solid var(--brand-orange);
+.eventImg {
+  width: 100%;
+  height: 220px; 
+  object-fit: cover; 
+  object-position: center; 
 }
-.btnEvents:hover {
-  color: white;
-  border-color: var(--brand-orange);
+.allCards {
+  background-color: var(--bg-main);
+}
+.btn {
   background-color: var(--brand-orange);
+  color: var(--text-main);
+  border: 1px solid transparent;
+}
+.btn:hover {
+  border-color: var(--brand-orange);
+  background-color: white;
+  color: var(--brand-orange);
 }
