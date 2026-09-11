@@ -20,7 +20,14 @@
   opacity: 0.8;
   padding:0 10px ;
 }
-.footerContent a:hover {
+.logout{
+  color: var(--text-main);
+  opacity: 0.8;
+  padding:0 10px ;
+
+}
+
+.footerContent a:hover , .logout:hover {
   color: var(--brand-orange);
 }
 .footerBrand p {

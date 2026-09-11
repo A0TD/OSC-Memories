@@ -1,0 +1,54 @@
+.memberCardBox{
+    background-color: var(--bg-main);
+    padding: 5px 10px;
+    min-height: 50px;
+    border-radius: 6px;
+}
+
+.image{
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
+}
+.avatarColor0 { background-color: var(--brand-orange); color: #000; }
+.avatarColor1 { background-color: var(--brand-yellow); color: #000; }
+.avatarColor2 { background-color: #e53e3e; color: #fff; } /* أحمر متناسق */
+.avatarColor3 { background-color: #319795; color: #fff; } /* تركواز */
+.avatarColor4 { background-color: #805ad5; color: #fff; } /* بنفسجي */
+.avatarColor5 { background-color: #d69e2e; color: #fff; } /* أصفر غامق */
+.name{
+    color: var(--hero-title-color);
+    font-weight: 600;
+}
+.email{
+    color: var(--text-main);
+}
+.rolew{
+    color: var(--text-main);
+    padding: 10px 10px 0 ;
+    font-size: 18px;
+    font-weight: 500;
+}
+.rolemember{
+    color: orange;
+    border: 1px solid orange;
+    border-radius: 6px;
+    text-decoration: center;
+    height: 38px;
+    padding: 5px 15px;
+    margin: auto;
+
+}
+
+.btndelete img {
+    filter: brightness(0) saturate(100%) invert(27%) sepia(93%) saturate(7491%) hue-rotate(355deg) brightness(95%) contrast(118%);
+}
+
+.btndelete:hover img {
+    filter: brightness(100%)  saturate(100%);
+    transform: scale(1.1);
+    transition: all 0.2s ease-in-out;
+}
