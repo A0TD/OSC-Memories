@@ -15,6 +15,7 @@ import {
 
 import { authenticate, authorize } from "../middlewares/auth.middleware";
 import paramSchema from "../zodSchemas/param.zodSchema";
+import upload from "../middlewares/multer.middleware";
 
 const eventRouter = Router({ mergeParams: true });
 
@@ -88,7 +89,7 @@ eventRouter.get("/", getAllEvents);
  *         description: ID of the event
  *     responses:
  *       200:
- *         description: Event retrieved successfully along with related media
+ *         description: Event retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -105,14 +106,10 @@ eventRouter.get("/", getAllEvents);
  *                   properties:
  *                     event:
  *                       $ref: '#/components/schemas/Event'
- *                     relatedMedia:
- *                       type: array
- *                       items:
- *                         type: object
  *       400:
  *         description: Bad Request - Validation error
- *       403:
- *         description: Forbidden - Insufficient permissions
+ *       401:
+ *         description: Unauthorized - Authentication required
  *       404:
  *         description: Event not found
  *       500:
@@ -136,7 +133,7 @@ eventRouter.get("/:eventId", validate(paramSchema("eventId")), getEvent);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -145,9 +142,10 @@ eventRouter.get("/:eventId", validate(paramSchema("eventId")), getEvent);
  *               name:
  *                 type: string
  *                 example: Salakhana 2026
- *               imageUrl:
+ *               media:
  *                 type: string
- *                 example: https://example.com/images/event.png
+ *                 format: binary
+ *                 description: Image file for the event
  *               description:
  *                 type: string
  *                 example: The amazing salakhana of 2026
@@ -183,6 +181,7 @@ eventRouter.post(
   "/",
   authenticate,
   authorize("Admin"),
+  upload.single("media"),
   validate(createEventSchema),
   createEvent,
 );
@@ -209,16 +208,17 @@ eventRouter.post(
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               name:
  *                 type: string
  *                 example: Updated Event Name
- *               imageUrl:
+ *               media:
  *                 type: string
- *                 example: https://example.com/images/new-event.png
+ *                 format: binary
+ *                 description: New image file to replace the old event image
  *               description:
  *                 type: string
  *                 example: Updated event description
@@ -256,6 +256,7 @@ eventRouter.put(
   "/:eventId",
   authenticate,
   authorize("Admin"),
+  upload.single("media"),
   validate(paramSchema("eventId")),
   validate(updateEventSchema),
   updateEvent,
