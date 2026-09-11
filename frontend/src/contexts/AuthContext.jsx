@@ -12,10 +12,17 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const savedUser = localStorage.getItem(STORAGE_KEYS.USER);
+    const savedToken = localStorage.getItem('token');
+
     if (savedUser) {
       try {
         const parsedUser = JSON.parse(savedUser);
-        setUser(parsedUser);
+        // دمج التوكن داخل كائن المستخدم لضمان توفره عبر user.token
+        const userWithToken = {
+          ...parsedUser,
+          token: parsedUser.token || savedToken || '',
+        };
+        setUser(userWithToken);
         setRole(parsedUser.role || ROLES.MEMBER);
       } catch (err) {
         console.error('Failed to parse user from localStorage:', err);
@@ -30,10 +37,19 @@ export const AuthProvider = ({ children }) => {
       method: 'POST',
       data: credentials,
     });
-    const userData = data.data.user;
 
-    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(userData));
-    setUser(userData);
+    const userData = data?.data?.user || data?.user || {};
+    const token = data?.data?.token || data?.token || userData?.token;
+
+    // دمج التوكن مع بيانات المستخدم
+    const userWithToken = { ...userData, token };
+
+    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(userWithToken));
+    if (token) {
+      localStorage.setItem('token', token);
+    }
+
+    setUser(userWithToken);
     setRole(userData.role || ROLES.MEMBER);
     return data;
   };
@@ -55,6 +71,7 @@ export const AuthProvider = ({ children }) => {
     });
     return data;
   };
+
   const forgotPassword = async (emailData) => {
     const data = await request({
       url: ENDPOINTS.AUTH.FORGOT_PASSWORD,
@@ -63,6 +80,7 @@ export const AuthProvider = ({ children }) => {
     });
     return data;
   };
+
   const resetPassword = async (resetData) => {
     const data = await request({
       url: ENDPOINTS.AUTH.RESET_PASSWORD,
@@ -71,23 +89,42 @@ export const AuthProvider = ({ children }) => {
     });
     return data;
   };
+
   const resendOtp = async (emailData) => {
-  const data = await request({
-    url: ENDPOINTS.AUTH.RESEND_OTP, 
-    method: 'POST',
-    data: emailData,
-  });
-  return data;
-};
+    const data = await request({
+      url: ENDPOINTS.AUTH.RESEND_OTP,
+      method: 'POST',
+      data: emailData,
+    });
+    return data;
+  };
 
   const logout = () => {
     localStorage.removeItem(STORAGE_KEYS.USER);
+    localStorage.removeItem('token');
     setUser(null);
     setRole(ROLES.GUEST);
   };
 
+  // إتاحة token بشكل مباشر في قيمة Context للتسهيل
+  const token = user?.token || localStorage.getItem('token') || '';
+
   return (
-    <AuthContext.Provider value={{ user, role, login, register, verifyEmail,forgotPassword,resetPassword, resendOtp, logout, loading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        role,
+        token,
+        login,
+        register,
+        verifyEmail,
+        forgotPassword,
+        resetPassword,
+        resendOtp,
+        logout,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
