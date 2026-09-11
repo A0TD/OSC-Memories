@@ -1,6 +1,8 @@
 import { createContext, useState, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import { ENDPOINTS, ROLES, STORAGE_KEYS } from '../utils/constants';
+import axios from 'axios';
+
 
 export const AuthContext = createContext();
 
@@ -99,14 +101,22 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  const logout = () => {
-    localStorage.removeItem(STORAGE_KEYS.USER);
-    localStorage.removeItem('token');
+const logout = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    await axios.post(
+      "http://localhost:3000/api/auth/logout",
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  } catch (error) {
+    console.error(error);
+  } finally {
+    localStorage.removeItem("osc_user");
     setUser(null);
-    setRole(ROLES.GUEST);
-  };
+  }
+};
 
-  // إتاحة token بشكل مباشر في قيمة Context للتسهيل
   const token = user?.token || localStorage.getItem('token') || '';
 
   return (

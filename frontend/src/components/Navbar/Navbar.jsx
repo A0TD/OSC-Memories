@@ -25,10 +25,10 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useContext(AuthContext);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-  };
+const handleLogout = async () => {
+  await logout();
+  navigate("/login");
+};
 
   return (
     <nav

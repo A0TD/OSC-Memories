@@ -1,5 +1,5 @@
 import React from "react";
-import { FaPlay, FaTrash } from "react-icons/fa";
+import { FaPlay, FaTrash, FaDownload } from "react-icons/fa";
 import styles from "./EventVideo.module.css";
 
 export default function EventVideo({
@@ -12,7 +12,7 @@ export default function EventVideo({
   if (!videos || videos.length === 0) {
     return (
       <div className={styles.emptyState}>
-        <h5>There is no videos yet.</h5>
+        <h5>There are no videos yet.</h5>
       </div>
     );
   }
@@ -22,6 +22,7 @@ export default function EventVideo({
       {videos.map((video, index) => {
         const videoId = video._id || video.id || video.mediaId;
         const canDelete = isAdmin || video.ownerId === currentUserId;
+        const downloadLink = video.downloadUrl || video.url;
 
         return (
           <div key={videoId || index} className={styles.videoCard}>
@@ -36,6 +37,17 @@ export default function EventVideo({
               >
                 <FaPlay />
               </button>
+
+              <a
+                href={downloadLink}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.actionBtn}
+              >
+                <FaDownload />
+              </a>
+
               {canDelete && videoId && (
                 <button
                   className={`${styles.actionBtn} ${styles.deleteBtn}`}

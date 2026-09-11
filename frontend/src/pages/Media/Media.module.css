@@ -8,6 +8,9 @@
 .btnColor {
   color: var(--brand-orange);
 }
+.btnColor:hover {
+  color: var(--brand-orange);
+}
 .btnContainer {
   background-color: var(--brand-orange);
   border: none !important;
