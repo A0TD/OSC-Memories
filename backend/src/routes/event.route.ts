@@ -145,7 +145,7 @@ eventRouter.get("/:eventId", validate(paramSchema("eventId")), getEvent);
  *               media:
  *                 type: string
  *                 format: binary
- *                 description: Image file for the event
+ *                 description: Image file for the event cover
  *               description:
  *                 type: string
  *                 example: The amazing salakhana of 2026

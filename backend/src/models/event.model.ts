@@ -69,6 +69,7 @@ eventSchema.set("toJSON", {
     delete ret.__v;
     delete ret.createdAt;
     delete ret.updatedAt;
+    delete ret.imagePublicId
     return ret;
   },
 });

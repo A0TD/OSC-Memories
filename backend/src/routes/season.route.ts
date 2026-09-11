@@ -14,6 +14,7 @@ import {
 } from "../zodSchemas/season.zodSchema";
 import paramSchema from "../zodSchemas/param.zodSchema";
 import { authenticate, authorize } from "../middlewares/auth.middleware";
+import upload from "../middlewares/multer.middleware";
 
 const seasonRouter = Router();
 
@@ -113,7 +114,7 @@ seasonRouter.get(
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -127,12 +128,13 @@ seasonRouter.get(
  *                 type: string
  *                 format: date-time
  *                 example: "2026-03-01T00:00:00.000Z"
- *               imageUrl:
+ *               media:
  *                 type: string
- *                 example: "https://example.com/images/season.png"
+ *                 format: binary
+ *                 description: Image file for the season cover
  *               description:
  *                 type: string
- *                 example: 2026 Season
+ *                 example: The amazing 2026 season
  *     responses:
  *       201:
  *         description: Season created successfully
@@ -165,6 +167,7 @@ seasonRouter.post(
   "/",
   authenticate,
   authorize("Admin"),
+  upload.single("media"),
   validate(createSeasonSchema),
   createSeason,
 );
@@ -185,7 +188,7 @@ seasonRouter.post(
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -196,9 +199,10 @@ seasonRouter.post(
  *                 type: string
  *                 format: date-time
  *                 example: "2026-03-15T00:00:00.000Z"
- *               imageUrl:
+ *               media:
  *                 type: string
- *                 example: "https://example.com/images/updated-season.png"
+ *                 format: binary
+ *                 description: New image file to replace the old season cover
  *               description:
  *                 type: string
  *                 example: Updated season description.
