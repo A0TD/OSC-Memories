@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 import Event from "./event.model";
-import Media from "./media.model";
 
 /**
  * @swagger
@@ -14,6 +13,7 @@ import Media from "./media.model";
  *       properties:
  *         id:
  *           type: string
+ *           readOnly: true
  *           description: Auto-generated MongoDB ObjectId
  *           example: 60d5ecb8b5c9c22b1c8e4010
  *         name:
@@ -23,7 +23,7 @@ import Media from "./media.model";
  *         date:
  *           type: string
  *           format: date-time
- *           description: start and end date of the season
+ *           description: Start and end date of the season
  *           example: "2026-03-01T00:00:00.000Z"
  *         imageUrl:
  *           type: string
@@ -51,6 +51,10 @@ const seasonSchema = new Schema(
       type: String,
       default: "https://placehold.co/600x400",
     },
+    imagePublicId: {
+      type: String,
+      default: "",
+    },
     description: {
       type: String,
       trim: true,
@@ -67,6 +71,7 @@ seasonSchema.set("toJSON", {
     delete ret.__v;
     delete ret.createdAt;
     delete ret.updatedAt;
+    delete ret.imagePublicId
     return ret;
   },
 });

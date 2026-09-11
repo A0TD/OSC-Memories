@@ -1,18 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import styles from "./Seasons.module.css";
-import { FaArrowRight, FaEdit, FaTrash, FaPlus, FaExclamationTriangle } from "react-icons/fa";
-import defaultImage from "../../assets/img/Seasons_Photo.jpg";
+import authStyles from "../../assets/styles/auth.module.css";
+import {
+  FaEdit,
+  FaTrash,
+  FaPlus,
+  FaExclamationTriangle,
+} from "react-icons/fa";
+
+import { AuthContext } from "../../contexts/AuthContext";
+import { ROLES } from "../../utils/constants";
+import { useApi } from "../../hooks/useApi";
+
+const DEFAULT_IMAGE = "https://via.placeholder.com/300x180?text=OSC+Season";
 
 export default function Seasons() {
   const [seasons, setSeasons] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const API_BASE_URL = "http://localhost:3000/api/seasons";
+  const { user, role } = useContext(AuthContext);
+  const { request, loading } = useApi();
 
-  const token = null
-  const userRole = null 
-  const isAdmin = null
+  const isAdmin =
+    role === ROLES.ADMIN || role === "Admin" || user?.role === "Admin";
 
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState("create");
@@ -27,14 +36,15 @@ export default function Seasons() {
 
   const fetchSeasons = async () => {
     try {
-      setLoading(true);
-      const response = await axios.get(API_BASE_URL);
-      const extractedSeasons = response.data?.data?.seasons || [];
-      setSeasons(extractedSeasons);
+      const response = await request({
+        url: "/seasons",
+        method: "GET",
+      });
+      const extractedSeasons =
+        response?.data?.seasons || response?.seasons || response?.data || [];
+      setSeasons(Array.isArray(extractedSeasons) ? extractedSeasons : []);
     } catch (error) {
       console.error("Error fetching seasons:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -80,45 +90,49 @@ export default function Seasons() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isAdmin) return;
+
     try {
       const payload = {
         name: formData.name,
         description: formData.description,
-        date: formData.date ? new Date(formData.date).toISOString() : new Date().toISOString(),
+        date: formData.date
+          ? new Date(formData.date).toISOString()
+          : new Date().toISOString(),
         imageUrl: formData.imageUrl,
       };
 
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
       if (modalMode === "create") {
-        await axios.post(API_BASE_URL, payload, config);
+        await request({
+          url: "/seasons",
+          method: "POST",
+          data: payload,
+        });
       } else {
-        await axios.put(`${API_BASE_URL}/${currentSeasonId}`, payload, config);
+        await request({
+          url: `/seasons/${currentSeasonId}`,
+          method: "PUT",
+          data: payload,
+        });
       }
 
       setShowModal(false);
       fetchSeasons();
     } catch (error) {
       console.error(`Error ${modalMode} season:`, error);
-      alert("Unauthorized or server error!");
     }
   };
 
   const handleDelete = async (id, e) => {
     e.preventDefault();
+    if (!isAdmin) return;
 
     if (deleteConfirmId === id) {
       try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        await axios.delete(`${API_BASE_URL}/${id}`, config);
+        await request({
+          url: `/seasons/${id}`,
+          method: "DELETE",
+        });
         setDeleteConfirmId(null);
         fetchSeasons();
       } catch (error) {
@@ -141,16 +155,16 @@ export default function Seasons() {
           <p className="lead md-w-50 fw-medium">
             Explore and check out all available OSC seasons and their events.
           </p>
-
-          {/* زر إضافة موسم جديد يظهر للأدمن فقط */}
-          {isAdmin && (
-            <button
-              className="btn btn-warning mt-3 fw-bold d-flex align-items-center gap-2"
-              onClick={handleOpenCreate}
-            >
-              <FaPlus /> Create New Season
-            </button>
-          )}
+          <div className="d-flex justify-content-start align-items-center w-100">
+            {isAdmin && (
+              <button
+                className={`btn ${authStyles.submitBtn} mt-5 mx-0 fw-bold w-50 fs-5`}
+                onClick={handleOpenCreate}
+              >
+                <FaPlus /> Create New Season
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -171,12 +185,13 @@ export default function Seasons() {
 
                 return (
                   <div key={seasonId} className="col-12 col-md-6 col-lg-4">
-                    <div className={`card text-light border-secondary h-100 position-relative ${styles.seasonCard}`}>
-                      
+                    <div
+                      className={`card text-light border-secondary h-100 position-relative ${styles.seasonCard}`}
+                    >
                       {isAdmin && (
                         <div className="position-absolute top-0 end-0 p-2 d-flex gap-2 z-2">
                           <button
-                            className="btn btn-sm btn-info text-white shadow"
+                            className={`btn btn-sm ${styles.btn}`}
                             onClick={(e) => {
                               e.stopPropagation();
                               handleOpenEdit(season);
@@ -186,15 +201,13 @@ export default function Seasons() {
                             <FaEdit />
                           </button>
                           <button
-                            className={`btn btn-sm shadow ${
-                              isDeleting ? "btn-danger px-3" : "btn-outline-danger bg-dark"
-                            }`}
+                            className={`btn btn-sm ${styles.btn}`}
                             onClick={(e) => handleDelete(seasonId, e)}
                             title="Delete Season"
                           >
                             {isDeleting ? (
                               <span className="fw-bold d-flex align-items-center gap-1">
-                                <FaExclamationTriangle /> Confirm?
+                                <FaExclamationTriangle /> Confirm
                               </span>
                             ) : (
                               <FaTrash />
@@ -203,13 +216,12 @@ export default function Seasons() {
                         </div>
                       )}
 
-                      {/* رابط كارت الموسم للجميع ينقل إلى مسار الأحداث */}
                       <Link
                         to={`/seasons/${seasonId}/events`}
                         className="text-decoration-none h-100 d-flex flex-column text-light"
                       >
                         <img
-                          src={season.imageUrl || season.image || defaultImage}
+                          src={season.imageUrl || season.image || DEFAULT_IMAGE}
                           alt={season.name || "season photo"}
                           className="card-img-top"
                           style={{ height: "180px", objectFit: "cover" }}
@@ -218,21 +230,14 @@ export default function Seasons() {
                           <h5 className={`card-title fw-bold ${styles.text}`}>
                             {season.name}
                           </h5>
-                          <p className="text-muted small mb-2">
-                            {season.date ? new Date(season.date).toLocaleDateString() : "No Date"}
+                          <p className={`${styles.text} small mb-2`}>
+                            {season.date
+                              ? new Date(season.date).toLocaleDateString()
+                              : "No Date"}
                           </p>
                           <p className={`card-text small mb-4 ${styles.text}`}>
                             {season.description || "No description included"}
                           </p>
-
-                          <div className="mt-auto d-flex justify-content-end">
-                            <div
-                              className={`${styles.icon} rounded-circle d-flex align-items-center justify-content-center`}
-                              style={{ width: "30px", height: "30px" }}
-                            >
-                              <FaArrowRight />
-                            </div>
-                          </div>
                         </div>
                       </Link>
                     </div>
@@ -240,7 +245,7 @@ export default function Seasons() {
                 );
               })
             ) : (
-              <div className="text-center text-light my-5">
+              <div className="text-center text-light my-5 w-100">
                 <p>No seasons found.</p>
               </div>
             )}
@@ -248,23 +253,25 @@ export default function Seasons() {
         </div>
       </div>
 
-      {/* Modal التعديل والإنشاء للأدمن فقط */}
+      {/* Modal */}
       {isAdmin && showModal && (
         <div
-          className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center z-3"
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.8)", backdropFilter: "blur(5px)" }}
+          className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center z-3 mt-4"
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            backdropFilter: "blur(5px)",
+          }}
         >
-          <div className="card bg-dark text-light border-secondary p-4 w-100" style={{ maxWidth: "500px" }}>
-            <h3 className="mb-4 fw-bold text-warning">
-              {modalMode === "create" ? "Create New Season" : "Update Season"}
-            </h3>
-
+          <div
+            className={`card ${styles.seasonCard} text-light border-secondary p-4 w-100`}
+            style={{ maxWidth: "500px" }}
+          >
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className="form-label text-secondary">Season Name</label>
+                <label className={`form-label ${styles.text}`}>Season Name</label>
                 <input
                   type="text"
-                  className="form-control bg-dark text-light border-secondary"
+                  className="form-control text-dark border-secondary"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
@@ -273,10 +280,10 @@ export default function Seasons() {
               </div>
 
               <div className="mb-3">
-                <label className="form-label text-secondary">Date</label>
+                <label className={`form-label ${styles.text}`}>Date</label>
                 <input
                   type="date"
-                  className="form-control bg-dark text-light border-secondary"
+                  className="form-control text-dark border-secondary"
                   name="date"
                   value={formData.date}
                   onChange={handleInputChange}
@@ -285,11 +292,13 @@ export default function Seasons() {
               </div>
 
               <div className="mb-3">
-                <label className="form-label text-secondary">Choose Image from Device</label>
+                <label className={`form-label ${styles.text}`}>
+                  Choose Image from Device
+                </label>
                 <input
                   type="file"
                   accept="image/*"
-                  className="form-control bg-dark text-light border-secondary"
+                  className="form-control text-dark border-secondary"
                   onChange={handleImageUpload}
                   required={modalMode === "create" && !formData.imageUrl}
                 />
@@ -306,9 +315,9 @@ export default function Seasons() {
               </div>
 
               <div className="mb-4">
-                <label className="form-label text-secondary">Description</label>
+                <label className={`form-label ${styles.text}`}>Description</label>
                 <textarea
-                  className="form-control bg-dark text-light border-secondary"
+                  className="form-control text-dark border-secondary"
                   name="description"
                   rows="3"
                   value={formData.description}
@@ -320,12 +329,12 @@ export default function Seasons() {
               <div className="d-flex justify-content-end gap-2">
                 <button
                   type="button"
-                  className="btn btn-secondary"
+                  className={`${authStyles.submitBtn} mx-0 fs-6 w-50`}
                   onClick={() => setShowModal(false)}
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-warning fw-bold">
+                <button type="submit" className={`${authStyles.submitBtn} mx-0 fs-6 w-50`}>
                   {modalMode === "create" ? "Create" : "Save Changes"}
                 </button>
               </div>

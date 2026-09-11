@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import Season from "../models/season.model";
 import AppError from "../utils/appError.util";
+import { uploadOne } from "../utils/uploadMedia.util";
+import cloudinary from "../config/cloudinary.config";
 
 export const getAllSeasons = async (
   req: Request,
@@ -51,10 +53,21 @@ export const createSeason = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const { name, date, description } = req.body;
+  const file = req.file as Express.Multer.File;
+  let uploadedImage;
   try {
-    const { name, date, description } = req.body;
+    if (file) {
+      uploadedImage = await uploadOne(file);
+    }
 
-    const season = await Season.create({ name, date, description });
+    const season = await Season.create({
+      name,
+      date,
+      imageUrl: uploadedImage?.result.url,
+      imagePublicId: uploadedImage?.result.public_id,
+      description,
+    });
     return res.status(201).send({
       success: true,
       message: "Season created successfully",
@@ -63,6 +76,11 @@ export const createSeason = async (
       },
     });
   } catch (err) {
+    if (uploadedImage) {
+      await cloudinary.uploader
+        .destroy(uploadedImage.result.public_id)
+        .catch(() => {});
+    }
     next(err);
   }
 };
@@ -72,26 +90,50 @@ export const updateSeason = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const { name, date, description } = req.body;
+  const { seasonId } = req.params;
+  const file = req.file;
+  let uploadedImage;
   try {
-    const { seasonId } = req.params;
-
-    const season = await Season.findByIdAndUpdate(seasonId, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const season = await Season.findById(seasonId);
 
     if (!season) {
       throw new AppError(404, "Season not found");
+    }
+
+    if (file) {
+      uploadedImage = await uploadOne(file);
+    }
+
+    const updatedSeason = await Season.findByIdAndUpdate(
+      seasonId,
+      {
+        name,
+        date,
+        imageUrl: uploadedImage?.result.url,
+        imagePublicId: uploadedImage?.result.public_id,
+        description,
+      },
+      { new: true, runValidators: true },
+    );
+
+    if (file && season.imagePublicId) {
+      await cloudinary.uploader.destroy(season.imagePublicId).catch(() => {});
     }
 
     return res.status(200).send({
       success: true,
       message: "Season updated successfully",
       data: {
-        season,
+        season: updatedSeason,
       },
     });
   } catch (err) {
+    if (uploadedImage) {
+      await cloudinary.uploader
+        .destroy(uploadedImage.result.public_id)
+        .catch(() => {});
+    }
     next(err);
   }
 };
@@ -111,6 +153,9 @@ export const deleteSeason = async (
     if (!season) {
       throw new AppError(404, "Season not found");
     }
+
+    if (season.imagePublicId)
+      await cloudinary.uploader.destroy(season.imagePublicId).catch(() => {});
 
     return res.status(200).send({
       success: true,
