@@ -23,10 +23,10 @@ export default function Members() {
   const fetchUsers = async () => {
     try {
       const data = await request({
-        url: "/admin/users",
+        url: "/users",
         method: "GET",
       });
-      setMembers(data.allUsers || data.data?.allUsers || []);
+      setMembers(data.users || data.data?.users || []);
     } catch (err) {
       console.error("Failed to fetch users", err);
     }
@@ -35,7 +35,7 @@ export default function Members() {
   const handleToggleRole = async (id) => {
     try {
       await request({
-        url: `/admin/users/${id}/make-admin`,
+        url: `/users/${id}/role`,
         method: "PATCH",
       });
       setMembers((prevMembers) =>
@@ -61,7 +61,7 @@ export default function Members() {
     if (!userToDelete) return;
     try {
       await request({
-        url: `/admin/users/${userToDelete}`,
+        url: `/users/${userToDelete}`,
         method: "DELETE",
       });
       setMembers((prevMembers) =>
