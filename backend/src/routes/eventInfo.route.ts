@@ -58,7 +58,7 @@ eventInfoRouter.get("/", getAllEventInfos);
  *       - Event Info
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: eventInfoId
  *         required: true
  *         schema:
  *           type: string
@@ -163,7 +163,7 @@ eventInfoRouter.post(
  *       - Event Info
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: eventInfoId
  *         required: true
  *         schema:
  *           type: string
@@ -229,7 +229,7 @@ eventInfoRouter.put(
  *       - Event Info
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: eventInfoId
  *         required: true
  *         schema:
  *           type: string
