@@ -57,7 +57,7 @@ export default function VerifyEmail() {
   return (
     <div className={`container-fluid ${verifycss.authContainer || ''}`}>
       <div className="row justify-content-center">
-        <div className={`col-10 col-sm-8 col-md-6 col-lg-4  ${verifycss.authCard} `}>
+        <div className={`col-10 col-sm-8 col-md-6 col-lg-5  ${verifycss.authCard} `}>
           <h2 className="text-center mb-3">Verify Email Address</h2>
         <p className="text-muted text-center mb-4">
           Enter the OTP code sent to <strong>{email || "your email"}</strong>.
@@ -92,7 +92,7 @@ export default function VerifyEmail() {
 
           <button 
             type="submit" 
-            className={`btn w-100 ${verifycss.submitBtn}`}
+            className={`btn  ${verifycss.submitBtn}`}
             disabled={loading}
           >
             {loading ? 'Verifying...' : 'Verify Account'}

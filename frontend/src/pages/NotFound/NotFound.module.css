@@ -1,0 +1,57 @@
+.notfcontainer{
+    background-color: var(--bg-main);
+    padding: 110px 0 190px;
+}
+.notfcontainer>h1{
+    color: var(--brand-orange);
+    font-size: 100px;
+    font-weight:bolder;
+}
+.notfcontainer h2 {
+  font-size:32px ;
+  font-weight: bold;
+  margin: 10px 0;
+  color: rgba(245, 178, 116, 0.88);
+
+}
+
+.notfcontainer>p{
+    color: var(--text-main);
+    margin: 10px 0 30px;
+}
+
+.notfcontainer button {
+  background-color: transparent;
+  color: var(--text-main, #fff);
+  border: 1px solid var(--brand-orange);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.notfcontainer button:hover {
+  background-color: rgba(255, 102, 7, 0.303);
+}
+
+.notfcontainer a {
+  background-color:var(--brand-orange) ;
+  color: var(--text-main, #fff);
+  padding: 10px 20px;
+  border-radius:6px;
+  border: transparent 1px solid;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.notfcontainer a:hover {
+  border: 1px solid var(--brand-orange);
+  background-color: transparent;
+}
+
+
+
+
