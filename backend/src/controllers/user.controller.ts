@@ -1,7 +1,101 @@
 import { Request, Response, NextFunction } from "express";
-import Media from "../models/media.model";
-import AppError from "../utils/appError.util";
 import User from "../models/user.model";
+import AppError from "../utils/appError.util";
+import Media from "../models/media.model";
+
+export const getAllUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const allUsers = await User.find().sort({ createdAt: -1 });
+
+    res.status(200).send({
+      success: true,
+      message: "Users fetched successfully!",
+      data: {
+        users: allUsers,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+export const getUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const userId = req.params.userId;
+    const foundUser = await User.findById(userId);
+    if (!foundUser) {
+      throw new AppError(404, "User not found");
+    }
+    res.status(200).send({
+      success: true,
+      message: "User fetched successfully!",
+      data: {
+        user: foundUser,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const changeRole = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { userId } = req.params;
+
+    const foundUser = await User.findById(userId);
+
+    if (!foundUser) {
+      throw new AppError(404, "User not found");
+    }
+    foundUser.role = foundUser.role === "Admin" ? "Member" : "Admin";
+    await foundUser.save();
+
+    res.status(200).send({
+      success: true,
+      message: "User role has been changed!",
+      data: {
+        user: foundUser,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { userId } = req.params;
+
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) throw new AppError(404, "User not found");
+
+    res.status(200).send({
+      success: true,
+      message: "User deleted successfully!",
+      data: {
+        deletedUser,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const getOwnUser = async (
   req: Request,
@@ -11,7 +105,9 @@ export const getOwnUser = async (
   try {
     const foundUser = await User.findById((req as any).user.id);
 
-    if (!foundUser) throw new AppError(404, "User not found!");
+    if (!foundUser) {
+      throw new AppError(404, "User not found!");
+    }
 
     return res.status(200).send({
       success: true,
@@ -23,7 +119,7 @@ export const getOwnUser = async (
   }
 };
 
-export const updateUser = async (
+export const updateOwnUser = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -55,7 +151,7 @@ export const updateUser = async (
   }
 };
 
-export const deleteUser = async (
+export const deleteOwnUser = async (
   req: Request,
   res: Response,
   next: NextFunction,

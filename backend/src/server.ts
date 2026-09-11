@@ -11,10 +11,9 @@ import specs from "./config/swagger.config";
 import connectDB from "./config/mongoDB.config";
 import authRouter from "./routes/auth.route";
 import seasonRouter from "./routes/season.route";
-import adminRouter from "./routes/admin.route";
+import userRouter from "./routes/user.route";
 import eventInfoRouter from "./routes/eventInfo.route";
 import { globalErrorHandler } from "./middlewares/errorHandler.middleware";
-import profileRouter from "./routes/profile.route";
 
 const app: Application = express();
 const PORT = (process.env.PORT as string) || 3000;
@@ -45,8 +44,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use("/api/auth", authRouter);
 app.use("/api/seasons", seasonRouter);
 app.use("/api/event-infos", eventInfoRouter);
-app.use("/api/admin", adminRouter);
-app.use("/api/profile",profileRouter)
+app.use("/api/users", userRouter);
 
 app.use(globalErrorHandler);
 

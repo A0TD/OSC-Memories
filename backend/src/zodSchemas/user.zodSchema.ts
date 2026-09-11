@@ -19,6 +19,16 @@ export const loginSchema = z.object({
   }),
 });
 
+export const updateOwnUserSchema = z.object({
+  body: z.object({
+    username: z
+      .string()
+      .trim()
+      .min(3, "Username must be at least 3 characters")
+      .optional(),
+  }),
+});
+
 export const verifyEmailSchema = z.object({
   body: z.object({
     email: z.email("Invalid email address"),
