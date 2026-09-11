@@ -105,7 +105,7 @@ export default function ResetPassword() {
 
             <button
               type="submit"
-              className={`btn w-100 ${resetcss.submitBtn}`}
+              className={`btn  ${resetcss.submitBtn}`}
               disabled={loading}
             >
               {loading ? "Resetting Password..." : "Reset Password"}

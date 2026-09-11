@@ -7,13 +7,15 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Seasons from "./pages/Seasons/Seasons.jsx";
 import Home from "./pages/Home/Home.jsx";
 import Events from './pages/Events/Events.jsx'
-import EventInfo from './pages/EventInfo/EventInfo';
+import EventInfo from './pages/EventInfo/EventInfo.jsx';
 import Register from './pages/Registers/Register.jsx';
 import VerifyEmail from './pages/VerifyEmail/VerifyEmail.jsx'; 
 import Login from "./pages/Login/Login.jsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
 import EveryEvent from "./pages/EveryEvent/EveryEvent.jsx";
+
+import NotFound from './pages/NotFound/NotFound.jsx';
 export default function App() {
   return (
     <>
@@ -28,6 +30,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path='*' element={<NotFound/>}/>
       </Routes>
       <Footer />
     </>
