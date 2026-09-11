@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-import { FaPlus, FaEdit, FaTrash, FaCalendarAlt, FaExclamationTriangle } from "react-icons/fa";
+import {
+  FaPlus,
+  FaEdit,
+  FaTrash,
+  FaCalendarAlt,
+  FaExclamationTriangle,
+} from "react-icons/fa";
 import styles from "./Events.module.css";
 import authStyles from "../../assets/styles/auth.module.css";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -231,7 +237,6 @@ export default function Events() {
                           </h4>
                           <p
                             className={`card-text flex-grow-1 ${styles.cardText}`}
-                            
                           >
                             {eventItem.description}
                           </p>
@@ -292,22 +297,22 @@ export default function Events() {
               }}
             >
               <div
-                className="card bg-dark text-light border-secondary p-4 w-100"
+                className={`card ${styles.modal}  border-secondary p-4 w-100`}
                 style={{ maxWidth: "500px" }}
               >
-                <h4 className="fw-bold text-warning mb-3">
+                <h4 className={`fw-bold mb-3 ${styles.modalText}`}>
                   {editingEventId ? "Edit Event" : "Create New Event"}
                 </h4>
 
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
-                    <label className="form-label text-secondary">
+                    <label className={`form-label ${styles.modalText}`}>
                       Event Name
                     </label>
                     <input
                       type="text"
                       name="name"
-                      className="form-control bg-dark text-light border-secondary"
+                      className="form-control border-secondary"
                       value={formData.name}
                       onChange={handleInputChange}
                       required
@@ -321,7 +326,7 @@ export default function Events() {
                     <input
                       type="file"
                       accept="image/*"
-                      className="form-control bg-dark text-light border-secondary"
+                      className="form-control border-secondary"
                       onChange={handleFileChange}
                       required={!editingEventId && !imagePreview}
                     />
@@ -343,13 +348,13 @@ export default function Events() {
                   </div>
 
                   <div className="mb-3">
-                    <label className="form-label text-secondary">
+                    <label className={`form-label ${styles.modalText}`}>
                       Description
                     </label>
                     <textarea
                       name="description"
                       rows="3"
-                      className="form-control bg-dark text-light border-secondary"
+                      className="form-control border-secondary"
                       value={formData.description}
                       onChange={handleInputChange}
                       required
@@ -359,12 +364,15 @@ export default function Events() {
                   <div className="d-flex justify-content-end gap-2 mt-4">
                     <button
                       type="button"
-                      className="btn btn-secondary"
+                      className={`btn ${authStyles.submitBtn} mx-auto fs-5 w-50`}
                       onClick={handleCloseModal}
                     >
                       Cancel
                     </button>
-                    <button type="submit" className="btn btn-warning fw-bold">
+                    <button
+                      type="submit"
+                      className={`btn ${authStyles.submitBtn} mx-auto fs-5 w-50`}
+                    >
                       {editingEventId ? "Save Changes" : "Create Event"}
                     </button>
                   </div>

@@ -2,12 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Seasons.module.css";
 import authStyles from "../../assets/styles/auth.module.css";
-import {
-  FaEdit,
-  FaTrash,
-  FaPlus,
-  FaExclamationTriangle,
-} from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaExclamationTriangle } from "react-icons/fa";
 
 import { AuthContext } from "../../contexts/AuthContext";
 import { ROLES } from "../../utils/constants";
@@ -150,12 +145,18 @@ export default function Seasons() {
       <div className={`${styles.heroSection} d-flex align-items-center`}>
         <div className="container-md">
           <h1 className={`fw-bold display-4 ${styles.seasonsHeading}`}>
-            Seasons Management
+            Seasons
           </h1>
           <p className="lead md-w-50 fw-medium">
             Explore and check out all available OSC seasons and their events.
           </p>
-          <div className="d-flex justify-content-start align-items-center w-100">
+        </div>
+      </div>
+
+      {/* Cards List Section */}
+      <div className={styles.allCards}>
+        <div className={`container-md ${styles.allCards}`}>
+          <div className="d-flex justify-content-center align-items-center w-100">
             {isAdmin && (
               <button
                 className={`btn ${authStyles.submitBtn} mt-5 mx-0 fw-bold w-50 fs-5`}
@@ -165,12 +166,6 @@ export default function Seasons() {
               </button>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* Cards List Section */}
-      <div className={styles.allCards}>
-        <div className={`container-md ${styles.allCards}`}>
           <div className="row g-4 py-5">
             {loading ? (
               <div className="text-center text-light my-5">
@@ -268,7 +263,9 @@ export default function Seasons() {
           >
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className={`form-label ${styles.text}`}>Season Name</label>
+                <label className={`form-label ${styles.text}`}>
+                  Season Name
+                </label>
                 <input
                   type="text"
                   className="form-control text-dark border-secondary"
@@ -315,7 +312,9 @@ export default function Seasons() {
               </div>
 
               <div className="mb-4">
-                <label className={`form-label ${styles.text}`}>Description</label>
+                <label className={`form-label ${styles.text}`}>
+                  Description
+                </label>
                 <textarea
                   className="form-control text-dark border-secondary"
                   name="description"
@@ -334,7 +333,10 @@ export default function Seasons() {
                 >
                   Cancel
                 </button>
-                <button type="submit" className={`${authStyles.submitBtn} mx-0 fs-6 w-50`}>
+                <button
+                  type="submit"
+                  className={`${authStyles.submitBtn} mx-0 fs-6 w-50`}
+                >
                   {modalMode === "create" ? "Create" : "Save Changes"}
                 </button>
               </div>

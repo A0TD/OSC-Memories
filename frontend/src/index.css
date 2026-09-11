@@ -36,9 +36,9 @@
 [data-theme="dark"] {
   --bg-nav: #100d0b94;
   --bg-main: #100d0b;
-  --bg-card:  #fab77f;
-  --text-main: #b5b5b5;
-   --text-card:#51585a;
+  --bg-card: #fab77f;
+  --text-main: #ffffff;
+  --text-card: #51585a;
   --border-color: #2d3748;
   --bg-footer1: #17110e;
   --bg-footer: #060504;

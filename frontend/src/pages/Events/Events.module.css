@@ -31,3 +31,9 @@
   background-color: white;
   color: var(--brand-orange);
 }
+.modal {
+  background-color: var(--bg-card);
+}
+.modalText {
+  color: var(--text-main);
+}
