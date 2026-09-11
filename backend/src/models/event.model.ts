@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Media from "./media.model";
+import cloudinary from "../config/cloudinary.config";
 
 /**
  * @swagger
@@ -69,25 +70,35 @@ eventSchema.set("toJSON", {
     delete ret.__v;
     delete ret.createdAt;
     delete ret.updatedAt;
-    delete ret.imagePublicId
+    delete ret.imagePublicId;
     return ret;
   },
 });
 
 //before deleting an event, delete all related media
 eventSchema.pre(["findOneAndDelete", "deleteOne"], async function () {
-  const event = await this.model.findOne(this.getQuery(), "_id");
+  const event = await this.model.findOne(this.getQuery(), "_id imagePublicId");
   if (event) {
     await Media.deleteMany({ eventId: event._id });
+
+    if (event.imagePublicId) {
+      await cloudinary.uploader.destroy(event.imagePublicId);
+    }
   }
 });
 
 eventSchema.pre("deleteMany", async function () {
-  const events = await this.model.find(this.getQuery(), "_id");
+  const events = await this.model.find(this.getQuery(), "_id imagePublicId");
   const eventIds = events.map((event) => event._id);
+  const eventPublicIds = events
+    .map((event) => event.imagePublicId)
+    .filter(Boolean);
 
   if (eventIds.length > 0) {
     await Media.deleteMany({ eventId: { $in: eventIds } });
+  }
+  if (eventPublicIds.length > 0) {
+    await cloudinary.api.delete_resources(eventPublicIds).catch(() => {});
   }
 });
 
