@@ -330,7 +330,19 @@ authRouter.post(
  *         description: Internal Server Error
  */
 authRouter.post("/login", validate(loginSchema), login);
-
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Logs a user out by clearing the cookie
+ *     tags:
+ *       - Authentication
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *       500:
+ *         description: Internal Server Error
+ */
 authRouter.post("/logout", logout);
 
 export default authRouter;
