@@ -5,6 +5,13 @@ import User from "../models/user.model";
 import AppError from "../utils/appError.util";
 import sendOtp from "../utils/sendOtp.util";
 
+const cookieOptions: any = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  maxAge: 1 * 60 * 60 * 1000,
+};
+
 export const register = async (
   req: Request,
   res: Response,
@@ -84,12 +91,7 @@ export const verifyEmail = async (
       },
     );
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: 1 * 60 * 60 * 1000,
-    });
+    res.cookie("token", token, cookieOptions);
     res.status(200).send({
       success: true,
       message: "Email verified successfully",
@@ -215,12 +217,7 @@ export const login = async (
         expiresIn: "1h",
       },
     );
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: 1 * 60 * 60 * 1000,
-    });
+    res.cookie("token", token, cookieOptions);
 
     return res.status(200).send({
       success: true,
@@ -228,6 +225,23 @@ export const login = async (
       data: {
         user,
       },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    res.clearCookie("token", cookieOptions);
+
+    return res.status(200).send({
+      success: true,
+      message: "Logged out successfully",
     });
   } catch (err) {
     next(err);

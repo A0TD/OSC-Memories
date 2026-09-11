@@ -7,6 +7,7 @@ import {
   forgotPassword,
   resetPassword,
   verifyEmail,
+  logout,
 } from "../controllers/auth.controller";
 import {
   forgotPasswordSchema,
@@ -329,5 +330,7 @@ authRouter.post(
  *         description: Internal Server Error
  */
 authRouter.post("/login", validate(loginSchema), login);
+
+authRouter.post("/logout", logout);
 
 export default authRouter;
