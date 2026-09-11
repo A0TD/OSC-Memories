@@ -57,7 +57,7 @@ const seasonSchema = new Schema(
       default: "No description included",
     },
   },
-  { timestamps: true, strict: false },
+  { timestamps: true },
 );
 
 seasonSchema.set("toJSON", {

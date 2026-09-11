@@ -50,6 +50,10 @@ const eventSchema = new mongoose.Schema(
       type: String,
       default: "https://placehold.co/600x400",
     },
+    imagePublicId: {
+      type: String,
+      default: "",
+    },
     description: {
       type: String,
       default: "No description included",
