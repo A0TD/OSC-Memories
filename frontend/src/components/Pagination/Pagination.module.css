@@ -1,0 +1,42 @@
+.paginationContainer {
+    font-family: inherit;
+}
+
+.pageBtn {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-card);
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.pageBtn:hover:not(:disabled) {
+    border-color: var(--brand-orange);
+    color: var(--brand-orange);
+}
+
+.active {
+    background: var(--brand-orange);
+    color: #000;
+    border-color: var(--brand-orange);
+    box-shadow: 0 4px 10px rgba(248, 132, 37, 0.3);
+}
+
+.dots {
+    cursor: default;
+    background: transparent;
+    border: none;
+}
+
+.pageBtn:disabled:not(.dots) {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

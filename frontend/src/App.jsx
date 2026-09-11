@@ -16,6 +16,7 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
 import EveryEvent from "./pages/EveryEvent/EveryEvent.jsx";
 
 import NotFound from './pages/NotFound/NotFound.jsx';
+import Members from "./pages/Members/Members.jsx";
 export default function App() {
   return (
     <>
@@ -30,6 +31,8 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/members" element={<Members/>}/>
+    
         <Route path='*' element={<NotFound/>}/>
       </Routes>
       <Footer />

@@ -47,7 +47,7 @@
 }
 .home a:hover {
   background-color: transparent;
-  border: 1.px var(--brand-orange) solid;
+  border: 1px var(--brand-orange) solid;
 }
 /* ********************* About Section ******************** */
 
@@ -134,12 +134,12 @@
   font-size: 1.05rem;
   font-weight: 600;
   margin-bottom: 8px;
-  color: var(--text-main);
+  color: var(--text-card);
 }
 
 .feature_card p {
   font-size: 0.8rem;
-  color: var(--text-main);
+  color: var(--text-card);
   opacity: 0.75;
   line-height: 1.4;
 }

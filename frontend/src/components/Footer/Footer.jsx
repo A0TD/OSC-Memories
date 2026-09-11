@@ -1,11 +1,14 @@
-import React from "react";
+import React,{useContext} from "react";
 import { NavLink } from "react-router-dom";
 import footcss from "./Footer.module.css";
+import { AuthContext } from "../../contexts/AuthContext";
 import oscLogo from "../../assets/images/imgi_1_Lock.png";
 import linkedin from "../../assets/images/linkedin.png";
 import facebook from "../../assets/images/icons8-facebook-48.png";
 import instagram from "../../assets/images/icons8-instagram-48.png";
+
 function Footer() {
+  const { user, logout } = useContext(AuthContext);
   return (
     <footer>
       <div className={`${footcss.footerContent} container-fluid`}>
@@ -23,10 +26,24 @@ function Footer() {
           </div>
           <div className="d-flex flex-column col-6 col-md-3 col-lg-2  ">
             <h3>Account</h3>
-            <NavLink to="/login">Login</NavLink>
-
-            <NavLink to="/register">Register</NavLink>
-          </div>
+            {!user ? (
+              <>
+                <NavLink to="/login">Login</NavLink>
+                <NavLink to="/register">Register</NavLink>
+              </>
+            ) : (
+              <>
+                <NavLink to="/profile">Profile</NavLink>
+                <span 
+                  onClick={logout} 
+                  style={{ cursor: 'pointer' }}
+                  className={footcss.logout} // أو الكلاس المناسب للتصميم عندك
+                >
+                  Logout
+                </span>
+              </>
+            )}
+            </div>
           <div className="d-flex flex-column  col-6 col-md-3 col-lg-2  ">
             <h3>Quick Links</h3>
             <NavLink to="/">Home</NavLink>
