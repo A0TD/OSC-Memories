@@ -1,24 +1,24 @@
 import React, { useState, useEffect, useContext } from "react";
 import EventCard from "../../components/EventCard/EventCard";
+import Pagination from "../../components/Pagination/Pagination";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useApi } from "../../hooks/useApi";
 import eventinfocss from "./EventInfo.module.css";
 
 export default function EventInfo() {
-  
-  
   const [events, setEvents] = useState([]);
 
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ name: "", description: "" });
   const [formError, setFormError] = useState("");
 
-const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editEventId, setEditEventId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-const [eventToDeleteId, setEventToDeleteId] = useState(null);
-  
+  const [eventToDeleteId, setEventToDeleteId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
   const { request, loading, error } = useApi();
   const { user } = useContext(AuthContext);
@@ -37,38 +37,41 @@ const [eventToDeleteId, setEventToDeleteId] = useState(null);
     fetchEvents();
   }, [request]);
 
-const handleDelete = (id) => {
-  setEventToDeleteId(id);
-  setShowDeleteModal(true);
-};
+  const handleDelete = (id) => {
+    setEventToDeleteId(id);
+    setShowDeleteModal(true);
+  };
 
-
-const handleDeleteConfirmed = async () => {
-  try {
-    await request({ method: "DELETE", url: `/event-infos/${eventToDeleteId}` });
-    setEvents(events.filter((event) => event.id !== eventToDeleteId));
-    setShowDeleteModal(false);
-    setEventToDeleteId(null);
-  } catch (err) {
-    console.error("Failed to delete event", err);
-  }
-};
+  const handleDeleteConfirmed = async () => {
+    try {
+      await request({
+        method: "DELETE",
+        url: `/event-infos/${eventToDeleteId}`,
+      });
+      setEvents(events.filter((event) => event.id !== eventToDeleteId));
+      setShowDeleteModal(false);
+      setEventToDeleteId(null);
+    } catch (err) {
+      console.error("Failed to delete event", err);
+    }
+  };
 
   const handleEdit = (id) => {
     const eventToEdit = events.find((event) => event.id === id);
     if (eventToEdit) {
-      setFormData({ name: eventToEdit.name, description: eventToEdit.description });
+      setFormData({
+        name: eventToEdit.name,
+        description: eventToEdit.description,
+      });
       setEditEventId(id);
       setIsEditing(true);
       setShowModal(true);
     }
   };
 
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -81,17 +84,17 @@ const handleDeleteConfirmed = async () => {
 
     try {
       if (isEditing) {
-   
         const response = await request({
           method: "PUT",
           url: `/event-infos/${editEventId}`,
           data: formData,
         });
-        
-        const updatedEvent = response.data?.eventInfo || response.data;
-        setEvents(events.map((ev) => (ev.id === editEventId ? updatedEvent : ev)));
-      } else {
 
+        const updatedEvent = response.data?.eventInfo || response.data;
+        setEvents(
+          events.map((ev) => (ev.id === editEventId ? updatedEvent : ev)),
+        );
+      } else {
         const response = await request({
           method: "POST",
           url: "/event-infos",
@@ -102,14 +105,12 @@ const handleDeleteConfirmed = async () => {
         setEvents([newEvent, ...events]);
       }
 
-
       closeModal();
     } catch (err) {
       console.error("Failed to save event", err);
       setFormError(err.response?.data?.message || "Failed to save event.");
     }
   };
-
 
   const closeModal = () => {
     setShowModal(false);
@@ -122,10 +123,13 @@ const handleDeleteConfirmed = async () => {
   if (loading) {
     return <div className="text-center py-5">Loading events...</div>;
   }
+  const totalPages = Math.ceil(events.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentEvents = events.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div>
-
       <div className={eventinfocss.heroSection}>
         <h1 className={eventinfocss.heroTitle}>Events, Workshops & Growth</h1>
         <p className={eventinfocss.heroSubtitle}>
@@ -134,9 +138,7 @@ const handleDeleteConfirmed = async () => {
         </p>
       </div>
 
-
       <div className={eventinfocss.cardcontainer}>
-
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h3 className="fw-bold">All Events</h3>
           {isAdmin && (
@@ -154,10 +156,9 @@ const handleDeleteConfirmed = async () => {
         </div>
         {error && <div className="alert alert-danger mb-4">{error}</div>}
 
-
         <div className="row">
-          {events.length > 0 ? (
-            events.map((event) => (
+          {currentEvents.length > 0 ? (
+            currentEvents.map((event) => (
               <EventCard
                 key={event.id}
                 id={event.id}
@@ -170,17 +171,30 @@ const handleDeleteConfirmed = async () => {
               />
             ))
           ) : (
-            <p style={{ textAlign: 'center', color:'var(--text-main)'}}>No events found.</p>
+            <p style={{ textAlign: "center", color: "var(--text-main)" }}>
+              No events found.
+            </p>
           )}
         </div>
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          />
+        )}
       </div>
-
 
       {showModal && (
         <div className={eventinfocss.modalOverlay}>
           <div className={eventinfocss.modalBox}>
             <div className="d-flex justify-content-between align-items-center mb-3">
-              <h5 className="fw-bold m-0">{isEditing ? "Edit Event" : "Add New Event"}</h5>
+              <h5 className="fw-bold m-0">
+                {isEditing ? "Edit Event" : "Add New Event"}
+              </h5>
               <button
                 type="button"
                 className="btn-close"
@@ -227,10 +241,7 @@ const handleDeleteConfirmed = async () => {
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className={eventinfocss.addbtn}
-                >
+                <button type="submit" className={eventinfocss.addbtn}>
                   {isEditing ? "Save Changes" : "Save Event"}
                 </button>
               </div>
@@ -239,47 +250,51 @@ const handleDeleteConfirmed = async () => {
         </div>
       )}
       {showDeleteModal && (
-  <div className={eventinfocss.modalOverlay}>
-    <div className={eventinfocss.modalBox} style={{ maxWidth: "400px", textAlign: "center" }}>
-      <h5 className="fw-bold mb-3">Are you sure?</h5>
-      <p className="mb-4">Do you really want to delete this event?</p>
-      <div className="d-flex justify-content-center gap-2">
-        <button
-          type="button"
-          className="btn btn-secondary px-4"
-          onClick={() => setShowDeleteModal(false)}
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          className="btn btn-danger px-4"
-          onClick={handleDeleteConfirmed}
-        >
-          Yes, Delete
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-{selectedEvent && (
-  <div className={eventinfocss.modalOverlay}>
-    <div className={eventinfocss.modalBox}>
-      <h3 className="fw-bold mb-3">{selectedEvent.name}</h3>
-      <p className="mb-4" style={{ whiteSpace: "pre-wrap" }}>{selectedEvent.description}</p>
-      <div className="d-flex justify-content-end">
-        <button
-          type="button"
-          className="btn btn-secondary px-4"
-          onClick={() => setSelectedEvent(null)}
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+        <div className={eventinfocss.modalOverlay}>
+          <div
+            className={eventinfocss.modalBox}
+            style={{ maxWidth: "400px", textAlign: "center" }}
+          >
+            <h5 className="fw-bold mb-3">Are you sure?</h5>
+            <p className="mb-4">Do you really want to delete this event?</p>
+            <div className="d-flex justify-content-center gap-2">
+              <button
+                type="button"
+                className="btn btn-secondary px-4"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger px-4"
+                onClick={handleDeleteConfirmed}
+              >
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {selectedEvent && (
+        <div className={eventinfocss.modalOverlay}>
+          <div className={eventinfocss.modalBox}>
+            <h3 className="fw-bold mb-3">{selectedEvent.name}</h3>
+            <p className="mb-4" style={{ whiteSpace: "pre-wrap" }}>
+              {selectedEvent.description}
+            </p>
+            <div className="d-flex justify-content-end">
+              <button
+                type="button"
+                className="btn btn-secondary px-4"
+                onClick={() => setSelectedEvent(null)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
