@@ -41,7 +41,7 @@ function Footer() {
               </>
             ) : (
               <>
-                <NavLink to="/profile">Profile</NavLink>
+                <NavLink to="/users/me">Profile</NavLink>
                 <span
                   onClick={handleLogout}
                   style={{ cursor: "pointer" }}

@@ -78,7 +78,7 @@ const handleLogout = async () => {
 
           {user && (
             <NavLink
-              to="/profile"
+              to="/users/me"
               className={({ isActive }) => (isActive ? navcss.active : "")}
               onClick={() => setIsOpen(false)}
             >

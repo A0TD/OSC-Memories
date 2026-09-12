@@ -1,0 +1,31 @@
+.avatar-container {
+  width: 110px;
+  height: 110px;
+}
+.modal-backdrop-custom {
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+}
+.media-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.hero {
+  background-color: var(--bg-main);
+  overflow: hidden;
+}
+.card {
+  background-color: var(--bg-card);
+}
+.text {
+  color: var(--text-main);
+}

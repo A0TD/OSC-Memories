@@ -16,6 +16,7 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
 import Members from "./pages/Members/Members.jsx";
 import Media from "./pages/Media/Media.jsx";
+import Profile from "./pages/Profile/Profile.jsx";
 export default function App() {
   return (
     <>
@@ -28,6 +29,7 @@ export default function App() {
           path="/seasons/:seasonId/events/:eventId/media"
           element={<Media />}
         />{" "}
+        <Route path="/users/me" element={<Profile/>} />
         <Route path="/eventinfo" element={<EventInfo />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
