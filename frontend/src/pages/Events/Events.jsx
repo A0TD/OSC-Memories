@@ -254,7 +254,7 @@ export default function Events() {
                       )}
 
                       <Link
-                        to={`/seasons/${seasonId}/events/${currentEventId}`}
+                        to={`/seasons/${seasonId}/events/${currentEventId}/media`}
                         className="text-decoration-none h-100 d-flex flex-column text-light"
                       >
                         <img
