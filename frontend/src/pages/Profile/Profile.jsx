@@ -29,7 +29,7 @@ function Profile() {
     try {
       const response = await api.get("/users/me");
       if (response.data?.success) {
-        const userData = response.data.data.user;
+        const userData = response.data.user;
         setProfile(userData);
         setNewUsername(userData.username || "");
       }
@@ -44,7 +44,7 @@ function Profile() {
     try {
       const response = await api.get("/users/me/media");
       if (response.data?.success) {
-        setMediaList(response.data.data.media || []);
+        setMediaList(response.data.media || []);
       }
     } catch (err) {
       console.error("Error fetching media:", err);
@@ -63,7 +63,7 @@ function Profile() {
       });
 
       if (response.data?.success) {
-        const updatedUser = response.data.data.user;
+        const updatedUser = response.data.user;
         setProfile(updatedUser);
         if (setUser) setUser(updatedUser);
 
