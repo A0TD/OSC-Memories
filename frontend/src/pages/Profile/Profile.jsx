@@ -134,14 +134,7 @@ function Profile() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="d-flex justify-content-center align-items-center vh-100 bg-dark text-warning mt-5">
-        <div className="spinner-border text-warning me-2" role="status"></div>
-        <span>Loading..</span>
-      </div>
-    );
-  }
+  
 
   return (
     <>

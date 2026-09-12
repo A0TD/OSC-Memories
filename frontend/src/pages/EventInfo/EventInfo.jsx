@@ -120,9 +120,6 @@ export default function EventInfo() {
     setFormError("");
   };
 
-  if (loading) {
-    return <div className="text-center py-5">Loading events...</div>;
-  }
   const totalPages = Math.ceil(events.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
