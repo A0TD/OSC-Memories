@@ -11,14 +11,14 @@ import styles from "./Events.module.css";
 import authStyles from "../../assets/styles/auth.module.css";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ROLES } from "../../utils/constants";
-import { useApi } from "../../hooks/useApi";
+import { api } from "../../services/api";
 
 export default function Events() {
   const params = useParams();
   const seasonId = params.seasonId || params.id;
 
   const { user, role } = useContext(AuthContext);
-  const { request, loading } = useApi();
+  const [loading, setLoading] = useState(false);
 
   const isAdmin =
     role === ROLES.ADMIN || role === "Admin" || user?.role === "Admin";
@@ -39,15 +39,18 @@ export default function Events() {
     if (!seasonId) return;
 
     try {
-      const response = await request({
-        url: `/seasons/${seasonId}/events`,
-        method: "GET",
-      });
-      const fetchedEvents =
-        response?.data?.events || response?.events || response?.data || [];
-      setEvents(Array.isArray(fetchedEvents) ? fetchedEvents : []);
+      setLoading(true);
+      const response = await api.get(`/seasons/${seasonId}/events`);
+      const data = response.data;
+      if (data?.success) {
+        const fetchedEvents =
+          data.events || data.data?.events || data.data || [];
+        setEvents(Array.isArray(fetchedEvents) ? fetchedEvents : []);
+      }
     } catch (error) {
       console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,7 +60,6 @@ export default function Events() {
     }
   }, [seasonId]);
 
-  // تايمر إلغاء حالة التأكيد بعد 3 ثوانٍ
   useEffect(() => {
     if (!deletingId) return;
 
@@ -124,23 +126,26 @@ export default function Events() {
       }
 
       if (editingEventId) {
-        await request({
-          url: `/seasons/${seasonId}/events/${editingEventId}`,
-          method: "PUT",
-          data: payload,
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        const response = await api.put(
+          `/seasons/${seasonId}/events/${editingEventId}`,
+          payload,
+          { headers: { "Content-Type": "multipart/form-data" } },
+        );
+        if (response.data?.success) {
+          handleCloseModal();
+          fetchEvents();
+        }
       } else {
-        await request({
-          url: `/seasons/${seasonId}/events`,
-          method: "POST",
-          data: payload,
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        const response = await api.post(
+          `/seasons/${seasonId}/events`,
+          payload,
+          { headers: { "Content-Type": "multipart/form-data" } },
+        );
+        if (response.data?.success) {
+          handleCloseModal();
+          fetchEvents();
+        }
       }
-
-      handleCloseModal();
-      fetchEvents();
     } catch (error) {
       console.error("Error saving event:", error);
     }
@@ -157,12 +162,13 @@ export default function Events() {
     }
 
     try {
-      await request({
-        url: `/seasons/${seasonId}/events/${eventId}`,
-        method: "DELETE",
-      });
-      setDeletingId(null);
-      fetchEvents();
+      const response = await api.delete(
+        `/seasons/${seasonId}/events/${eventId}`,
+      );
+      if (response.data?.success) {
+        setDeletingId(null);
+        fetchEvents();
+      }
     } catch (error) {
       console.error("Error deleting event:", error);
     }

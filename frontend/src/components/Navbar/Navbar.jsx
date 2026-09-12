@@ -1,34 +1,20 @@
-import React from'react';
 import navcss from "./Navbar.module.css";
 import oscLogo from "../../assets/images/imgi_1_Lock.png";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 function Navbar() {
-  const [theme, setTheme] = useState("light");
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "light";
-    setTheme(savedTheme);
-    document.documentElement.setAttribute("data-theme", savedTheme);
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-  };
-
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useContext(AuthContext);
 
-const handleLogout = async () => {
-  await logout();
-  navigate("/login");
-};
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+  };
 
   return (
     <nav
@@ -86,7 +72,11 @@ const handleLogout = async () => {
             </NavLink>
           )}
           {user?.role === "Admin" && (
-            <NavLink to="/members" className={({ isActive }) => (isActive ? navcss.active : "")} onClick={() => setIsOpen(false)}>
+            <NavLink
+              to="/members"
+              className={({ isActive }) => (isActive ? navcss.active : "")}
+              onClick={() => setIsOpen(false)}
+            >
               Members
             </NavLink>
           )}

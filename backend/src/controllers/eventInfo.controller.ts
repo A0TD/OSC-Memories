@@ -12,7 +12,7 @@ export const getAllEventInfos = async (
     return res.status(200).send({
       success: true,
       message: "Event infos retrieved successfully",
-      data: { eventInfos },
+      eventInfos,
     });
   } catch (err) {
     next(err);
@@ -35,7 +35,7 @@ export const getEventInfoById = async (
     return res.status(200).send({
       success: true,
       message: "Event info retrieved successfully",
-      data: { eventInfo },
+      eventInfo,
     });
   } catch (err) {
     next(err);
@@ -56,7 +56,7 @@ export const createEventInfo = async (
     return res.status(201).send({
       success: true,
       message: "Event info created successfully",
-      data: { eventInfo },
+      eventInfo,
     });
   } catch (err) {
     next(err);
@@ -85,7 +85,7 @@ export const updateEventInfo = async (
     return res.status(200).send({
       success: true,
       message: "Event info updated successfully",
-      data: { eventInfo },
+      eventInfo,
     });
   } catch (err) {
     next(err);

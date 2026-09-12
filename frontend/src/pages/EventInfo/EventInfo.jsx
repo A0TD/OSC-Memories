@@ -2,11 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import EventCard from "../../components/EventCard/EventCard";
 import Pagination from "../../components/Pagination/Pagination";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useApi } from "../../hooks/useApi";
+import { api } from "../../services/api";
 import eventinfocss from "./EventInfo.module.css";
 
 export default function EventInfo() {
   const [events, setEvents] = useState([]);
+  const [error, setError] = useState(null);
 
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ name: "", description: "" });
@@ -20,22 +21,26 @@ export default function EventInfo() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
-  const { request, loading, error } = useApi();
   const { user } = useContext(AuthContext);
   const isAdmin = user?.role === "Admin";
 
   const fetchEvents = async () => {
     try {
-      const response = await request({ method: "GET", url: "/event-infos" });
-      setEvents(response.data?.eventInfos || []);
+      setError(null);
+      const response = await api.get("/event-infos");
+      const data = response.data;
+      if (data?.success) {
+        setEvents(data.eventInfos || data.data?.eventInfos || []);
+      }
     } catch (err) {
       console.error("Failed to fetch events", err);
+      setError(err.response?.data?.message || "Failed to load events.");
     }
   };
 
   useEffect(() => {
     fetchEvents();
-  }, [request]);
+  }, []);
 
   const handleDelete = (id) => {
     setEventToDeleteId(id);
@@ -44,13 +49,13 @@ export default function EventInfo() {
 
   const handleDeleteConfirmed = async () => {
     try {
-      await request({
-        method: "DELETE",
-        url: `/event-infos/${eventToDeleteId}`,
-      });
-      setEvents(events.filter((event) => event.id !== eventToDeleteId));
-      setShowDeleteModal(false);
-      setEventToDeleteId(null);
+      const response = await api.delete(`/event-infos/${eventToDeleteId}`);
+      const data = response.data;
+      if (data?.success) {
+        setEvents(events.filter((event) => event.id !== eventToDeleteId));
+        setShowDeleteModal(false);
+        setEventToDeleteId(null);
+      }
     } catch (err) {
       console.error("Failed to delete event", err);
     }
@@ -84,28 +89,24 @@ export default function EventInfo() {
 
     try {
       if (isEditing) {
-        const response = await request({
-          method: "PUT",
-          url: `/event-infos/${editEventId}`,
-          data: formData,
-        });
-
-        const updatedEvent = response.data?.eventInfo || response.data;
-        setEvents(
-          events.map((ev) => (ev.id === editEventId ? updatedEvent : ev)),
-        );
+        const response = await api.put(`/event-infos/${editEventId}`, formData);
+        const data = response.data;
+        if (data?.success) {
+          const updatedEvent = data.eventInfo || data.data?.eventInfo || data;
+          setEvents(
+            events.map((ev) => (ev.id === editEventId ? updatedEvent : ev)),
+          );
+          closeModal();
+        }
       } else {
-        const response = await request({
-          method: "POST",
-          url: "/event-infos",
-          data: formData,
-        });
-
-        const newEvent = response.data?.eventInfo || response.data;
-        setEvents([newEvent, ...events]);
+        const response = await api.post("/event-infos", formData);
+        const data = response.data;
+        if (data?.success) {
+          const newEvent = data.eventInfo || data.data?.eventInfo || data;
+          setEvents([newEvent, ...events]);
+          closeModal();
+        }
       }
-
-      closeModal();
     } catch (err) {
       console.error("Failed to save event", err);
       setFormError(err.response?.data?.message || "Failed to save event.");

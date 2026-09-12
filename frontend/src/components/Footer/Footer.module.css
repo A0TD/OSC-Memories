@@ -18,16 +18,16 @@
   text-decoration: none;
   color: var(--text-main);
   opacity: 0.8;
-  padding:0 10px ;
+  padding: 0 10px;
 }
-.logout{
+.logout {
   color: var(--text-main);
   opacity: 0.8;
-  padding:0 10px ;
-
+  padding: 0 10px;
 }
 
-.footerContent a:hover , .logout:hover {
+.footerContent a:hover,
+.logout:hover {
   color: var(--brand-orange);
 }
 .footerBrand p {
@@ -53,6 +53,4 @@
   background-color: var(--bg-footer);
   color: var(--text-main);
   font-size: 14px;
-  
 }
-

@@ -29,7 +29,7 @@ export default function App() {
           path="/seasons/:seasonId/events/:eventId/media"
           element={<Media />}
         />{" "}
-        <Route path="/users/me" element={<Profile/>} />
+        <Route path="/users/me" element={<Profile />} />
         <Route path="/eventinfo" element={<EventInfo />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify-email" element={<VerifyEmail />} />

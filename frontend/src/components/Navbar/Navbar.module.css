@@ -1,4 +1,3 @@
-
 .navbar {
   background-color: var(--bg-nav);
   border-bottom: 1px solid var(--border-color);
@@ -141,7 +140,11 @@
 }
 
 .authLinks button.regbtn {
-  background-image: linear-gradient(135deg, rgb(243, 195, 94) 0%, rgb(233, 96, 5) 100%);
+  background-image: linear-gradient(
+    135deg,
+    rgb(243, 195, 94) 0%,
+    rgb(233, 96, 5) 100%
+  );
   border: none;
   color: white;
   transition: transform 0.5 ease;
@@ -173,7 +176,9 @@
   height: 26px;
   background-color: var(--text-main);
   border-radius: 50%;
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
 }
 
 [data-theme="dark"] .toggleCircle {
@@ -216,7 +221,7 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     gap: 20px;
     align-items: center;
-    margin:0 20px;
+    margin: 0 20px;
   }
 
   .menuWrapper.showMenu {
@@ -254,6 +259,6 @@
   align-items: center;
   text-decoration: none;
   -webkit-user-select: none;
-  -ms-user-select: none;     
-  user-select: none;  
+  -ms-user-select: none;
+  user-select: none;
 }

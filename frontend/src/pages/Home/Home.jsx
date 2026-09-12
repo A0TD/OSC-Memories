@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import homecss from "./Home.module.css";
 import calender from "../../assets/images/icons8-calender-85.png";

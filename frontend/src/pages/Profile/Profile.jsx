@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { api } from "../../services/api";
 import { AuthContext } from "../../contexts/AuthContext";
 import styles from "./Profile.module.css";
-import authStyles from '../../assets/styles/auth.module.css'
-
-const API_BASE_URL = "http://localhost:3000";
+import authStyles from "../../assets/styles/auth.module.css";
 
 function Profile() {
   const { user, logout, setUser } = useContext(AuthContext);
@@ -27,23 +25,9 @@ function Profile() {
     fetchUserMedia();
   }, []);
 
-  const getAxiosConfig = () => {
-    const token = localStorage.getItem("token");
-    return {
-      headers: {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      withCredentials: true,
-    };
-  };
-
   const fetchProfileData = async () => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/api/users/me`,
-        getAxiosConfig(),
-      );
+      const response = await api.get("/users/me");
       if (response.data?.success) {
         const userData = response.data.data.user;
         setProfile(userData);
@@ -58,10 +42,7 @@ function Profile() {
 
   const fetchUserMedia = async () => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/api/users/me/media`,
-        getAxiosConfig(),
-      );
+      const response = await api.get("/users/me/media");
       if (response.data?.success) {
         setMediaList(response.data.data.media || []);
       }
@@ -77,11 +58,9 @@ function Profile() {
 
     setActionLoading(true);
     try {
-      const response = await axios.patch(
-        `${API_BASE_URL}/api/users/me`,
-        { username: trimmedUsername },
-        getAxiosConfig(),
-      );
+      const response = await api.patch("/users/me", {
+        username: trimmedUsername,
+      });
 
       if (response.data?.success) {
         const updatedUser = response.data.data.user;
@@ -105,7 +84,7 @@ function Profile() {
       }
     } catch (err) {
       console.error("Error updating profile:", err);
-      alert(err.response?.data?.message);
+      alert(err.response?.data?.message || "Failed to update profile");
     } finally {
       setActionLoading(false);
     }
@@ -114,10 +93,7 @@ function Profile() {
   const handleDeleteAccount = async () => {
     setActionLoading(true);
     try {
-      const response = await axios.delete(
-        `${API_BASE_URL}/api/users/me`,
-        getAxiosConfig(),
-      );
+      const response = await api.delete("/users/me");
 
       if (response.data?.success) {
         setIsDeleteModalOpen(false);
@@ -128,13 +104,11 @@ function Profile() {
       }
     } catch (err) {
       console.error("Error deleting account:", err);
-      alert(err.response?.data?.message);
+      alert(err.response?.data?.message || "Failed to delete account");
     } finally {
       setActionLoading(false);
     }
   };
-
-  
 
   return (
     <>
@@ -143,7 +117,9 @@ function Profile() {
           <div className="container">
             <div className="row g-4">
               <aside className="col-12 col-md-4 col-lg-3">
-                <div className={`card ${styles.card} border-secondary text-center p-4 shadow`}>
+                <div
+                  className={`card ${styles.card} border-secondary text-center p-4 shadow`}
+                >
                   <h4 className={`card-title ${styles.text} fw-bold mb-1`}>
                     {profile?.username || user?.username || "User"}
                   </h4>
@@ -170,13 +146,13 @@ function Profile() {
               </aside>
 
               <main className="col-12 col-md-8 col-lg-9">
-                <div className={`card ${styles.card} border-secondary p-4 shadow min-vh-50`}>
+                <div
+                  className={`card ${styles.card} border-secondary p-4 shadow min-vh-50`}
+                >
                   <div className="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
                     <h3 className={`h4 ${styles.text} fw-bold m-0 `}>
                       My Uploaded Media{" "}
-                      <span className=" fs-5">
-                        ({mediaList.length})
-                      </span>
+                      <span className=" fs-5">({mediaList.length})</span>
                     </h3>
                   </div>
 
@@ -232,9 +208,13 @@ function Profile() {
               style={{ backgroundColor: "rgba(0, 0, 0, 0.75)" }}
             >
               <div className="modal-dialog modal-dialog-centered">
-                <div className={`modal-content ${styles.card} border-secondary`}>
+                <div
+                  className={`modal-content ${styles.card} border-secondary`}
+                >
                   <div className="modal-header border-secondary">
-                    <h5 className={`modal-title ${styles.text} fw-bold`}>Edit Profile</h5>
+                    <h5 className={`modal-title ${styles.text} fw-bold`}>
+                      Edit Profile
+                    </h5>
                     <button
                       type="button"
                       className="btn-close btn-close-white"
@@ -285,7 +265,9 @@ function Profile() {
               style={{ backgroundColor: "rgba(0, 0, 0, 0.75)" }}
             >
               <div className="modal-dialog modal-dialog-centered">
-                <div className={`modal-content ${styles.card} border-secondary`}>
+                <div
+                  className={`modal-content ${styles.card} border-secondary`}
+                >
                   <div className="modal-header border-secondary">
                     <h5 className={`modal-title ${styles.text} fw-bold`}>
                       Confirm Account Deletion
@@ -335,9 +317,13 @@ function Profile() {
                 className="modal-dialog modal-dialog-centered modal-lg"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className={`modal-content border-secondary overflow-hidden ${styles.card}`}>
+                <div
+                  className={`modal-content border-secondary overflow-hidden ${styles.card}`}
+                >
                   <div className="modal-header border-secondary">
-                    <h5 className={`${styles.text} modal-title fw-bold`}>Media Preview</h5>
+                    <h5 className={`${styles.text} modal-title fw-bold`}>
+                      Media Preview
+                    </h5>
                     <button
                       type="button"
                       className="btn-close btn-close-white"

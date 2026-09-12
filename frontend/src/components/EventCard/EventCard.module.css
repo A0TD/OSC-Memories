@@ -1,5 +1,5 @@
 .eventCard {
-min-height: 280px;
+  min-height: 280px;
   display: flex;
   flex-direction: column;
   justify-content: between;
@@ -18,15 +18,15 @@ min-height: 280px;
 
 .eventTitle {
   font-weight: 700;
-  color: var( --hero-title-color);
+  color: var(--hero-title-color);
   margin-bottom: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid ;
+  border-bottom: 1px solid;
 }
 
 .eventDescription {
-display: -webkit-box;
-  -webkit-line-clamp: 3; 
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;

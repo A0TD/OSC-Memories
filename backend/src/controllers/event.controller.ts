@@ -17,9 +17,7 @@ export const getAllEvents = async (
     res.status(200).send({
       success: true,
       message: "Events retrieved successfully",
-      data: {
-        events: allEvents,
-      },
+      events: allEvents,
     });
   } catch (err) {
     next(err);
@@ -42,9 +40,7 @@ export const getEvent = async (
     res.status(200).send({
       success: true,
       message: "Event retrieved successfully",
-      data: {
-        event: requiredEvent,
-      },
+      event: requiredEvent,
     });
   } catch (err) {
     next(err);
@@ -75,9 +71,7 @@ export const createEvent = async (
     res.status(201).send({
       success: true,
       message: "Event created successfully",
-      data: {
-        event: newEvent,
-      },
+      event: newEvent,
     });
   } catch (err) {
     if (uploadedImage) {
@@ -128,9 +122,7 @@ export const updateEvent = async (
     res.status(200).send({
       success: true,
       message: "Event updated successfully",
-      data: {
-        event: updatedEvent,
-      },
+      event: updatedEvent,
     });
   } catch (err) {
     if (uploadedImage) {

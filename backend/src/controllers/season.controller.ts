@@ -14,9 +14,7 @@ export const getAllSeasons = async (
     return res.status(200).send({
       success: true,
       message: "Seasons retrieved successfully",
-      data: {
-        seasons,
-      },
+      seasons,
     });
   } catch (err) {
     next(err);
@@ -39,9 +37,7 @@ export const getSeasonById = async (
     return res.status(200).send({
       success: true,
       message: "Season retrieved successfully",
-      data: {
-        season,
-      },
+      season,
     });
   } catch (err) {
     next(err);
@@ -71,9 +67,7 @@ export const createSeason = async (
     return res.status(201).send({
       success: true,
       message: "Season created successfully",
-      data: {
-        season,
-      },
+      season,
     });
   } catch (err) {
     if (uploadedImage) {
@@ -124,9 +118,7 @@ export const updateSeason = async (
     return res.status(200).send({
       success: true,
       message: "Season updated successfully",
-      data: {
-        season: updatedSeason,
-      },
+      season: updatedSeason,
     });
   } catch (err) {
     if (uploadedImage) {

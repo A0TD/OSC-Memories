@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   FaImage,
   FaVideo,
   FaPlus,
-  FaArrowLeft,
   FaCloudUploadAlt,
   FaTimes,
 } from "react-icons/fa";
@@ -14,15 +13,15 @@ import styles from "./Media.module.css";
 import authStyles from "../../assets/styles/auth.module.css";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ROLES } from "../../utils/constants";
-import { useApi } from "../../hooks/useApi";
+import { api } from "../../services/api";
 
 export default function EventMedia() {
   const { seasonId, eventId } = useParams();
   const { user, role } = useContext(AuthContext);
-  const { request, loading } = useApi();
 
   const [activeTab, setActiveTab] = useState("photos");
   const [mediaList, setMediaList] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -37,20 +36,19 @@ export default function EventMedia() {
     if (!eventId) return;
 
     try {
-      const response = await request({
-        url: `/seasons/${seasonId}/events/${eventId}/media`,
-        method: "GET",
-      });
+      setLoading(true);
+      const response = await api.get(
+        `/seasons/${seasonId}/events/${eventId}/media`,
+      );
+      const data = response.data;
 
-      const rawData =
-        response?.data?.media ||
-        response?.media ||
-        response?.data?.data?.media ||
-        [];
+      const rawData = data?.media || data?.data?.media || data?.data || [];
 
       setMediaList(Array.isArray(rawData) ? rawData : []);
     } catch (error) {
       console.error("Error fetching media:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,11 +65,12 @@ export default function EventMedia() {
 
   const handleDeleteMedia = async (mediaId) => {
     try {
-      await request({
-        url: `/seasons/${seasonId}/events/${eventId}/media/${mediaId}`,
-        method: "DELETE",
-      });
-      fetchMedia();
+      const response = await api.delete(
+        `/seasons/${seasonId}/events/${eventId}/media/${mediaId}`,
+      );
+      if (response.data?.success) {
+        fetchMedia();
+      }
     } catch (error) {
       console.error("Error deleting media:", error);
     }
@@ -94,16 +93,19 @@ export default function EventMedia() {
         formData.append("media", file);
       });
 
-      await request({
-        url: `/seasons/${seasonId}/events/${eventId}/media`,
-        method: "POST",
-        data: formData,
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await api.post(
+        `/seasons/${seasonId}/events/${eventId}/media`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
 
-      setSelectedFiles([]);
-      setShowUploadModal(false);
-      fetchMedia();
+      if (response.data?.success) {
+        setSelectedFiles([]);
+        setShowUploadModal(false);
+        fetchMedia();
+      }
     } catch (error) {
       console.error("Error uploading media:", error);
     } finally {

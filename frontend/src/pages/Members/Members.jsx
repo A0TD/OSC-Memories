@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useApi } from "../../hooks/useApi";
+import { api } from "../../services/api";
 import MemberCard from "../../components/MemberCard/MemberCard";
 import Pagination from "../../components/Pagination/Pagination";
 import memberscss from "./Members.module.css";
@@ -9,7 +9,8 @@ export default function Members() {
   const [members, setMembers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
-  const { request, loading, error } = useApi();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
 
@@ -22,31 +23,35 @@ export default function Members() {
 
   const fetchUsers = async () => {
     try {
-      const data = await request({
-        url: "/users",
-        method: "GET",
-      });
-      setMembers(data.users || data.data?.users || []);
+      setLoading(true);
+      setError(null);
+      const response = await api.get("/users");
+      const data = response.data;
+      setMembers(data.users || data.data?.users || data.data || []);
     } catch (err) {
       console.error("Failed to fetch users", err);
+      setError(err.message || "Failed to fetch users");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleToggleRole = async (id) => {
     try {
-      await request({
-        url: `/users/${id}/role`,
-        method: "PATCH",
-      });
-      setMembers((prevMembers) =>
-        prevMembers.map((m) => {
-          if (m.id === id) {
-            const newRole = m.role === "Admin" ? "Member" : "Admin";
-            return { ...m, role: newRole };
-          }
-          return m;
-        }),
-      );
+      const response = await api.patch(`/users/${id}/role`);
+
+      if (response.data && response.data.success !== false) {
+        setMembers((prevMembers) =>
+          prevMembers.map((m) => {
+            const currentId = m.id || m._id;
+            if (currentId === id) {
+              const newRole = m.role === "Admin" ? "Member" : "Admin";
+              return { ...m, role: newRole };
+            }
+            return m;
+          }),
+        );
+      }
     } catch (err) {
       console.error("Failed to toggle role", err);
     }
@@ -60,15 +65,15 @@ export default function Members() {
   const handleDelete = async () => {
     if (!userToDelete) return;
     try {
-      await request({
-        url: `/users/${userToDelete}`,
-        method: "DELETE",
-      });
-      setMembers((prevMembers) =>
-        prevMembers.filter((m) => m.id !== userToDelete),
-      );
-      setShowDeleteModal(false);
-      setUserToDelete(null);
+      const response = await api.delete(`/users/${userToDelete}`);
+
+      if (response.data && response.data.success !== false) {
+        setMembers((prevMembers) =>
+          prevMembers.filter((m) => (m.id || m._id) !== userToDelete),
+        );
+        setShowDeleteModal(false);
+        setUserToDelete(null);
+      }
     } catch (err) {
       console.error("Failed to delete user", err);
     }
@@ -79,7 +84,11 @@ export default function Members() {
     const usernameLower = (member.username || "").toLowerCase();
     const emailLower = (member.email || "").toLowerCase();
 
-    if (!searchLower) return true;
+    if (!searchLower) {
+      if (activeFilter === "Members") return member.role === "Member";
+      if (activeFilter === "Admins") return member.role === "Admin";
+      return true;
+    }
 
     const matchesSearch =
       usernameLower.startsWith(searchLower) ||
@@ -158,16 +167,25 @@ export default function Members() {
           <div className={memberscss.tableBox}>
             {loading ? (
               <p className="text-center py-5 text-muted">Loading members...</p>
+            ) : error ? (
+              <p className="text-center py-5 text-danger">{error}</p>
             ) : currentMembers.length > 0 ? (
               <div className="d-flex flex-column gap-2">
-                {currentMembers.map((member) => (
-                  <MemberCard
-                    key={member.id}
-                    member={{ ...member, name: member.username }}
-                    onToggleRole={handleToggleRole}
-                    onDelete={confirmDelete}
-                  />
-                ))}
+                {currentMembers.map((member) => {
+                  const memberId = member.id || member._id;
+                  return (
+                    <MemberCard
+                      key={memberId}
+                      member={{
+                        ...member,
+                        id: memberId,
+                        name: member.username,
+                      }}
+                      onToggleRole={handleToggleRole}
+                      onDelete={confirmDelete}
+                    />
+                  );
+                })}
               </div>
             ) : (
               <p className="text-center py-5 text-muted">No members found.</p>

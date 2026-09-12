@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Seasons.module.css";
 import authStyles from "../../assets/styles/auth.module.css";
@@ -6,17 +6,17 @@ import { FaEdit, FaTrash, FaPlus, FaExclamationTriangle } from "react-icons/fa";
 
 import { AuthContext } from "../../contexts/AuthContext";
 import { ROLES } from "../../utils/constants";
-import { useApi } from "../../hooks/useApi";
+import { api } from "../../services/api";
 
 const DEFAULT_IMAGE = "https://via.placeholder.com/300x180?text=OSC+Season";
 
 export default function Seasons() {
   const [seasons, setSeasons] = useState([]);
   const { user, role } = useContext(AuthContext);
-  const { request, loading } = useApi();
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState(null);
 
-  const isAdmin =
-    role === ROLES.ADMIN || role === "Admin" || user?.role === "Admin";
+  const isAdmin = role === ROLES.ADMIN;
 
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState("create");
@@ -28,23 +28,37 @@ export default function Seasons() {
   });
   const [currentSeasonId, setCurrentSeasonId] = useState(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [actionLoading, setActionLoading] = useState(false);
+  const deleteTimeoutRef = useRef(null);
 
   const fetchSeasons = async () => {
+    setLoading(true);
+    setFetchError(null);
     try {
-      const response = await request({
-        url: "/seasons",
-        method: "GET",
-      });
-      const extractedSeasons =
-        response?.data?.seasons || response?.seasons || response?.data || [];
-      setSeasons(Array.isArray(extractedSeasons) ? extractedSeasons : []);
+      const response = await api.get("/seasons");
+      const data = response.data;
+      if (data.success) {
+        const extractedSeasons = data.seasons;
+        setSeasons(Array.isArray(extractedSeasons) ? extractedSeasons : []);
+      } else {
+        setFetchError(data.message || "Failed to load seasons.");
+      }
     } catch (error) {
       console.error("Error fetching seasons:", error);
+      setFetchError(
+        error.response?.data?.message ||
+          "Failed to load seasons. Please check your network connection.",
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchSeasons();
+    return () => {
+      if (deleteTimeoutRef.current) clearTimeout(deleteTimeoutRef.current);
+    };
   }, []);
 
   const handleInputChange = (e) => {
@@ -87,6 +101,7 @@ export default function Seasons() {
     e.preventDefault();
     if (!isAdmin) return;
 
+    setActionLoading(true);
     try {
       const payload = {
         name: formData.name,
@@ -98,23 +113,18 @@ export default function Seasons() {
       };
 
       if (modalMode === "create") {
-        await request({
-          url: "/seasons",
-          method: "POST",
-          data: payload,
-        });
+        await api.post("/seasons", payload);
       } else {
-        await request({
-          url: `/seasons/${currentSeasonId}`,
-          method: "PUT",
-          data: payload,
-        });
+        await api.put(`/seasons/${currentSeasonId}`, payload);
       }
 
       setShowModal(false);
       fetchSeasons();
     } catch (error) {
       console.error(`Error ${modalMode} season:`, error);
+      alert(error.response?.data?.message || `Failed to ${modalMode} season`);
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -123,19 +133,25 @@ export default function Seasons() {
     if (!isAdmin) return;
 
     if (deleteConfirmId === id) {
+      if (deleteTimeoutRef.current) clearTimeout(deleteTimeoutRef.current);
+      setActionLoading(true);
       try {
-        await request({
-          url: `/seasons/${id}`,
-          method: "DELETE",
-        });
+        await api.delete(`/seasons/${id}`);
         setDeleteConfirmId(null);
         fetchSeasons();
       } catch (error) {
         console.error("Error deleting season:", error);
+        alert(error.response?.data?.message || "Failed to delete season");
+      } finally {
+        setActionLoading(false);
       }
     } else {
+      if (deleteTimeoutRef.current) clearTimeout(deleteTimeoutRef.current);
       setDeleteConfirmId(id);
-      setTimeout(() => setDeleteConfirmId(null), 3000);
+      deleteTimeoutRef.current = setTimeout(
+        () => setDeleteConfirmId(null),
+        3000,
+      );
     }
   };
 
@@ -155,7 +171,7 @@ export default function Seasons() {
 
       {/* Cards List Section */}
       <div className={styles.allCards}>
-        <div className={`container-md ${styles.allCards}`}>
+        <div className="container-md">
           <div className="d-flex justify-content-center align-items-center w-100">
             {isAdmin && (
               <button
@@ -168,10 +184,20 @@ export default function Seasons() {
           </div>
           <div className="row g-4 py-5">
             {loading ? (
-              <div className="text-center text-light my-5">
+              <div className="text-center text-light my-5 w-100">
                 <div className="spinner-border text-warning" role="status">
                   <span className="visually-hidden">Loading...</span>
                 </div>
+              </div>
+            ) : fetchError ? (
+              <div className="text-center text-danger my-5 w-100">
+                <p className="fs-5">{fetchError}</p>
+                <button
+                  className="btn btn-outline-light btn-sm mt-2"
+                  onClick={fetchSeasons}
+                >
+                  Try Again
+                </button>
               </div>
             ) : seasons.length > 0 ? (
               seasons.map((season) => {
@@ -199,6 +225,7 @@ export default function Seasons() {
                             className={`btn btn-sm ${styles.btn}`}
                             onClick={(e) => handleDelete(seasonId, e)}
                             title="Delete Season"
+                            disabled={actionLoading}
                           >
                             {isDeleting ? (
                               <span className="fw-bold d-flex align-items-center gap-1">
@@ -330,14 +357,20 @@ export default function Seasons() {
                   type="button"
                   className={`${authStyles.submitBtn} mx-0 fs-6 w-50`}
                   onClick={() => setShowModal(false)}
+                  disabled={actionLoading}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   className={`${authStyles.submitBtn} mx-0 fs-6 w-50`}
+                  disabled={actionLoading}
                 >
-                  {modalMode === "create" ? "Create" : "Save Changes"}
+                  {actionLoading
+                    ? "Saving..."
+                    : modalMode === "create"
+                      ? "Create"
+                      : "Save Changes"}
                 </button>
               </div>
             </form>

@@ -18,7 +18,7 @@ export const getAllMedia = async (
     return res.status(200).send({
       success: true,
       message: "Successfully retrieved all media!",
-      data: { media: allMedia },
+      media: allMedia,
     });
   } catch (err) {
     next(err);
@@ -41,7 +41,7 @@ export const getMedia = async (
     return res.status(200).send({
       success: true,
       message: "Successfully retrieved media!",
-      data: { media: foundMedia },
+      media: foundMedia,
     });
   } catch (err) {
     next(err);
@@ -89,7 +89,7 @@ export const uploadMedia = async (
     res.status(200).json({
       success: true,
       message: "Upload successful",
-      data: { media: createdMedia },
+      media: createdMedia,
     });
   } catch (err) {
     if (uploadedMedia.length > 0) {
@@ -144,7 +144,7 @@ export const getMediaByOwnerId = async (
     return res.status(200).send({
       success: true,
       message: "Successfully retrieved media!",
-      data: { media: foundMedia },
+      media: foundMedia,
     });
   } catch (err) {
     next(err);

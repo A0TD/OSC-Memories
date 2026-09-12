@@ -14,9 +14,7 @@ export const getAllUsers = async (
     res.status(200).send({
       success: true,
       message: "Users fetched successfully!",
-      data: {
-        users: allUsers,
-      },
+      users: allUsers,
     });
   } catch (err) {
     next(err);
@@ -36,9 +34,7 @@ export const getUser = async (
     res.status(200).send({
       success: true,
       message: "User fetched successfully!",
-      data: {
-        user: foundUser,
-      },
+      user: foundUser,
     });
   } catch (err) {
     next(err);
@@ -64,9 +60,7 @@ export const changeRole = async (
     res.status(200).send({
       success: true,
       message: "User role has been changed!",
-      data: {
-        user: foundUser,
-      },
+      user: foundUser,
     });
   } catch (err) {
     next(err);
@@ -88,9 +82,7 @@ export const deleteUser = async (
     res.status(200).send({
       success: true,
       message: "User deleted successfully!",
-      data: {
-        deletedUser,
-      },
+      user: deletedUser,
     });
   } catch (err) {
     next(err);
@@ -112,7 +104,7 @@ export const getOwnUser = async (
     return res.status(200).send({
       success: true,
       message: "User retrieved successfully",
-      data: { user: foundUser },
+      user: foundUser,
     });
   } catch (err) {
     next(err);
@@ -144,7 +136,7 @@ export const updateOwnUser = async (
     return res.status(200).send({
       success: true,
       message: "User updated successfully",
-      data: { user: updatedUser },
+      user: updatedUser,
     });
   } catch (err) {
     next(err);
@@ -172,7 +164,7 @@ export const deleteOwnUser = async (
     return res.status(200).send({
       success: true,
       message: "User deleted successfully",
-      data: { user: deletedUser },
+      user: deletedUser,
     });
   } catch (err) {
     next(err);
@@ -192,7 +184,7 @@ export const getOwnMedia = async (
     return res.status(200).send({
       success: true,
       message: "Successfully retrieved media!",
-      data: { media: foundMedia },
+      media: foundMedia,
     });
   } catch (err) {
     next(err);

@@ -40,9 +40,7 @@ export const register = async (
     return res.status(201).send({
       success: true,
       message: "User created successfully, verification OTP sent to email",
-      data: {
-        user,
-      },
+      user,
     });
   } catch (err) {
     next(err);
@@ -222,9 +220,7 @@ export const login = async (
     return res.status(200).send({
       success: true,
       message: "Login successful",
-      data: {
-        user,
-      },
+      user,
     });
   } catch (err) {
     next(err);
