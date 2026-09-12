@@ -24,4 +24,4 @@ export const ENDPOINTS = {
   },
   SEASONS: "/seasons",
 };
-export const API_BASE_URL = "https://containers.back4app.com/apps/d950dc41-51ab-4b39-b47c-1c619a1fd5be/api";
+export const API_BASE_URL = "http://localhost:3000/api";
