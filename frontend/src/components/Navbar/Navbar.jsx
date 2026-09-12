@@ -4,6 +4,7 @@ import { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import { ROLES } from "../../utils/constants";
 
 function Navbar() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -71,7 +72,7 @@ function Navbar() {
               Profile
             </NavLink>
           )}
-          {user?.role === "Admin" && (
+          {user?.role === ROLES.ADMIN && (
             <NavLink
               to="/members"
               className={({ isActive }) => (isActive ? navcss.active : "")}
