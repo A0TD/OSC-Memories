@@ -15,6 +15,8 @@ import userRouter from "./routes/user.route";
 import eventInfoRouter from "./routes/eventInfo.route";
 import { globalErrorHandler } from "./middlewares/errorHandler.middleware";
 
+const path = require("path");
+
 const app: Application = express();
 const PORT = (process.env.PORT as string) || 3000;
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -35,16 +37,37 @@ app.use(
     },
   }),
 );
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "img-src": [
+          "'self'",
+          "data:",
+          "https://res.cloudinary.com",
+          "https://via.placeholder.com",
+        ],
+      },
+    },
+  }),
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
+
+app.use(express.static(path.join(__dirname, "../../frontend/dist")));
+app.use("/uploads", express.static("uploads"));
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use("/api/auth", authRouter);
 app.use("/api/seasons", seasonRouter);
 app.use("/api/event-infos", eventInfoRouter);
 app.use("/api/users", userRouter);
+
+app.get("/*path", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
+});
 
 app.use(globalErrorHandler);
 
