@@ -45,10 +45,7 @@ export default function Seasons() {
       }
     } catch (error) {
       console.error("Error fetching seasons:", error);
-      setFetchError(
-        error.response?.data?.message ||
-          "Failed to load seasons. Please check your network connection.",
-      );
+      setFetchError(error.response?.data?.message || "Failed to load seasons.");
     } finally {
       setLoading(false);
     }
@@ -190,15 +187,7 @@ export default function Seasons() {
                 </div>
               </div>
             ) : fetchError ? (
-              <div className="text-center text-danger my-5 w-100">
-                <p className="fs-5">{fetchError}</p>
-                <button
-                  className="btn btn-outline-light btn-sm mt-2"
-                  onClick={fetchSeasons}
-                >
-                  Try Again
-                </button>
-              </div>
+              <div className="alert alert-danger mb-4 w-100">{fetchError}</div>
             ) : seasons.length > 0 ? (
               seasons.map((season) => {
                 const seasonId = season._id || season.id;
