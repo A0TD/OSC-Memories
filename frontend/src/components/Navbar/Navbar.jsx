@@ -21,9 +21,9 @@ function Navbar() {
       className={`${navcss.navbar} d-flex align-items-center justify-content-between px-4`}
     >
       <div className="d-flex align-items-center">
-        <NavLink to={"/"} className={navcss.logos}>
+        <NavLink to="/" className={navcss.logos}>
           <div className={navcss.logo}>
-            <img src={oscLogo} alt="OSC-Logo" />
+            <img src={oscLogo} alt="" aria-hidden="true" />
           </div>
           <div className={navcss.logop}>
             <h1>OSC</h1>
@@ -32,7 +32,12 @@ function Navbar() {
         </NavLink>
       </div>
 
-      <button className={navcss.hamburger} onClick={() => setIsOpen(!isOpen)}>
+      <button
+        className={navcss.hamburger}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle navigation menu"
+        aria-expanded={isOpen}
+      >
         <span></span>
         <span></span>
         <span></span>
