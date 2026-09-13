@@ -157,7 +157,6 @@ export default function Seasons() {
 
   return (
     <div className="text-light min-vh-100 position-relative">
-      {/* Hero Section */}
       <div className={`${styles.heroSection} d-flex align-items-center`}>
         <div className="container-md">
           <h1 className={`fw-bold display-4 ${styles.seasonsHeading}`}>
@@ -169,7 +168,6 @@ export default function Seasons() {
         </div>
       </div>
 
-      {/* Cards List Section */}
       <div className={styles.allCards}>
         <div className="container-md">
           <div className="d-flex justify-content-center align-items-center w-100">
@@ -275,7 +273,6 @@ export default function Seasons() {
         </div>
       </div>
 
-      {/* Modal */}
       {isAdmin && showModal && (
         <div
           className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center z-3 mt-4"
@@ -295,7 +292,7 @@ export default function Seasons() {
                 </label>
                 <input
                   type="text"
-                  className="form-control text-dark border-secondary"
+                  className="form-control border-secondary"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
@@ -307,7 +304,7 @@ export default function Seasons() {
                 <label className={`form-label ${styles.text}`}>Date</label>
                 <input
                   type="date"
-                  className="form-control text-dark border-secondary"
+                  className="form-control border-secondary"
                   name="date"
                   value={formData.date}
                   onChange={handleInputChange}
@@ -322,7 +319,7 @@ export default function Seasons() {
                 <input
                   type="file"
                   accept="image/*"
-                  className="form-control text-dark border-secondary"
+                  className="form-control border-secondary"
                   onChange={handleImageUpload}
                   required={modalMode === "create" && !formData.imageUrl}
                 />
@@ -343,7 +340,7 @@ export default function Seasons() {
                   Description
                 </label>
                 <textarea
-                  className="form-control text-dark border-secondary"
+                  className="form-control border-secondary"
                   name="description"
                   rows="3"
                   value={formData.description}
