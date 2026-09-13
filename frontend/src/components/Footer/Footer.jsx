@@ -21,14 +21,17 @@ function Footer() {
       <div className={`${footcss.footerContent} container-fluid`}>
         <div className="row g-4">
           <div className={`${footcss.footerBrand} col-12 col-md-6 col-lg-5`}>
-            <div className="d-flex align-items-center gap-2">
-              <div>
+            <NavLink
+              to="/"
+              className={`${footcss.brandLink} d-flex align-items-center gap-2`}
+            >
+              <div className={footcss.logoWrapper}>
                 <img src={oscLogo} alt="OSC-Logo" />
               </div>
               <h3>
                 OSC <span>MEMORIES</span>
               </h3>
-            </div>
+            </NavLink>
             <p>Relive the moments, celebrate the journey together.</p>
           </div>
 
@@ -67,6 +70,8 @@ function Footer() {
                 href="https://www.facebook.com/share/1DjbiuiTob/"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Facebook"
+                className={footcss.socialIcon}
               >
                 <img src={facebook} alt="facebook-icon" />
               </a>
@@ -74,6 +79,8 @@ function Footer() {
                 href="https://www.linkedin.com/company/osc---open-source-community/"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className={footcss.socialIcon}
               >
                 <img src={linkedin} alt="linkedin-icon" />
               </a>
@@ -81,6 +88,8 @@ function Footer() {
                 href="https://www.instagram.com/oscgeeks?stkn=NDlxMjNtbGIwcTh2"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Instagram"
+                className={footcss.socialIcon}
               >
                 <img src={instagram} alt="instagram-icon" />
               </a>
