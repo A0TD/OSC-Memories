@@ -59,6 +59,11 @@
   --hero-border: #2d2e30;
 }
 
+::selection {
+  background-color:var(--brand-orange); 
+  color:var(--text-main);
+}
+
 body {
   background-color: var(--bg-main);
   color: var(--text-main);
