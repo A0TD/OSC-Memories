@@ -1,6 +1,6 @@
 .memberCardBox {
   background-color: var(--bg-main);
-  padding: 5px 10px;
+  padding: 10px 10px;
   min-height: 50px;
   border-radius: 6px;
 }
@@ -24,19 +24,19 @@
 .avatarColor2 {
   background-color: #e53e3e;
   color: #fff;
-} /* أحمر متناسق */
+}
 .avatarColor3 {
   background-color: #319795;
   color: #fff;
-} /* تركواز */
+} 
 .avatarColor4 {
   background-color: #805ad5;
   color: #fff;
-} /* بنفسجي */
+}
 .avatarColor5 {
   background-color: #d69e2e;
   color: #fff;
-} /* أصفر غامق */
+} 
 .name {
   color: var(--hero-title-color);
   font-weight: 600;
@@ -70,3 +70,28 @@
   transform: scale(1.1);
   transition: all 0.2s ease-in-out;
 }
+
+
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  start: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.modalContent {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  width: 85%;
+  max-width: 340px;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+} 

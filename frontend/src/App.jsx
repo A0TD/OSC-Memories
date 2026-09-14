@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import Reacr, { useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar.jsx";
 import Footer from "./components/Footer/Footer.jsx";
@@ -17,9 +18,19 @@ import NotFound from "./pages/NotFound/NotFound.jsx";
 import Members from "./pages/Members/Members.jsx";
 import Media from "./pages/Media/Media.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 export default function App() {
   return (
     <>
+      <ScrollToTop />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
