@@ -4,6 +4,30 @@ import calender from "../../assets/images/icons8-calender-85.png";
 import photo from "../../assets/images/icons8-photo-48.png";
 import people from "../../assets/images/icons8-people-48.png";
 import star from "../../assets/images/icons8-star-50.png";
+
+const features = [
+  {
+    icon: calender,
+    title: "Seasons",
+    desc: "Explore all OSC seasons and their highlights.",
+  },
+  {
+    icon: star,
+    title: "Events",
+    desc: "Discover events that brought us together.",
+  },
+  {
+    icon: photo,
+    title: "Memories",
+    desc: "Photos and videos that we'll always remember.",
+  },
+  {
+    icon: people,
+    title: "Members",
+    desc: "Meet the amazing people behind OSC.",
+  },
+];
+
 function Home() {
   return (
     <>
@@ -24,6 +48,7 @@ function Home() {
           </Link>
         </div>
       </section>
+
       <section className={homecss.about_sec}>
         <div className={homecss.about_left}>
           <span className={homecss.subtitle}>ABOUT OSC MEMORIES</span>
@@ -38,40 +63,19 @@ function Home() {
         </div>
 
         <div className={homecss.about_right}>
-          <div className={homecss.feature_card}>
-            <div className={homecss.icon}>
-              <img src={calender} alt="season-photo" />
+          {features.map((item, index) => (
+            <div className={homecss.feature_card} key={index}>
+              <div className={homecss.icon}>
+                <img src={item.icon} alt="" aria-hidden="true" />
+              </div>
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
             </div>
-            <h3>Seasons</h3>
-            <p>Explore all OSC seasons and their highlights.</p>
-          </div>
-
-          <div className={homecss.feature_card}>
-            <div className={homecss.icon}>
-              <img src={star} alt="event-photo" />
-            </div>
-            <h3>Events</h3>
-            <p>Discover events that brought us together.</p>
-          </div>
-
-          <div className={homecss.feature_card}>
-            <div className={homecss.icon}>
-              <img src={photo} alt="memory-photo" />
-            </div>
-            <h3>Memories</h3>
-            <p>Photos and videos that we'll always remember.</p>
-          </div>
-
-          <div className={homecss.feature_card}>
-            <div className={homecss.icon}>
-              <img src={people} alt="member-photo" />
-            </div>
-            <h3>Members</h3>
-            <p>Meet the amazing people behind OSC.</p>
-          </div>
+          ))}
         </div>
       </section>
     </>
   );
 }
+
 export default Home;

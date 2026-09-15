@@ -3,47 +3,79 @@
   padding: 70px 50px;
   font-size: 14px;
 }
+
 .footerContent h3 {
   font-size: 16px;
   font-weight: bold;
   padding: 10px 0 0 5px;
   color: var(--brand-orange);
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-.footerContent h3:hover {
-  transform: translateY(-6px);
-}
-.footerContent a {
-  text-decoration: none;
-  color: var(--text-main);
-  opacity: 0.8;
-  padding: 0 10px;
-}
-.logout {
-  color: var(--text-main);
-  opacity: 0.8;
-  padding: 0 10px;
+  margin: 0;
 }
 
-.footerContent a:hover,
-.logout:hover {
-  color: var(--brand-orange);
+/* Brand Link wrapper handles the whole header click & hover together */
+.brandLink {
+  text-decoration: none;
+  cursor: pointer;
+  width: fit-content;
+  transition: opacity 0.2s ease;
 }
+
+.brandLink:hover {
+  opacity: 0.85;
+}
+
+/* Logo box keeps the image contained and scales the wrapper smoothly if desired, or keeps it static */
+.logoWrapper img {
+  width: 30px;
+  background-color: rgb(167, 167, 167);
+  border-radius: 8px;
+  padding: 2px;
+  display: block;
+}
+
 .footerBrand p {
   color: var(--text-main);
   opacity: 0.8;
+  margin-top: 10px;
 }
 
-.footerContent img {
+/* Standard navigation links */
+.footerContent a:not(.brandLink) {
+  text-decoration: none;
+  color: var(--text-main);
+  opacity: 0.8;
+  padding: 4px 10px;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.logout {
+  color: var(--text-main);
+  opacity: 0.8;
+  padding: 4px 10px;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.footerContent a:not(.brandLink):hover,
+.logout:hover {
+  color: var(--brand-orange);
+  opacity: 1;
+}
+
+/* Social icons hover effect isolated to social links only */
+.socialIcon img {
   width: 30px;
   background-color: rgb(167, 167, 167);
   border-radius: 8px;
   padding: 2px;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: transform 0.3s ease;
 }
-.footerContent img:hover {
+
+.socialIcon:hover img {
   transform: scale(1.1);
 }
 
