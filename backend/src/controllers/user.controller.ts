@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import User from "../models/user.model";
 import AppError from "../utils/appError.util";
 import Media from "../models/media.model";
+import { DeleteMediaRequest } from "../models/deleteMediaRequest.model";
 
 export const getAllUsers = async (
   req: Request,
@@ -185,6 +186,26 @@ export const getOwnMedia = async (
       success: true,
       message: "Successfully retrieved media!",
       media: foundMedia,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getOwnDeleteRequests = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const requestedBy = (req as any).user.id;
+
+    const requests = await DeleteMediaRequest.find({ requestedBy });
+
+    return res.status(200).send({
+      success: true,
+      message: "Requests fetched successfully!",
+      requests,
     });
   } catch (err) {
     next(err);

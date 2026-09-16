@@ -92,7 +92,7 @@ export default function EventMedia() {
       });
 
       const response = await api.post(
-        ENDPOINTS.EVENTS.MEDIA.ALL(seasonId, eventId),
+        ENDPOINTS.MEDIA.ALL(seasonId, eventId),
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
