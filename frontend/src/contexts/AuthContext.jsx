@@ -10,25 +10,32 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem(STORAGE_KEYS.USER);
-
-    if (savedUser) {
+    const verifySession = async () => {
       try {
-        const parsedUser = JSON.parse(savedUser);
-        setUser(parsedUser);
-        setRole(parsedUser.role || ROLES.MEMBER);
+        const response = await api.get("/users/me");
+        const userData = response.data?.user;
+
+        setUser(userData);
+        setRole(userData.role || ROLES.MEMBER);
+
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(userData));
       } catch (err) {
-        console.error("Failed to parse user from localStorage:", err);
+        console.warn("Session expired or invalid");
         localStorage.removeItem(STORAGE_KEYS.USER);
+        setUser(null);
+        setRole(ROLES.GUEST);
+      } finally {
+        setLoading(false);
       }
-    }
-    setLoading(false);
+    };
+
+    verifySession();
   }, []);
 
   const login = async (credentials) => {
     const response = await api.post(ENDPOINTS.AUTH.LOGIN, credentials);
     const data = response.data;
-    const userData = data?.user || {};
+    const userData = data?.user || data?.data?.user || {};
 
     localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(userData));
     setUser(userData);
@@ -63,8 +70,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      const response = await api.post(ENDPOINTS.AUTH.LOGOUT);
-      return response.data;
+      await api.post(ENDPOINTS.AUTH.LOGOUT);
     } catch (error) {
       console.error("Logout request failed:", error);
     } finally {
