@@ -4,6 +4,7 @@ import Pagination from "../../components/Pagination/Pagination";
 import { AuthContext } from "../../contexts/AuthContext";
 import { api } from "../../services/api";
 import eventinfocss from "./EventInfo.module.css";
+import { ENDPOINTS } from "../../utils/constants";
 
 export default function EventInfo() {
   const [events, setEvents] = useState([]);
@@ -27,7 +28,7 @@ export default function EventInfo() {
   const fetchEvents = async () => {
     try {
       setError(null);
-      const response = await api.get("/event-infos");
+      const response = await api.get(ENDPOINTS.EVENT_INFOS.ALL);
       const data = response.data;
       if (data?.success) {
         setEvents(data.eventInfos || data.data?.eventInfos || []);
@@ -49,7 +50,9 @@ export default function EventInfo() {
 
   const handleDeleteConfirmed = async () => {
     try {
-      const response = await api.delete(`/event-infos/${eventToDeleteId}`);
+      const response = await api.delete(
+        ENDPOINTS.EVENT_INFOS.ONE(eventToDeleteId),
+      );
       const data = response.data;
       if (data?.success) {
         setEvents(events.filter((event) => event.id !== eventToDeleteId));
@@ -89,7 +92,10 @@ export default function EventInfo() {
 
     try {
       if (isEditing) {
-        const response = await api.put(`/event-infos/${editEventId}`, formData);
+        const response = await api.put(
+          ENDPOINTS.EVENT_INFOS.ONE(editEventId),
+          formData,
+        );
         const data = response.data;
         if (data?.success) {
           const updatedEvent = data.eventInfo || data.data?.eventInfo || data;
@@ -99,7 +105,7 @@ export default function EventInfo() {
           closeModal();
         }
       } else {
-        const response = await api.post("/event-infos", formData);
+        const response = await api.post(ENDPOINTS.EVENT_INFOS.ALL, formData);
         const data = response.data;
         if (data?.success) {
           const newEvent = data.eventInfo || data.data?.eventInfo || data;

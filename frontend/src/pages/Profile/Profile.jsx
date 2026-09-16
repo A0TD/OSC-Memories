@@ -4,6 +4,7 @@ import { api } from "../../services/api";
 import { AuthContext } from "../../contexts/AuthContext";
 import styles from "./Profile.module.css";
 import authStyles from "../../assets/styles/auth.module.css";
+import { ENDPOINTS } from "../../utils/constants";
 
 function Profile() {
   const { user, logout, setUser } = useContext(AuthContext);
@@ -27,7 +28,7 @@ function Profile() {
 
   const fetchProfileData = async () => {
     try {
-      const response = await api.get("/users/me");
+      const response = await api.get(ENDPOINTS.USERS.ME);
       if (response.data?.success) {
         const userData = response.data.user;
         setProfile(userData);
@@ -42,7 +43,7 @@ function Profile() {
 
   const fetchUserMedia = async () => {
     try {
-      const response = await api.get("/users/me/media");
+      const response = await api.get(ENDPOINTS.USERS.MY_MEDIA);
       if (response.data?.success) {
         setMediaList(response.data.media || []);
       }
@@ -58,7 +59,7 @@ function Profile() {
 
     setActionLoading(true);
     try {
-      const response = await api.patch("/users/me", {
+      const response = await api.patch(ENDPOINTS.USERS.ME, {
         username: trimmedUsername,
       });
 
@@ -93,7 +94,7 @@ function Profile() {
   const handleDeleteAccount = async () => {
     setActionLoading(true);
     try {
-      const response = await api.delete("/users/me");
+      const response = await api.delete(ENDPOINTS.USERS.ME);
 
       if (response.data?.success) {
         setIsDeleteModalOpen(false);

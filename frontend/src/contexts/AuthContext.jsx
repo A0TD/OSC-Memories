@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const verifySession = async () => {
       try {
-        const response = await api.get("/users/me");
+        const response = await api.get(ENDPOINTS.USERS.ME);
         const userData = response.data?.user;
 
         setUser(userData);

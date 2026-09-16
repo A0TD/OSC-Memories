@@ -10,7 +10,7 @@ import {
 import styles from "./Events.module.css";
 import authStyles from "../../assets/styles/auth.module.css";
 import { AuthContext } from "../../contexts/AuthContext";
-import { ROLES } from "../../utils/constants";
+import { ROLES, ENDPOINTS } from "../../utils/constants";
 import { api } from "../../services/api";
 
 export default function Events() {
@@ -41,7 +41,7 @@ export default function Events() {
 
     try {
       setLoading(true);
-      const response = await api.get(`/seasons/${seasonId}/events`);
+      const response = await api.get(ENDPOINTS.EVENTS.ALL_BY_SEASON(seasonId));
       const data = response.data;
       if (data?.success) {
         const fetchedEvents =
@@ -129,9 +129,9 @@ export default function Events() {
 
       if (editingEventId) {
         const response = await api.put(
-          `/seasons/${seasonId}/events/${editingEventId}`,
+          ENDPOINTS.EVENTS.ONE_BY_SEASON(seasonId, editingEventId),
           payload,
-          { headers: { "Content-Type": "multipart/form-data" } }
+          { headers: { "Content-Type": "multipart/form-data" } },
         );
         if (response.data?.success) {
           handleCloseModal();
@@ -141,7 +141,7 @@ export default function Events() {
         const response = await api.post(
           `/seasons/${seasonId}/events`,
           payload,
-          { headers: { "Content-Type": "multipart/form-data" } }
+          { headers: { "Content-Type": "multipart/form-data" } },
         );
         if (response.data?.success) {
           handleCloseModal();
@@ -167,7 +167,7 @@ export default function Events() {
 
     try {
       const response = await api.delete(
-        `/seasons/${seasonId}/events/${eventId}`
+        ENDPOINTS.EVENTS.ONE_BY_SEASON(seasonId, eventId),
       );
       if (response.data?.success) {
         setDeletingId(null);

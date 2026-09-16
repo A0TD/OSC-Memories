@@ -12,7 +12,7 @@ import EventVideo from "../EventVideo/EventVideo.jsx";
 import styles from "./Media.module.css";
 import authStyles from "../../assets/styles/auth.module.css";
 import { AuthContext } from "../../contexts/AuthContext";
-import { ROLES } from "../../utils/constants";
+import { ENDPOINTS, ROLES } from "../../utils/constants";
 import { api } from "../../services/api";
 
 export default function EventMedia() {
@@ -37,9 +37,7 @@ export default function EventMedia() {
 
     try {
       setLoading(true);
-      const response = await api.get(
-        `/seasons/${seasonId}/events/${eventId}/media`,
-      );
+      const response = await api.get(ENDPOINTS.EVENTS.MEDIA(seasonId, eventId));
       const data = response.data;
 
       const rawData = data?.media || data?.data?.media || data?.data || [];
@@ -66,7 +64,7 @@ export default function EventMedia() {
   const handleDeleteMedia = async (mediaId) => {
     try {
       const response = await api.delete(
-        `/seasons/${seasonId}/events/${eventId}/media/${mediaId}`,
+        `${ENDPOINTS.EVENTS.MEDIA(seasonId, eventId)}/${mediaId}`,
       );
       if (response.data?.success) {
         fetchMedia();
@@ -94,7 +92,7 @@ export default function EventMedia() {
       });
 
       const response = await api.post(
-        `/seasons/${seasonId}/events/${eventId}/media`,
+        ENDPOINTS.EVENTS.MEDIA(seasonId, eventId),
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

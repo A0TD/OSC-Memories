@@ -5,7 +5,7 @@ import authStyles from "../../assets/styles/auth.module.css";
 import { FaEdit, FaTrash, FaPlus, FaExclamationTriangle } from "react-icons/fa";
 
 import { AuthContext } from "../../contexts/AuthContext";
-import { ROLES } from "../../utils/constants";
+import { ROLES, ENDPOINTS } from "../../utils/constants";
 import { api } from "../../services/api";
 
 export default function Seasons() {
@@ -34,7 +34,7 @@ export default function Seasons() {
     setLoading(true);
     setFetchError(null);
     try {
-      const response = await api.get("/seasons");
+      const response = await api.get(ENDPOINTS.SEASONS.BASE);
       const data = response.data;
       if (data.success) {
         const extractedSeasons = data.seasons;
@@ -104,7 +104,7 @@ export default function Seasons() {
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("name", formData.name);
-      
+
       if (formData.description && formData.description.trim() !== "") {
         formDataToSend.append("description", formData.description.trim());
       }
@@ -113,7 +113,7 @@ export default function Seasons() {
         "date",
         formData.date
           ? new Date(formData.date).toISOString()
-          : new Date().toISOString()
+          : new Date().toISOString(),
       );
 
       if (selectedFile) {
@@ -126,9 +126,13 @@ export default function Seasons() {
       };
 
       if (modalMode === "create") {
-        await api.post("/seasons", formDataToSend, config);
+        await api.post(ENDPOINTS.SEASONS.BASE, formDataToSend, config);
       } else {
-        await api.put(`/seasons/${currentSeasonId}`, formDataToSend, config);
+        await api.put(
+          ENDPOINTS.SEASONS.BY_ID(currentSeasonId),
+          formDataToSend,
+          config,
+        );
       }
 
       setShowModal(false);
@@ -150,7 +154,7 @@ export default function Seasons() {
       if (deleteTimeoutRef.current) clearTimeout(deleteTimeoutRef.current);
       setActionLoading(true);
       try {
-        await api.delete(`/seasons/${id}`);
+        await api.delete(ENDPOINTS.SEASONS.BY_ID(id));
         setDeleteConfirmId(null);
         fetchSeasons();
       } catch (error) {
@@ -164,7 +168,7 @@ export default function Seasons() {
       setDeleteConfirmId(id);
       deleteTimeoutRef.current = setTimeout(
         () => setDeleteConfirmId(null),
-        3000
+        3000,
       );
     }
   };
@@ -346,7 +350,8 @@ export default function Seasons() {
 
               <div className="mb-4">
                 <label className={`form-label ${styles.text}`}>
-                  Description <span className="text-muted fw-normal">(Optional)</span>
+                  Description{" "}
+                  <span className="text-muted fw-normal">(Optional)</span>
                 </label>
                 <textarea
                   className="form-control text-dark border-secondary"
@@ -374,8 +379,8 @@ export default function Seasons() {
                   {actionLoading
                     ? "Saving..."
                     : modalMode === "create"
-                    ? "Create"
-                    : "Save Changes"}
+                      ? "Create"
+                      : "Save Changes"}
                 </button>
               </div>
             </form>

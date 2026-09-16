@@ -4,6 +4,7 @@ import MemberCard from "../../components/MemberCard/MemberCard";
 import Pagination from "../../components/Pagination/Pagination";
 import memberscss from "./Members.module.css";
 import { Search } from "lucide-react";
+import { ENDPOINTS } from "../../utils/constants";
 
 export default function Members() {
   const [members, setMembers] = useState([]);
@@ -25,7 +26,7 @@ export default function Members() {
     try {
       setLoading(true);
       setError(null);
-      const response = await api.get("/users");
+      const response = await api.get(ENDPOINTS.USERS.ALL);
       const data = response.data;
       setMembers(data.users || data.data?.users || data.data || []);
     } catch (err) {
@@ -38,7 +39,7 @@ export default function Members() {
 
   const handleToggleRole = async (id) => {
     try {
-      const response = await api.patch(`/users/${id}/role`);
+      const response = await api.patch(ENDPOINTS.USERS.ROLE(id));
 
       if (response.data && response.data.success !== false) {
         setMembers((prevMembers) =>
@@ -65,7 +66,7 @@ export default function Members() {
   const handleDelete = async () => {
     if (!userToDelete) return;
     try {
-      const response = await api.delete(`/users/${userToDelete}`);
+      const response = await api.delete(ENDPOINTS.USERS.ONE(userToDelete));
 
       if (response.data && response.data.success !== false) {
         setMembers((prevMembers) =>
