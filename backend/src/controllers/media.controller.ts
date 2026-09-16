@@ -59,13 +59,18 @@ export const uploadMedia = async (
 ) => {
   let uploadedMedia: Awaited<ReturnType<typeof uploadMany>> = [];
   try {
-    const { eventId }: any = req.params;
+    const { seasonId, eventId }: any = req.params;
     const files = req.files as Express.Multer.File[]; // allows using .map() on the files variable
 
     if (!files || files.length === 0)
       throw new AppError(400, "Missing file upload!");
 
-    uploadedMedia = await uploadMany(files);
+    const dynamicOptions = {
+      folder: `seasons/${seasonId}/events/${eventId}/media`,
+      resource_type: "auto" as const,
+    };
+
+    uploadedMedia = await uploadMany(files,dynamicOptions);
 
     const mediaDocuments = uploadedMedia.map(({ file, result }) => {
       const autoDownloadUrl = cloudinary.url(result.public_id, {
@@ -95,7 +100,7 @@ export const uploadMedia = async (
     if (uploadedMedia.length > 0) {
       await Promise.all(
         uploadedMedia.map(({ result }) => {
-          cloudinary.uploader.destroy(result.public_id).catch(() => {});
+          return cloudinary.uploader.destroy(result.public_id).catch(() => {});
         }),
       );
     }

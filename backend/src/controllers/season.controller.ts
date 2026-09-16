@@ -3,6 +3,7 @@ import Season from "../models/season.model";
 import AppError from "../utils/appError.util";
 import { uploadOne } from "../utils/uploadMedia.util";
 import cloudinary from "../config/cloudinary.config";
+import mongoose from "mongoose";
 
 export const getAllSeasons = async (
   req: Request,
@@ -52,12 +53,19 @@ export const createSeason = async (
   const { name, date, description } = req.body;
   const file = req.file as Express.Multer.File;
   let uploadedImage;
+
+  const seasonId = new mongoose.Types.ObjectId();
   try {
     if (file) {
-      uploadedImage = await uploadOne(file);
+      const dynamicOptions = {
+        folder: `seasons/${seasonId}`,
+        resource_type: "auto" as const,
+      };
+      uploadedImage = await uploadOne(file, dynamicOptions);
     }
 
     const season = await Season.create({
+      _id: seasonId,
       name,
       date,
       imageUrl: uploadedImage?.result.url,
@@ -96,7 +104,11 @@ export const updateSeason = async (
     }
 
     if (file) {
-      uploadedImage = await uploadOne(file);
+      const dynamicOptions = {
+      folder: `seasons/${seasonId}`,
+      resource_type: "auto" as const,
+    };
+      uploadedImage = await uploadOne(file,dynamicOptions);
     }
 
     const updatedSeason = await Season.findByIdAndUpdate(

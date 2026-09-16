@@ -5,15 +5,6 @@ import { Readable } from "stream";
 
 const defaultUploadOptions: UploadApiOptions = {
   resource_type: "auto",
-  transformation: [
-    {
-      width: 1920,
-      height: 1080,
-      crop: "limit",
-      quality: "auto:good",
-      fetch_format: "auto",
-    },
-  ],
 };
 
 const streamUpload = (

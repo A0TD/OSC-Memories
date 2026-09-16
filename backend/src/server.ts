@@ -19,6 +19,8 @@ const app: Application = express();
 const PORT = (process.env.PORT as string) || 3000;
 const CLIENT_URL = process.env.CLIENT_URL;
 
+app.set('trust proxy', 1);
+
 app.use(
   cors({
     origin: CLIENT_URL,

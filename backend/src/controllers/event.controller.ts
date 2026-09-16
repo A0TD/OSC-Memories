@@ -4,6 +4,7 @@ import Event from "../models/event.model.js";
 import AppError from "../utils/appError.util.js";
 import { uploadOne } from "../utils/uploadMedia.util.js";
 import cloudinary from "../config/cloudinary.config.js";
+import mongoose from "mongoose";
 
 export const getAllEvents = async (
   req: Request,
@@ -56,12 +57,19 @@ export const createEvent = async (
   const { seasonId }: any = req.params;
   const file = req.file as Express.Multer.File;
   let uploadedImage;
+
+  const eventId = new mongoose.Types.ObjectId();
   try {
     if (file) {
-      uploadedImage = await uploadOne(file);
+      const dynamicOptions = {
+      folder: `seasons/${seasonId}/events/${eventId}`,
+      resource_type: "auto" as const,
+    };
+      uploadedImage = await uploadOne(file,dynamicOptions);
     }
 
     const newEvent = await Event.create({
+      _id: eventId,
       name: name,
       seasonId,
       imageUrl: uploadedImage?.result.url,
@@ -99,7 +107,11 @@ export const updateEvent = async (
       throw new AppError(404, "Event not found");
     }
     if (file) {
-      uploadedImage = await uploadOne(file);
+      const dynamicOptions = {
+      folder: `seasons/${seasonId}/events/${eventId}`,
+      resource_type: "auto" as const,
+    };
+      uploadedImage = await uploadOne(file,dynamicOptions);
     }
 
     const updatedEvent = await Event.findOneAndUpdate(
