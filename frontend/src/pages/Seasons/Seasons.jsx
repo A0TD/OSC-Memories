@@ -8,8 +8,6 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { ROLES } from "../../utils/constants";
 import { api } from "../../services/api";
 
-const DEFAULT_IMAGE = "https://via.placeholder.com/300x180?text=OSC+Season";
-
 export default function Seasons() {
   const [seasons, setSeasons] = useState([]);
   const { user, role } = useContext(AuthContext);
@@ -26,6 +24,7 @@ export default function Seasons() {
     description: "",
     imageUrl: "",
   });
+  const [selectedFile, setSelectedFile] = useState(null);
   const [currentSeasonId, setCurrentSeasonId] = useState(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
@@ -65,6 +64,7 @@ export default function Seasons() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setSelectedFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData((prev) => ({ ...prev, imageUrl: reader.result }));
@@ -75,12 +75,14 @@ export default function Seasons() {
 
   const handleOpenCreate = () => {
     setModalMode("create");
+    setSelectedFile(null);
     setFormData({ name: "", date: "", description: "", imageUrl: "" });
     setShowModal(true);
   };
 
   const handleOpenEdit = (season) => {
     setModalMode("edit");
+    setSelectedFile(null);
     const seasonId = season._id || season.id;
     setCurrentSeasonId(seasonId);
     const formattedDate = season.date ? season.date.split("T")[0] : "";
@@ -100,22 +102,34 @@ export default function Seasons() {
 
     setActionLoading(true);
     try {
-      const payload = {
-        name: formData.name,
-        description: formData.description,
-        date: formData.date
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append(
+        "date",
+        formData.date
           ? new Date(formData.date).toISOString()
-          : new Date().toISOString(),
-        imageUrl: formData.imageUrl,
+          : new Date().toISOString()
+      );
+
+      if (selectedFile) {
+        formDataToSend.append("media", selectedFile);
+      }
+
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       };
 
       if (modalMode === "create") {
-        await api.post("/seasons", payload);
+        await api.post("/seasons", formDataToSend, config);
       } else {
-        await api.put(`/seasons/${currentSeasonId}`, payload);
+        await api.put(`/seasons/${currentSeasonId}`, formDataToSend, config);
       }
 
       setShowModal(false);
+      setSelectedFile(null);
       fetchSeasons();
     } catch (error) {
       console.error(`Error ${modalMode} season:`, error);
@@ -147,7 +161,7 @@ export default function Seasons() {
       setDeleteConfirmId(id);
       deleteTimeoutRef.current = setTimeout(
         () => setDeleteConfirmId(null),
-        3000,
+        3000
       );
     }
   };
@@ -232,7 +246,9 @@ export default function Seasons() {
                         className="text-decoration-none h-100 d-flex flex-column text-light"
                       >
                         <img
-                          src={season.imageUrl || season.image || DEFAULT_IMAGE}
+                          src={
+                            season.imageUrl || season.image
+                          }
                           alt={season.name || "season photo"}
                           className="card-img-top"
                           style={{ height: "180px", objectFit: "cover" }}
@@ -358,8 +374,8 @@ export default function Seasons() {
                   {actionLoading
                     ? "Saving..."
                     : modalMode === "create"
-                      ? "Create"
-                      : "Save Changes"}
+                    ? "Create"
+                    : "Save Changes"}
                 </button>
               </div>
             </form>
