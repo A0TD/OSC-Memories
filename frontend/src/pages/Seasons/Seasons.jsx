@@ -118,12 +118,18 @@ export default function Seasons() {
         formDataToSend.append("media", selectedFile);
       }
 
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
       if (modalMode === "create") {
-        await api.post(ENDPOINTS.SEASONS.ALL, formDataToSend);
+        await api.post(ENDPOINTS.SEASONS.ALL, formDataToSend,config);
       } else {
         await api.put(
           ENDPOINTS.SEASONS.ONE(currentSeasonId),
-          formDataToSend
+          formDataToSend,config
         );
       }
 
