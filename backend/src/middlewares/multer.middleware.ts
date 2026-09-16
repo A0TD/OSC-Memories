@@ -2,12 +2,7 @@ import multer from "multer";
 import path from "path";
 import { Request } from "express";
 
-const storage = multer.diskStorage({
-  filename: (req: Request, file, callback) => {
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    callback(null, uniqueSuffix + path.extname(file.originalname));
-  },
-});
+const storage = multer.memoryStorage()
 
 // 1. Define the file filter function
 const fileFilter = (req: Request, file: Express.Multer.File, callback: any) => {
@@ -30,7 +25,7 @@ const fileFilter = (req: Request, file: Express.Multer.File, callback: any) => {
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 },
-}); // 10 for 10MB
+  limits: { fileSize: 20 * 1024 * 1024 },
+}); // 20 for 20MB
 
 export default upload;

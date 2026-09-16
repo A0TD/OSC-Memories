@@ -1,6 +1,7 @@
 import cloudinary from "../config/cloudinary.config";
-import { UploadApiOptions } from "cloudinary";
-import fs from "fs/promises";
+import { UploadApiOptions, UploadApiResponse } from "cloudinary";
+import { compressImage } from "./compressMedia.util";
+import { Readable } from "stream";
 
 const defaultUploadOptions: UploadApiOptions = {
   resource_type: "auto",
@@ -15,19 +16,40 @@ const defaultUploadOptions: UploadApiOptions = {
   ],
 };
 
+const streamUpload = (
+  buffer: Buffer,
+  options: UploadApiOptions,
+): Promise<UploadApiResponse> => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      options,
+      (error, result) => {
+        if (result) resolve(result);
+        else reject(error);
+      },
+    );
+    uploadStream.on("error", (error) => reject(error));
+
+    const readableStream = Readable.from(buffer);
+    readableStream.on("error", (error) => reject(error));
+
+    readableStream.pipe(uploadStream);
+  });
+};
+
 export const uploadOne = async (
   file: Express.Multer.File,
   options: UploadApiOptions = defaultUploadOptions,
 ) => {
-  try {
-    const result = await cloudinary.uploader.upload(file.path, options);
+  const isImage = file.mimetype.startsWith("image/");
 
-    return { file, result };
-  } finally {
-    if (file.path) {
-      await fs.unlink(file.path).catch(() => {}); //Deletes the temporary files created by multer using File System (fs)
-    }
-  }
+  const bufferToUpload = isImage
+    ? await compressImage(file.buffer)
+    : file.buffer;
+
+  const result = await streamUpload(bufferToUpload, options);
+
+  return { file, result };
 };
 
 export const uploadMany = async (
@@ -38,7 +60,13 @@ export const uploadMany = async (
   try {
     const uploadedMedia = await Promise.all(
       files.map(async (file) => {
-        const result = await cloudinary.uploader.upload(file.path, options);
+        const isImage = file.mimetype.startsWith("image/");
+        
+        const bufferToUpload = isImage
+          ? await compressImage(file.buffer)
+          : file.buffer;
+
+        const result = await streamUpload(bufferToUpload, options);
 
         uploadedPublicIds.push(result.public_id);
 
@@ -53,10 +81,5 @@ export const uploadMany = async (
     }
 
     throw err;
-  } finally {
-    await Promise.all(
-      //Deletes the temporary files created by multer using File System (fs)
-      files.map((file) => fs.unlink(file.path).catch(() => {})),
-    );
   }
 };
