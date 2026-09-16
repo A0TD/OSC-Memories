@@ -34,17 +34,17 @@ export const ENDPOINTS = {
     ALL_BY_SEASON: (seasonId) => `/seasons/${seasonId}/events`,
     ONE_BY_SEASON: (seasonId, eventId) =>
       `/seasons/${seasonId}/events/${eventId}`,
-    MEDIA: (seasonId, eventId) =>
-      `/seasons/${seasonId}/events/${eventId}/media`,
   },
   EVENT_INFOS: {
     ALL: "/event-infos",
     ONE: (eventInfoId) => `/event-infos/${eventInfoId}`,
   },
   MEDIA: {
-    ALL: "/media",
-    ONE: (mediaId) => `/media/${mediaId}`,
+    ALL: (seasonId, eventId) => `/seasons/${seasonId}/events/${eventId}/media`,
+    ONE: (seasonId, eventId, mediaId) =>
+      `/seasons/${seasonId}/events/${eventId}/media/${mediaId}`,
   },
 };
 
-export const API_BASE_URL = "http://localhost:3000/api";
+export const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:3000/api";

@@ -43,7 +43,7 @@ function Profile() {
 
   const fetchUserMedia = async () => {
     try {
-      const response = await api.get(ENDPOINTS.USERS.MY_MEDIA);
+      const response = await api.get(ENDPOINTS.USERS.ME_MEDIA);
       if (response.data?.success) {
         setMediaList(response.data.media || []);
       }

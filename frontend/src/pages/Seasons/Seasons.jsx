@@ -34,7 +34,7 @@ export default function Seasons() {
     setLoading(true);
     setFetchError(null);
     try {
-      const response = await api.get(ENDPOINTS.SEASONS.BASE);
+      const response = await api.get(ENDPOINTS.SEASONS.ALL);
       const data = response.data;
       if (data.success) {
         const extractedSeasons = data.seasons;
@@ -126,10 +126,10 @@ export default function Seasons() {
       };
 
       if (modalMode === "create") {
-        await api.post(ENDPOINTS.SEASONS.BASE, formDataToSend, config);
+        await api.post(ENDPOINTS.SEASONS.ALL, formDataToSend, config);
       } else {
         await api.put(
-          ENDPOINTS.SEASONS.BY_ID(currentSeasonId),
+          ENDPOINTS.SEASONS.ONE(currentSeasonId),
           formDataToSend,
           config,
         );
@@ -154,7 +154,7 @@ export default function Seasons() {
       if (deleteTimeoutRef.current) clearTimeout(deleteTimeoutRef.current);
       setActionLoading(true);
       try {
-        await api.delete(ENDPOINTS.SEASONS.BY_ID(id));
+        await api.delete(ENDPOINTS.SEASONS.ONE(id));
         setDeleteConfirmId(null);
         fetchSeasons();
       } catch (error) {

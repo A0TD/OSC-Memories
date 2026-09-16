@@ -37,7 +37,7 @@ export default function EventMedia() {
 
     try {
       setLoading(true);
-      const response = await api.get(ENDPOINTS.EVENTS.MEDIA(seasonId, eventId));
+      const response = await api.get(ENDPOINTS.MEDIA.ALL(seasonId, eventId));
       const data = response.data;
 
       const rawData = data?.media || data?.data?.media || data?.data || [];
@@ -64,7 +64,7 @@ export default function EventMedia() {
   const handleDeleteMedia = async (mediaId) => {
     try {
       const response = await api.delete(
-        `${ENDPOINTS.EVENTS.MEDIA(seasonId, eventId)}/${mediaId}`,
+        ENDPOINTS.MEDIA.ONE(seasonId, eventId, mediaId),
       );
       if (response.data?.success) {
         fetchMedia();
@@ -92,7 +92,7 @@ export default function EventMedia() {
       });
 
       const response = await api.post(
-        ENDPOINTS.EVENTS.MEDIA(seasonId, eventId),
+        ENDPOINTS.EVENTS.MEDIA.ALL(seasonId, eventId),
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
