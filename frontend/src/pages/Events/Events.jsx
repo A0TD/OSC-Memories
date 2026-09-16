@@ -19,6 +19,7 @@ export default function Events() {
 
   const { user, role } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isAdmin =
     role === ROLES.ADMIN || role === "Admin" || user?.role === "Admin";
@@ -115,9 +116,10 @@ export default function Events() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isAdmin) return;
+    if (!isAdmin || isSubmitting) return;
 
     try {
+      setIsSubmitting(true);
       const payload = new FormData();
       payload.append("name", formData.name);
       payload.append("description", formData.description);
@@ -129,7 +131,7 @@ export default function Events() {
         const response = await api.put(
           `/seasons/${seasonId}/events/${editingEventId}`,
           payload,
-          { headers: { "Content-Type": "multipart/form-data" } },
+          { headers: { "Content-Type": "multipart/form-data" } }
         );
         if (response.data?.success) {
           handleCloseModal();
@@ -139,7 +141,7 @@ export default function Events() {
         const response = await api.post(
           `/seasons/${seasonId}/events`,
           payload,
-          { headers: { "Content-Type": "multipart/form-data" } },
+          { headers: { "Content-Type": "multipart/form-data" } }
         );
         if (response.data?.success) {
           handleCloseModal();
@@ -148,6 +150,8 @@ export default function Events() {
       }
     } catch (error) {
       console.error("Error saving event:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -163,7 +167,7 @@ export default function Events() {
 
     try {
       const response = await api.delete(
-        `/seasons/${seasonId}/events/${eventId}`,
+        `/seasons/${seasonId}/events/${eventId}`
       );
       if (response.data?.success) {
         setDeletingId(null);
@@ -303,7 +307,7 @@ export default function Events() {
               }}
             >
               <div
-                className={`card ${styles.modal}  border-secondary p-4 w-100`}
+                className={`card ${styles.modal} border-secondary p-4 w-100`}
                 style={{ maxWidth: "500px" }}
               >
                 <h4 className={`fw-bold mb-3 ${styles.modalText}`}>
@@ -322,6 +326,7 @@ export default function Events() {
                       value={formData.name}
                       onChange={handleInputChange}
                       required
+                      disabled={isSubmitting}
                     />
                   </div>
 
@@ -335,6 +340,7 @@ export default function Events() {
                       className="form-control border-secondary"
                       onChange={handleFileChange}
                       required={!editingEventId && !imagePreview}
+                      disabled={isSubmitting}
                     />
                     {imagePreview && (
                       <div className="mt-2 text-center">
@@ -363,7 +369,7 @@ export default function Events() {
                       className="form-control border-secondary"
                       value={formData.description}
                       onChange={handleInputChange}
-                      required
+                      disabled={isSubmitting}
                     ></textarea>
                   </div>
 
@@ -372,14 +378,29 @@ export default function Events() {
                       type="button"
                       className={`btn ${authStyles.submitBtn} mx-auto fs-5 w-50`}
                       onClick={handleCloseModal}
+                      disabled={isSubmitting}
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className={`btn ${authStyles.submitBtn} mx-auto fs-5 w-50`}
+                      className={`btn ${authStyles.submitBtn} mx-auto fs-5 w-50 d-flex align-items-center justify-content-center gap-2`}
+                      disabled={isSubmitting}
                     >
-                      {editingEventId ? "Save Changes" : "Create Event"}
+                      {isSubmitting ? (
+                        <>
+                          <span
+                            className="spinner-border spinner-border-sm"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                          <span>Saving...</span>
+                        </>
+                      ) : editingEventId ? (
+                        "Save Changes"
+                      ) : (
+                        "Create Event"
+                      )}
                     </button>
                   </div>
                 </form>

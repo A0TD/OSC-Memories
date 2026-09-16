@@ -104,7 +104,11 @@ export default function Seasons() {
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("name", formData.name);
-      formDataToSend.append("description", formData.description);
+      
+      if (formData.description && formData.description.trim() !== "") {
+        formDataToSend.append("description", formData.description.trim());
+      }
+
       formDataToSend.append(
         "date",
         formData.date
@@ -115,7 +119,6 @@ export default function Seasons() {
       if (selectedFile) {
         formDataToSend.append("media", selectedFile);
       }
-
       const config = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -246,9 +249,7 @@ export default function Seasons() {
                         className="text-decoration-none h-100 d-flex flex-column text-light"
                       >
                         <img
-                          src={
-                            season.imageUrl || season.image
-                          }
+                          src={season.imageUrl || season.image}
                           alt={season.name || "season photo"}
                           className="card-img-top"
                           style={{ height: "180px", objectFit: "cover" }}
@@ -345,7 +346,7 @@ export default function Seasons() {
 
               <div className="mb-4">
                 <label className={`form-label ${styles.text}`}>
-                  Description
+                  Description <span className="text-muted fw-normal">(Optional)</span>
                 </label>
                 <textarea
                   className="form-control text-dark border-secondary"
@@ -353,7 +354,6 @@ export default function Seasons() {
                   rows="3"
                   value={formData.description}
                   onChange={handleInputChange}
-                  required
                 ></textarea>
               </div>
 
