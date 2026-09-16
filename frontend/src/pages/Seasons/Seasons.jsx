@@ -37,7 +37,7 @@ export default function Seasons() {
       const response = await api.get(ENDPOINTS.SEASONS.ALL);
       const data = response.data;
       if (data.success) {
-        const extractedSeasons = data.seasons;
+        const extractedSeasons = data.seasons || data.data?.seasons || data.data;
         setSeasons(Array.isArray(extractedSeasons) ? extractedSeasons : []);
       } else {
         setFetchError(data.message || "Failed to load seasons.");
@@ -76,6 +76,7 @@ export default function Seasons() {
   const handleOpenCreate = () => {
     setModalMode("create");
     setSelectedFile(null);
+    setCurrentSeasonId(null);
     setFormData({ name: "", date: "", description: "", imageUrl: "" });
     setShowModal(true);
   };
@@ -83,7 +84,7 @@ export default function Seasons() {
   const handleOpenEdit = (season) => {
     setModalMode("edit");
     setSelectedFile(null);
-    const seasonId = season._id || season.id;
+    const seasonId = season.id || season._id;
     setCurrentSeasonId(seasonId);
     const formattedDate = season.date ? season.date.split("T")[0] : "";
 
@@ -109,29 +110,20 @@ export default function Seasons() {
         formDataToSend.append("description", formData.description.trim());
       }
 
-      formDataToSend.append(
-        "date",
-        formData.date
-          ? new Date(formData.date).toISOString()
-          : new Date().toISOString(),
-      );
+      if (formData.date) {
+        formDataToSend.append("date", new Date(formData.date).toISOString());
+      }
 
       if (selectedFile) {
         formDataToSend.append("media", selectedFile);
       }
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
 
       if (modalMode === "create") {
-        await api.post(ENDPOINTS.SEASONS.ALL, formDataToSend, config);
+        await api.post(ENDPOINTS.SEASONS.ALL, formDataToSend);
       } else {
         await api.put(
           ENDPOINTS.SEASONS.ONE(currentSeasonId),
-          formDataToSend,
-          config,
+          formDataToSend
         );
       }
 
@@ -211,7 +203,7 @@ export default function Seasons() {
               <div className="alert alert-danger mb-4 w-100">{fetchError}</div>
             ) : seasons.length > 0 ? (
               seasons.map((season) => {
-                const seasonId = season._id || season.id;
+                const seasonId = season.id || season._id;
                 const isDeleting = deleteConfirmId === seasonId;
 
                 return (
