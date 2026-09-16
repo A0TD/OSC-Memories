@@ -205,7 +205,7 @@ export default function EventMedia() {
                   <div className="mb-3">
                     <label className="form-label text-secondary">
                       Select {activeTab === "photos" ? "Photos" : "Videos"} (Max
-                      5 files)
+                      10 files)
                     </label>
                     <input
                       type="file"

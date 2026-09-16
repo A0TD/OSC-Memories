@@ -163,7 +163,7 @@ mediaRouter.get("/:mediaId", getMedia);
 mediaRouter.post(
   "/",
   authenticate,
-  upload.array("media", 5), // 5 is the limit for a single upload.
+  upload.array("media", 10), // 5 is the limit for a single upload.
   uploadMedia,
 );
 /**
