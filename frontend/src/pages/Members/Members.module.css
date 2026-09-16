@@ -9,7 +9,7 @@
   flex-direction: column;
   gap: 10px;
   align-items: center;
-  padding: 120px 20% 155px;
+  padding: 120px 20px 155px;
   color: white;
   text-align: center;
 }
@@ -92,4 +92,22 @@
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+@media (max-width: 768px) {
+  .home {
+    padding: 80px 5% 100px;
+  }
+  
+  .home > h1 {
+    font-size: 32px;
+  }
+
+  .home > p {
+    padding: 0 5%;
+    font-size: 14px;
+  }
+
+  .filterContainer {
+    overflow-x: auto;
+  }
 }
