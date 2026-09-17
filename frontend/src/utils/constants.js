@@ -24,7 +24,7 @@ export const ENDPOINTS = {
     ALL: "/users",
     ONE: (userId) => `/users/${userId}`,
     ROLE: (userId) => `/users/${userId}/role`,
-    MEDIA_BY_ID: (userId) => `/users/${userId}/media`,
+    MEDIA_BY_ID: (userId) => `/users/${userId}/media`,//not used
   },
   SEASONS: {
     ALL: "/seasons",

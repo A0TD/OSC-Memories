@@ -14,12 +14,13 @@ import seasonRouter from "./routes/season.route";
 import userRouter from "./routes/user.route";
 import eventInfoRouter from "./routes/eventInfo.route";
 import { globalErrorHandler } from "./middlewares/errorHandler.middleware";
+import transporter from "./config/nodemailer.config";
 
 const app: Application = express();
 const PORT = (process.env.PORT as string) || 3000;
 const CLIENT_URL = process.env.CLIENT_URL;
 
-app.set('trust proxy', 1);
+app.set("trust proxy", 1);
 
 app.use(
   cors({
@@ -56,6 +57,8 @@ async function startServer() {
     app.listen(PORT, () => {
       console.log(`Server is listening on  http://localhost:${PORT}/api-docs`);
     });
+    await transporter.verify();
+    console.log("SMTP server is ready");
   } catch (error) {
     console.error("Error starting server:", error);
   }
