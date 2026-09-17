@@ -37,7 +37,8 @@ export default function Seasons() {
       const response = await api.get(ENDPOINTS.SEASONS.ALL);
       const data = response.data;
       if (data.success) {
-        const extractedSeasons = data.seasons || data.data?.seasons || data.data;
+        const extractedSeasons =
+          data.seasons || data.data?.seasons || data.data;
         setSeasons(Array.isArray(extractedSeasons) ? extractedSeasons : []);
       } else {
         setFetchError(data.message || "Failed to load seasons.");
@@ -103,41 +104,52 @@ export default function Seasons() {
 
     setActionLoading(true);
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("name", formData.name);
-
-      if (formData.description && formData.description.trim() !== "") {
-        formDataToSend.append("description", formData.description.trim());
-      }
-
-      if (formData.date) {
-        formDataToSend.append("date", new Date(formData.date).toISOString());
-      }
-
-      if (selectedFile) {
-        formDataToSend.append("media", selectedFile);
-      }
-
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
+      const formattedDate = formData.date
+        ? new Date(formData.date).toISOString()
+        : "";
 
       if (modalMode === "create") {
-        await api.post(ENDPOINTS.SEASONS.ALL, formDataToSend,config);
+        const formDataToSend = new FormData();
+        formDataToSend.append("name", formData.name.trim());
+        formDataToSend.append("date", formattedDate);
+        if (formData.description?.trim()) {
+          formDataToSend.append("description", formData.description.trim());
+        }
+        if (selectedFile) {
+          formDataToSend.append("media", selectedFile);
+        }
+
+        await api.post(ENDPOINTS.SEASONS.ALL, formDataToSend);
       } else {
-        await api.put(
-          ENDPOINTS.SEASONS.ONE(currentSeasonId),
-          formDataToSend,config
-        );
+        if (selectedFile) {
+          const formDataToSend = new FormData();
+          formDataToSend.append("name", formData.name.trim());
+          formDataToSend.append("date", formattedDate);
+          if (formData.description?.trim()) {
+            formDataToSend.append("description", formData.description.trim());
+          }
+          formDataToSend.append("media", selectedFile);
+
+          await api.put(ENDPOINTS.SEASONS.ONE(currentSeasonId), formDataToSend);
+        } else {
+          const jsonPayload = {
+            name: formData.name.trim(),
+            date: formattedDate,
+            description: formData.description?.trim() || "",
+          };
+
+          await api.put(ENDPOINTS.SEASONS.ONE(currentSeasonId), jsonPayload);
+        }
       }
 
       setShowModal(false);
       setSelectedFile(null);
       fetchSeasons();
     } catch (error) {
-      console.error(`Error ${modalMode} season:`, error);
+      console.error(
+        `Error ${modalMode} season:`,
+        error.response?.data || error,
+      );
       alert(error.response?.data?.message || `Failed to ${modalMode} season`);
     } finally {
       setActionLoading(false);
