@@ -4,7 +4,7 @@ import { api } from "../../services/api";
 import { AuthContext } from "../../contexts/AuthContext";
 import styles from "./Profile.module.css";
 import authStyles from "../../assets/styles/auth.module.css";
-import { ENDPOINTS } from "../../utils/constants";
+import { ENDPOINTS, STORAGE_KEYS } from "../../utils/constants";
 
 function Profile() {
   const { user, logout, setUser } = useContext(AuthContext);
@@ -94,23 +94,34 @@ function Profile() {
   const handleDeleteAccount = async () => {
     setActionLoading(true);
     try {
-      const response = await api.delete(ENDPOINTS.USERS.ME);
+      const userId = profile?.id || profile?._id || user?.id || user?._id;
+      const userRole = profile?.role || user?.role;
 
-      if (response.data?.success) {
+      if (!userId) {
+        alert("User ID not found");
+        return;
+      }
+
+      const endpoint =
+        userRole === "Admin" ? ENDPOINTS.USERS.ONE(userId) : ENDPOINTS.USERS.ME;
+
+      const response = await api.delete(endpoint);
+
+      if (response.status === 200 || response.data?.success) {
         setIsDeleteModalOpen(false);
-        localStorage.removeItem("osc_user");
+        localStorage.removeItem(STORAGE_KEYS.USER);
         localStorage.removeItem("token");
+
         if (logout) await logout();
-        navigate("/register");
+        navigate("/register", { replace: true });
       }
     } catch (err) {
-      console.error("Error deleting account:", err);
+      console.error("Delete account error details:", err.response?.data);
       alert(err.response?.data?.message || "Failed to delete account");
     } finally {
       setActionLoading(false);
     }
   };
-
   return (
     <>
       <div className={` overflow-hidden ${styles.hero}`}>

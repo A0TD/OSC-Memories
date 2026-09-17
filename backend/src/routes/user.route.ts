@@ -56,56 +56,6 @@ userRouter.get("/", authenticate, authorize("Admin"), getAllUsers);
 
 /**
  * @swagger
- * /api/users/{userId}:
- *   delete:
- *     summary: Delete a user
- *     tags:
- *       - User
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         schema:
- *           type: string
- *         description: The MongoDB ObjectId of the user
- *     responses:
- *       200:
- *         description: User deleted successfully!
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: User deleted successfully!
- *                 data:
- *                   type: object
- *                   properties:
- *                     deletedUser:
- *                       $ref: '#/components/schemas/User'
- *       401:
- *         description: Unauthorized - Authentication required
- *       403:
- *         description: Forbidden - Insufficient permissions
- *       404:
- *         description: Event not found
- *       500:
- *         description: Internal server error
- */
-userRouter.delete(
-  "/:userId",
-  authenticate,
-  authorize("Admin"),
-  validate(paramSchema("userId")),
-  deleteUser,
-);
-
-/**
- * @swagger
  * /api/users/me:
  *   get:
  *     summary: Get the current authenticated user's profile
@@ -309,6 +259,57 @@ userRouter.delete("/me", authenticate, deleteOwnUser);
  *       500:
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /api/users/{userId}:
+ *   delete:
+ *     summary: Delete a user
+ *     tags:
+ *       - User
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The MongoDB ObjectId of the user
+ *     responses:
+ *       200:
+ *         description: User deleted successfully!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: User deleted successfully!
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     deletedUser:
+ *                       $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized - Authentication required
+ *       403:
+ *         description: Forbidden - Insufficient permissions
+ *       404:
+ *         description: Event not found
+ *       500:
+ *         description: Internal server error
+ */
+userRouter.delete(
+  "/:userId",
+  authenticate,
+  authorize("Admin"),
+  validate(paramSchema("userId")),
+  deleteUser,
+);
+
 userRouter.get(
   "/:userId",
   authenticate,
