@@ -33,7 +33,9 @@ export const register = async (
       password: hashedPassword,
     });
 
-    await sendOtp(user._id, user.email, "verification");
+    sendOtp(user._id, user.email, "verification").catch((err) => {
+      console.error("Error sending verification OTP in background:", err);
+    });
 
     return res.status(201).send({
       success: true,
@@ -112,7 +114,9 @@ export const resendOtp = async (
           "Verification OTP sent to email if it exists and is not already verified",
       });
     }
-    await sendOtp(user._id, user.email, "verification");
+    sendOtp(user._id, user.email, "verification").catch((err) => {
+      console.error("Error sending verification OTP in background:", err);
+    });
     return res.status(200).send({
       success: true,
       message:
@@ -134,7 +138,9 @@ export const forgotPassword = async (
     if (!user) {
       throw new AppError(400, "User not found");
     }
-    await sendOtp(user._id, user.email, "resetPassword");
+    sendOtp(user._id, user.email, "resetPassword").catch((err) => {
+      console.error("Error sending reset password OTP in background:", err);
+    });
     return res.status(200).send({
       success: true,
       message: "Reset password OTP sent to email",

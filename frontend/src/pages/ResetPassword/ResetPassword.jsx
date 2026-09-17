@@ -6,7 +6,7 @@ import resetcss from "../../assets/styles/auth.module.css";
 export default function ResetPassword() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { resetPassword, resendOtp } = useContext(AuthContext);
+  const { resetPassword, forgotPassword } = useContext(AuthContext);
 
   const email = location.state?.email || "";
 
@@ -33,7 +33,8 @@ export default function ResetPassword() {
       }, 2000);
     } catch (err) {
       setApiError(
-        err.response?.data?.message || "Invalid or expired OTP. Please try again."
+        err.response?.data?.message ||
+          "Invalid or expired OTP. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -46,11 +47,14 @@ export default function ResetPassword() {
     setResendLoading(true);
 
     try {
-      await resendOtp({ email });
-      setSuccessMessage("Verification OTP resent successfully to your email!");
+      await forgotPassword({ email });
+      setSuccessMessage(
+        "A new password reset OTP has been sent to your email.",
+      );
     } catch (err) {
       setApiError(
-        err.response?.data?.message || "Failed to resend OTP. Please try again."
+        err.response?.data?.message ||
+          "Failed to resend OTP. Please try again.",
       );
     } finally {
       setResendLoading(false);
@@ -58,16 +62,23 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className={`container-fluid ${resetcss.authContainer || ''}`}>
+    <div className={`container-fluid ${resetcss.authContainer || ""}`}>
       <div className="row justify-content-center align-items-center min-vh-100">
-        <div className={`col-10 col-sm-8 col-md-6 col-lg-4 ${resetcss.authCard || ''}`}>
+        <div
+          className={`col-10 col-sm-8 col-md-6 col-lg-4 ${resetcss.authCard || ""}`}
+        >
           <h2 className="text-center mb-3 fw-bold">Reset Password</h2>
           <p className="text-muted text-center mb-4 small">
-            Please enter the OTP sent to <strong>{email || "your email"}</strong> and choose a new password.
+            Please enter the OTP sent to{" "}
+            <strong>{email || "your email"}</strong> and choose a new password.
           </p>
 
-          {apiError && <div className="alert alert-danger py-2">{apiError}</div>}
-          {successMessage && <div className="alert alert-success py-2">{successMessage}</div>}
+          {apiError && (
+            <div className="alert alert-danger py-2">{apiError}</div>
+          )}
+          {successMessage && (
+            <div className="alert alert-success py-2">{successMessage}</div>
+          )}
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
@@ -123,7 +134,6 @@ export default function ResetPassword() {
               {resendLoading ? "Resending..." : "Resend OTP"}
             </button>
           </div>
-
         </div>
       </div>
     </div>
