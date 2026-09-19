@@ -28,7 +28,7 @@ export default function Members() {
       setError(null);
       const response = await api.get(ENDPOINTS.USERS.ALL);
       const data = response.data;
-      setMembers(data.users || data.data?.users || data.data || []);
+      setMembers(data.users || []);
     } catch (err) {
       console.error("Failed to fetch users", err);
       setError(err.message || "Failed to fetch users");

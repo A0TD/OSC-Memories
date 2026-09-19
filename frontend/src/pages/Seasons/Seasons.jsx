@@ -37,8 +37,7 @@ export default function Seasons() {
       const response = await api.get(ENDPOINTS.SEASONS.ALL);
       const data = response.data;
       if (data.success) {
-        const extractedSeasons =
-          data.seasons || data.data?.seasons || data.data;
+        const extractedSeasons = data.seasons || [];
         setSeasons(Array.isArray(extractedSeasons) ? extractedSeasons : []);
       } else {
         setFetchError(data.message || "Failed to load seasons.");

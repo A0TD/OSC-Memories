@@ -44,8 +44,7 @@ export default function Events() {
       const response = await api.get(ENDPOINTS.EVENTS.ALL_BY_SEASON(seasonId));
       const data = response.data;
       if (data?.success) {
-        const fetchedEvents =
-          data.events || data.data?.events || data.data || [];
+        const fetchedEvents = data.events || [];
         setEvents(Array.isArray(fetchedEvents) ? fetchedEvents : []);
       }
     } catch (error) {

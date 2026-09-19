@@ -31,7 +31,7 @@ export default function EventInfo() {
       const response = await api.get(ENDPOINTS.EVENT_INFOS.ALL);
       const data = response.data;
       if (data?.success) {
-        setEvents(data.eventInfos || data.data?.eventInfos || []);
+        setEvents(data.eventInfos || []);
       }
     } catch (err) {
       console.error("Failed to fetch events", err);
@@ -98,7 +98,7 @@ export default function EventInfo() {
         );
         const data = response.data;
         if (data?.success) {
-          const updatedEvent = data.eventInfo || data.data?.eventInfo || data;
+          const updatedEvent = data.eventInfo;
           setEvents(
             events.map((ev) => (ev.id === editEventId ? updatedEvent : ev)),
           );
@@ -108,7 +108,7 @@ export default function EventInfo() {
         const response = await api.post(ENDPOINTS.EVENT_INFOS.ALL, formData);
         const data = response.data;
         if (data?.success) {
-          const newEvent = data.eventInfo || data.data?.eventInfo || data;
+          const newEvent = data.eventInfo;
           setEvents([newEvent, ...events]);
           closeModal();
         }

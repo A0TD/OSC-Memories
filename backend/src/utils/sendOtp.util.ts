@@ -17,7 +17,7 @@ const sendOtp = async (
     [`${type}OtpExpiry`]: otpExpiry,
   });
   await transporter.sendMail({
-    from: process.env.SMTP_USER,
+    from: process.env.SMTP_FROM_EMAIL,
     to: email,
     subject: `${type === "verification" ? "Verification" : "Reset Password"} OTP`,
     html: `
